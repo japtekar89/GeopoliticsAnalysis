@@ -1,0 +1,30 @@
+---
+title: "STAT 431 Project 1 Checkpoint 1"
+author: "Julia Aptekar"
+format: html
+---
+
+## Context
+This is a long data frame with 14,768 observations and 43 variables. Each row contains political information for one country during a particular year. The variables of the data frame provide information on whether a country is democratic, what type of regime the country has, the structure of the political system, along with information on elections, leaders, suffrage, power changes, and colonial history. There are variables about whether the leader is a president or a monarch, when their leadership term began, their gender, and their birth year. Three variables provide information on timing of regime or leadership changes. Lastly, three variables provide information on colonial status and relationships of a country.
+
+## What Cleaning Has Been Done?
+First, variables were renamed to all lowercase names with clean_names(). Then, many variable names were renamed to clearer and more descriptive names (for example, dd_regime became regime_category_index). Next, "?" values in the election_month column were converted to NA with na_if(), before the column was split into separate month and year variables with separate_wider_regex(). A new variable, electoral_category, is created using case_match() from electoral_category_index which contained values of 0-3 that measure the level of electoral competition; a 0 means no elections, a 1 means single-party elections, a 2 means non-democratic multi-party elections, and a 3 means democratic elections. Also, str_squish() was used to clean up whitespaces in the election_month variable. Lastly, variables were converted to appropriate data types using across(); year/count columns became numeric and indicator variables (starting with _is or _has) became logical.
+
+## Proposed Research Questions
+1. Does the level of democracy in neighboring countries influence whether a country is democratic?
+2. Which types of political regimes are more likely to have female political leaders?
+3. Which types of political regimes are more likely to have younger political leaders?
+
+## Proposed Research Questions with Supplemental Data
+1. Are countries currently participating in geopolitical conflicts more likely to have postponed elections?
+2. Do crime rates affect the likelihood of free and fair elections?
+3. Does the number of seats held by women in national government influence the likelihood of a country having a female leader?
+
+## Data Visualization Sketches
+1. For investigating whether regime type influences the probability of having a female leader, we should make a bar chart.
+
+![](Viz1.png)
+
+2. For investigating whether the number of seats held by women in national government influences the likelihood of a country having a female leader, we should make a box plot.
+
+![](Viz2.png){width=60%}
