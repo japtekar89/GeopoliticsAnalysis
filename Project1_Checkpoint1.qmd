@@ -27,4 +27,4 @@ First, variables were renamed to all lowercase names with clean_names(). Then, m
 
 2. For investigating whether the number of seats held by women in national government influences the likelihood of a country having a female president, we should make a box plot. The same selective monarchy idea from above can be applied here.
 
-![](Viz2.png){width=60%}
+![](Viz2.png)
