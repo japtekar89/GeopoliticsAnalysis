@@ -12,19 +12,19 @@ First, variables were renamed to all lowercase names with clean_names(). Then, m
 
 ## Proposed Research Questions
 1. Does the level of democracy in neighboring countries influence whether a country is democratic?
-2. Which types of political regimes are more likely to have female political leaders?
+2. Which types of political regimes are more likely to have female presidents?
 3. Which types of political regimes are more likely to have younger political leaders?
 
 ## Proposed Research Questions with Supplemental Data
 1. Are countries currently participating in geopolitical conflicts more likely to have postponed elections?
 2. Do crime rates affect the likelihood of free and fair elections?
-3. Does the number of seats held by women in national government influence the likelihood of a country having a female leader?
+3. Does the number of seats held by women in national government influence the likelihood of a country having a female president?
 
 ## Data Visualization Sketches
-1. For investigating whether regime type influences the probability of having a female leader, we should make a bar chart.
+1. For investigating whether regime type influences the probability of having a female president, we should make a bar chart.
 
 ![](Viz1.png)
 
-2. For investigating whether the number of seats held by women in national government influences the likelihood of a country having a female leader, we should make a box plot.
+2. For investigating whether the number of seats held by women in national government influences the likelihood of a country having a female president, we should make a box plot.
 
 ![](Viz2.png){width=60%}
