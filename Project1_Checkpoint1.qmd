@@ -21,10 +21,10 @@ First, variables were renamed to all lowercase names with clean_names(). Then, m
 3. Does the number of seats held by women in national government influence the likelihood of a country having a female president?
 
 ## Data Visualization Sketches
-1. For investigating whether regime type influences the probability of having a female president, we should make a bar chart.
+1. For investigating whether regime type influences the probability of having a female president, we should make a bar chart. For this question, I would rather filter data to not include countries with monarchies since monarchs aren't elected (unless it's a selective monarchy). An early idea is to use the election_system variable; the values "selected by committee" show if the monarch is somehow selected instead of put in power by heritage/marriage.
 
 ![](Viz1.png)
 
-2. For investigating whether the number of seats held by women in national government influences the likelihood of a country having a female president, we should make a box plot.
+2. For investigating whether the number of seats held by women in national government influences the likelihood of a country having a female president, we should make a box plot. The same selective monarchy idea from above can be applied here.
 
 ![](Viz2.png){width=60%}
