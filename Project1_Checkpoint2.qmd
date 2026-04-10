@@ -1,0 +1,178 @@
+---
+title: "STAT 431 Project 1 Checkpoint 2"
+author: "Julia Aptekar"
+format: html
+---
+
+## Context
+This is a long data frame with 14,768 observations and 43 variables. 
+Each row contains political information for one country during a particular year.
+The variables of the data frame provide information on whether a country is democratic, what type of regime the country has, the structure of the political system, along with information on elections, leaders, suffrage, power changes, and colonial history. 
+There are variables about whether the leader is a president or a monarch, when their leadership term began, their gender, and their birth year. 
+Three variables provide information on timing of regime or leadership changes. 
+Lastly, three variables provide information on colonial status and relationships of a country.
+
+## What Cleaning Has Been Done?
+First, variables were renamed to all lowercase names with clean_names(). Then, many variable names were renamed to clearer and more descriptive names (for example, dd_regime became regime_category_index). Next, "?" values in the election_month column were converted to NA with na_if(), before the column was split into separate month and year variables with separate_wider_regex(). A new variable, electoral_category, is created using case_match() from electoral_category_index which contained values of 0-3 that measure the level of electoral competition; a 0 means no elections, a 1 means single-party elections, a 2 means non-democratic multi-party elections, and a 3 means democratic elections. Also, str_squish() was used to clean up whitespaces in the election_month variable. Lastly, variables were converted to appropriate data types using across(); year/count columns became numeric and indicator variables (starting with _is or _has) became logical.
+
+## Packages & Data Cleaning
+```{r}
+library(tidyverse)
+library(tidytuesdayR)
+library(pak)
+library(janitor)
+library(democracyData)
+options(pillar.width = Inf)
+
+tuesdata <- tidytuesdayR::tt_load(2024, week = 45)
+democracy_data <- tuesdata$democracy_data
+
+democracy_data <-
+  democracyData::pacl_update |> 
+  janitor::clean_names() |> 
+  dplyr::select(
+    "country_name" = "pacl_update_country",
+    "country_code" = "pacl_update_country_isocode",
+    "year",
+    "regime_category_index" = "dd_regime",
+    "regime_category" = "dd_category",
+    "is_monarchy" = "monarchy",
+    "is_commonwealth" = "commonwealth",
+    "monarch_name",
+    "monarch_accession_year" = "monarch_accession",
+    "monarch_birthyear",
+    "is_female_monarch" = "female_monarch",
+    "is_democracy" = "democracy",
+    "is_presidential" = "presidential",
+    "president_name",
+    "president_accesion_year" = "president_accesion",
+    "president_birthyear",
+    "is_interim_phase" = "interim_phase",
+    "is_female_president" = "female_president",
+    "is_colony" = "colony",
+    "colony_of",
+    "colony_administrated_by",
+    "is_communist" = "communist",
+    "has_regime_change_lag" = "regime_change_lag",
+    "spatial_democracy",
+    "parliament_chambers" = "no_of_chambers_in_parliament",
+    "has_proportional_voting" = "proportional_voting",
+    "election_system",
+    "lower_house_members" = "no_of_members_in_lower_house",
+    "upper_house_members" = "no_of_members_in_upper_house",
+    "third_house_members" = "no_of_members_in_third_house",
+    "has_new_constitution" = "new_constitution",
+    "has_full_suffrage" = "fullsuffrage",
+    "suffrage_restriction",
+    "electoral_category_index" = "electoral",
+    "spatial_electoral",
+    "has_alternation" = "alternation",
+    "is_multiparty" = "multiparty",
+    "has_free_and_fair_election" = "free_and_fair_election",
+    "parliamentary_election_year",
+    "election_month" = "election_month_year",
+    "has_postponed_election" = "postponed_election") |>
+  dplyr::mutate(
+    election_month = dplyr::na_if(.data$election_month, "?")) |> 
+  tidyr::separate_wider_regex(
+    "election_month",
+    patterns = c(
+      election_month = "\\D+",
+      election_year = "\\d{4}$"
+    ),
+    too_few = "align_start") |> 
+  dplyr::mutate(
+    electoral_category = dplyr::recode_values(
+      .data$electoral_category_index,
+      0 ~ "no elections",
+      1 ~ "single-party elections",
+      2 ~ "non-democratic multi-party elections",
+      3 ~ "democratic elections"),
+    .after = "electoral_category_index") |> 
+  dplyr::mutate(
+    election_month = stringr::str_squish(.data$election_month),
+    dplyr::across(
+      c(
+        tidyselect::ends_with("_index"),
+        tidyselect::contains("year"),
+        tidyselect::ends_with("_members"),
+        "parliament_chambers"),
+      as.integer),
+    dplyr::across(
+      c(
+        tidyselect::starts_with("is_"),
+        tidyselect::starts_with("has_")),
+      as.logical))
+
+```
+
+## Data Summary with Modified Columns and a Custom Function
+We created four new variables.
+
+- president_age_at_accession: a president's age at their accession, calculated by subtracting the president's birth year from their accession year
+- monarch_age_at_accession: a monarch's age at their accession, calculated by subtracting the monarch's birth year from their accession year
+- has_female_leader: an indicator variable indicating whether or not a country had a female president or monarch for that year, a 1 is "yes" and a 0 is "no"
+- era: a section of years, split up the years evenly using cut()
+
+Afterwards, we wrote a custom function summarise_leadership_gender_gap() that uses an input grouping variable to group the data before calculating proportions of female and male monarchs and presidents, their average accession ages, and the difference in those proportions and ages.
+```{r}
+# creating our new variables
+democracy_data <- democracy_data |>
+  mutate(
+    president_age_at_accession = president_accesion_year - president_birthyear,
+    monarch_age_at_accession = monarch_accession_year - monarch_birthyear,
+    has_female_leader = ifelse(is_female_president | is_female_monarch, 1, 0),
+    era = cut(year, breaks = seq(1950, 2020, by = 10),
+      labels = paste(seq(1950, 2010, by = 10), "-", seq(1959, 2019, by = 10)),
+      include.lowest = TRUE, right = FALSE))
+
+# writing our custom function
+summarise_leadership_gender_gap <- function(group_var) {
+  democracy_data |> 
+    filter(!is.na(democracy_data[[group_var]])) |>
+    # grouping data by specified grouping variable
+    group_by(across(all_of(group_var))) |>
+    summarise(n = n(),
+      # calculating proportions of female and male presidents
+      prop_female_president = mean(
+        ifelse(!is_monarchy, is_female_president, NA), na.rm = TRUE),
+      prop_male_president = mean(
+        ifelse(!is_monarchy, !is_female_president, NA), na.rm = TRUE),
+      # calculating difference in proportions of male presidents and female presidents (male - female)
+      gap_president_prop = prop_male_president - prop_female_president,
+      # calculating the average accession ages for female and male presidents
+      avg_accession_age_female_president = mean(
+        president_age_at_accession[is_presidential & is_female_president], na.rm = TRUE),
+      avg_accession_age_male_president = mean(
+        president_age_at_accession[is_presidential & !is_female_president], na.rm = TRUE),
+      
+      # calculating proportions of female and male monarchs
+      prop_female_monarch = mean(
+        ifelse(is_monarchy, is_female_monarch, NA), na.rm = TRUE),
+      prop_male_monarch = mean(
+        ifelse(is_monarchy, !is_female_monarch, NA), na.rm = TRUE),
+      # calculating difference in proportions of male presidents and female monarchs (male - female)
+      gap_monarch_prop = prop_male_monarch - prop_female_monarch,
+      # calculating the average accession ages for female and male monarchs
+      avg_accession_age_female_monarch = mean(
+        monarch_age_at_accession[is_monarchy & is_female_monarch], na.rm = TRUE),
+      avg_accession_age_male_monarch = mean(
+        monarch_age_at_accession[is_monarchy & !is_female_monarch], na.rm = TRUE),
+      # calculating difference in average accession ages of male and female monarchs (male - female)
+      gap_monarch_accession_age =
+        avg_accession_age_male_monarch - avg_accession_age_female_monarch,
+      .groups = "drop")
+}
+```
+
+We can add any variable from the dataset as a grouping variable. For example, we could input is_democracy or has_free_and_fair_election instead of era to see the different values for democratic vs non-democratic countries or countries with and without free and fair elections.
+```{r}
+summarise_leadership_gender_gap("is_democracy")
+summarise_leadership_gender_gap("has_free_and_fair_election")
+```
+
+In particular, however, we want to see those different values by era.
+```{r}
+summarise_leadership_gender_gap("era")
+```
+Over time, the proportions of female presidents and monarchs has increased. 
