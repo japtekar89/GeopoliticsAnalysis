@@ -261,7 +261,7 @@ The following object is masked from 'package:janitor':
 <li>president_age_at_accession: a president’s age at their accession, calculated by subtracting the president’s birth year from their accession year</li>
 <li>monarch_age_at_accession: a monarch’s age at their accession, calculated by subtracting the monarch’s birth year from their accession year</li>
 <li>has_female_leader: an indicator variable indicating whether or not a country had a female president or monarch for that year, a 1 is “yes” and a 0 is “no”</li>
-<li>era: a section of years, split up the years evenly using cut()</li>
+<li>decade: decade category, split up the years evenly using nested ifelse() statements</li>
 </ul>
 <p>Afterwards, we wrote a custom function summarise_leadership_gender_gap() that uses an input grouping variable to group the data before calculating proportions of female and male monarchs and presidents, their average accession ages, and the difference in those proportions and ages.</p>
 <div class="cell">
@@ -271,7 +271,7 @@ The following object is masked from 'package:janitor':
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">president_age_at_accession =</span> president_accesion_year <span class="sc">-</span> president_birthyear,</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">monarch_age_at_accession =</span> monarch_accession_year <span class="sc">-</span> monarch_birthyear,</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">has_female_leader =</span> <span class="fu">ifelse</span>(is_female_president <span class="sc">|</span> is_female_monarch, <span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">era =</span> <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1960</span>, <span class="st">"1950-1959"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">decade =</span> <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1960</span>, <span class="st">"1950-1959"</span>,</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1970</span>, <span class="st">"1960-1969"</span>,</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1980</span>, <span class="st">"1970-1979"</span>,</span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1990</span>, <span class="st">"1980-1989"</span>,</span>
@@ -368,12 +368,12 @@ The following object is masked from 'package:janitor':
 2                           38.6                      7.65</code></pre>
 </div>
 </div>
-<p>In particular, however, we want to see those different values by era.</p>
+<p>In particular, however, we want to see those different values by decade</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"era"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"decade"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 × 13
-  era           n prop_female_president prop_male_president gap_president_prop
+  decade        n prop_female_president prop_male_president gap_president_prop
   &lt;chr&gt;     &lt;int&gt;                 &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;
 1 1950-1959  2080               0                     1                  1    
 2 1960-1969  2080               0                     1                  1    
@@ -420,7 +420,7 @@ The following object is masked from 'package:janitor':
 7                     15.6 </code></pre>
 </div>
 </div>
-<p>Over time, the proportions of female presidents has increased to 6.96% of countries having a female president by 2020.</p>
+<p>Over time, the proportions of female presidents has increased to 6.96% of countries having a female president by 2020. The gender gap for presidents has decreased by 13.7% for female and male presidents. The average accession ages for female and male presidents are similar across all years, typically around 50-55 years old. The proportion of female monarchs was increasing until the 2000-2009 decade, where it slightly dropped from 35.6% to 32.6%. After that, it dropped to 25.3% for the 2010-2020 decade. This is the lowest proportion of female monarchs across all decades; thus the gender gap for monarchs increased from 41.7% in 1950-1959 to 49.5% in 2010-2020. Average accession ages for monarchs are much younger than that of presidents. The typical accession age for a monarch is around 30 years. Female monarchs seem to be slightly younger than male monarchs at accession. The most dramatic difference in accession ages is seen during 2010-2020, where the average male monarch accession age was 44.1, and the average female monarch accession age was 28.6.</p>
 </section>
 
 </main>
