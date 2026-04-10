@@ -103,7 +103,6 @@ democracy_data <-
         tidyselect::starts_with("is_"),
         tidyselect::starts_with("has_")),
       as.logical))
-
 ```
 
 ## Data Summary with Modified Columns and a Custom Function
@@ -122,9 +121,13 @@ democracy_data <- democracy_data |>
     president_age_at_accession = president_accesion_year - president_birthyear,
     monarch_age_at_accession = monarch_accession_year - monarch_birthyear,
     has_female_leader = ifelse(is_female_president | is_female_monarch, 1, 0),
-    era = cut(year, breaks = seq(1950, 2020, by = 10),
-      labels = paste(seq(1950, 2010, by = 10), "-", seq(1959, 2019, by = 10)),
-      include.lowest = TRUE, right = FALSE))
+    era = ifelse(year < 1960, "1950-1959",
+       ifelse(year < 1970, "1960-1969",
+       ifelse(year < 1980, "1970-1979",
+       ifelse(year < 1990, "1980-1989",
+       ifelse(year < 2000, "1990-1999",
+       ifelse(year < 2010, "2000-2009",
+                           "2010-2020")))))))
 
 # writing our custom function
 summarise_leadership_gender_gap <- function(group_var) {
@@ -175,4 +178,4 @@ In particular, however, we want to see those different values by era.
 ```{r}
 summarise_leadership_gender_gap("era")
 ```
-Over time, the proportions of female presidents and monarchs has increased. 
+Over time, the proportions of female presidents has increased to 6.96% of countries having a female president by 2020.
