@@ -45,7 +45,7 @@ democracy_data <-
     "is_democracy" = "democracy",
     "is_presidential" = "presidential",
     "president_name",
-    "president_accesion_year" = "president_accesion",
+    "president_accession_year" = "president_accesion", # caught a typo and fixed it, used to be president_accesion_year = president_accesion
     "president_birthyear",
     "is_interim_phase" = "interim_phase",
     "is_female_president" = "female_president",
@@ -78,8 +78,7 @@ democracy_data <-
     "election_month",
     patterns = c(
       election_month = "\\D+",
-      election_year = "\\d{4}$"
-    ),
+      election_year = "\\d{4}$"),
     too_few = "align_start") |> 
   dplyr::mutate(
     electoral_category = dplyr::recode_values(
@@ -92,20 +91,18 @@ democracy_data <-
   dplyr::mutate(
     election_month = stringr::str_squish(.data$election_month),
     dplyr::across(
-      c(
-        tidyselect::ends_with("_index"),
+      c(tidyselect::ends_with("_index"),
         tidyselect::contains("year"),
         tidyselect::ends_with("_members"),
         "parliament_chambers"),
       as.integer),
     dplyr::across(
-      c(
-        tidyselect::starts_with("is_"),
+      c(tidyselect::starts_with("is_"),
         tidyselect::starts_with("has_")),
       as.logical))
 ```
 
-## Data Summary with Modified Columns and a Custom Function
+## Modified Columns and a Custom Function**
 We created four new variables.
 
 - president_age_at_accession: a president's age at their accession, calculated by subtracting the president's birth year from their accession year
@@ -118,7 +115,7 @@ Afterwards, we wrote a custom function summarise_leadership_gender_gap() that us
 # creating our new variables
 democracy_data <- democracy_data |>
   mutate(
-    president_age_at_accession = president_accesion_year - president_birthyear,
+    president_age_at_accession = president_accession_year - president_birthyear,
     monarch_age_at_accession = monarch_accession_year - monarch_birthyear,
     has_female_leader = ifelse(is_female_president | is_female_monarch, 1, 0),
     decade = ifelse(year < 1960, "1950-1959",
@@ -174,9 +171,12 @@ summarise_leadership_gender_gap("is_democracy")
 summarise_leadership_gender_gap("has_free_and_fair_election")
 ```
 
-In particular, however, we want to see those different values by decade
+In particular, however, we want to see those different values by decade.
 ```{r}
 summarise_leadership_gender_gap("decade")
 ```
+**Conclusion**
+
 Over time, the proportions of female presidents has increased to 6.96% of countries having a female president by 2020. The gender gap for presidents has decreased by 13.7% for female and male presidents. The average accession ages for female and male presidents are similar across all years, typically around 50-55 years old.
+
 The proportion of female monarchs was increasing until the 2000-2009 decade, where it slightly dropped from 35.6% to 32.6%. After that, it dropped to 25.3% for the 2010-2020 decade. This is the lowest proportion of female monarchs across all decades; thus the gender gap for monarchs increased from 41.7% in 1950-1959 to 49.5% in 2010-2020. Average accession ages for monarchs are much younger than that of presidents. The typical accession age for a monarch is around 30 years. Female monarchs seem to be slightly younger than male monarchs at accession. The most dramatic difference in accession ages is seen during 2010-2020, where the average male monarch accession age was 44.1, and the average female monarch accession age was 28.6. 
