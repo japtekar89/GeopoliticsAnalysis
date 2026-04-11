@@ -4,6 +4,14 @@ author: "Julia Aptekar"
 format: html
 ---
 
+## Loading Data & Installing Packages
+```{R}
+democracy_data <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-05/democracy_data.csv')
+
+library(tidyverse)
+options(pillar.width = Inf)
+```
+
 ## Context
 This is a long data frame with 14,768 observations and 43 variables. 
 Each row contains political information for one country during a particular year.
@@ -13,17 +21,47 @@ Three variables provide information on timing of regime or leadership changes.
 Lastly, three variables provide information on colonial status and relationships of a country.
 
 ## What Cleaning Has Been Done?
-First, variables were renamed to all lowercase names with clean_names(). Then, many variable names were renamed to clearer and more descriptive names (for example, dd_regime became regime_category_index). Next, "?" values in the election_month column were converted to NA with na_if(), before the column was split into separate month and year variables with separate_wider_regex(). A new variable, electoral_category, is created using case_match() from electoral_category_index which contained values of 0-3 that measure the level of electoral competition; a 0 means no elections, a 1 means single-party elections, a 2 means non-democratic multi-party elections, and a 3 means democratic elections. Also, str_squish() was used to clean up whitespaces in the election_month variable. Lastly, variables were converted to appropriate data types using across(); year/count columns became numeric and indicator variables (starting with _is or _has) became logical.
+First, variables were renamed to all lowercase names with clean_names(). Then, many variable names were renamed to clearer and more descriptive names (for example, dd_regime became regime_category_index). 
+Next, "?" values in the election_month column were converted to NA with na_if(), before the column was split into separate month and year variables with separate_wider_regex(). 
+A new variable, electoral_category, is created using case_match() from electoral_category_index which contained values of 0-3 that measure the level of electoral competition; a 0 means no elections, a 1 means single-party elections, a 2 means non-democratic multi-party elections, and a 3 means democratic elections. 
+Also, str_squish() was used to clean up whitespaces in the election_month variable. 
+Lastly, variables were converted to appropriate data types using across(); year/count columns became numeric and indicator variables (starting with _is or _has) became logical.
 
-## Packages & Data Cleaning
-```{r}
-library(tidyverse)
-options(pillar.width = Inf)
-democracy_data <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-05/democracy_data.csv')
+## Among countries in the year 2000, how does the proportion of full suffrage differ across electoral systems (monarchy vs. presidential)? 
+**Unmodified columns with a custom function**
+```{R}
+full_sample_2000s <- democracy_data %>%
+  filter(year == 2000) %>%
+  distinct(country_name, .keep_all = TRUE)
+
+monarchy_2000s <- democracy_data %>%
+  filter(is_monarchy, year == 2000) %>%
+  distinct(country_name, .keep_all = TRUE)
+
+presidential_2000s <- democracy_data %>%
+  filter(is_presidential, year == 2000) %>%
+  distinct(country_name, .keep_all = TRUE)
+
+prop_full_suffrage <- function(df) {
+  mean(df$has_full_suffrage, na.rm = TRUE)
+}
+
+overall_prop <- prop_full_suffrage(full_sample_2000s)
+monarchy_prop <- prop_full_suffrage(monarchy_2000s)
+presidential_prop <- prop_full_suffrage(presidential_2000s)
+
+data.frame(
+  system = c("Overall", "Monarchy", "Presidential"),
+  proportion_full_suffrage = c(overall_prop, monarchy_prop, presidential_prop)
+)
 ```
+
+**Conclusion**
+Looking at the summary statistics for the year 2000, presidential countries are more likely to have full suffrage compared to monarchies. This result makes sense because presidents are typically elected by the public, while monarchs usually inherit their positions through hereditary systems.
 
 ## How have gender gaps in presidential and monarchical leadership evolved across decades, and are these gaps larger in non-democratic countries?
 **Modified columns with a custom function**
+
 We created four new variables.
 
 - president_age_at_accession: a president's age at their accession, calculated by subtracting the president's birth year from their accession year
@@ -100,8 +138,113 @@ We also want to see these different values by decade.
 ```{r}
 summarise_leadership_gender_gap("decade")
 ```
-**Conclusion**
-
 Over time, the proportions of female presidents has increased to 6.96% of countries having a female president by 2020. The gender gap for presidents has decreased by 13.7 percentage points for female and male presidents. The average accession ages for female and male presidents are similar across all years, typically around 50-55 years old. The largest difference in accession ages occurred in 1970-1979, when the average accession age of female presidents was 43, and the average accession age of male presidents was 48.6.
 
 The proportion of female monarchs was increasing until the 2000-2009 decade, where it slightly dropped from 35.6% to 32.6%. After that, it dropped to 25.3% for the 2010-2020 decade. This is the lowest proportion of female monarchs across all decades; thus the gender gap for monarchs increased from 41.7% in 1950-1959 to 49.5% in 2010-2020. Average accession ages for monarchs are much younger than that of presidents. The typical accession age for a monarch is around 30 years. Female monarchs seem to be slightly younger than male monarchs at accession. The most dramatic difference in accession ages is seen during 2010-2020, where the average male monarch accession age was 44.1, and the average female monarch accession age was 28.6. 
+
+## How does the proportion of countries with full suffrage differ between monarchies and presidencies over each decade (1950s-2020s)?
+**Unmodified columns with iteration**
+```{R}
+decade_range <- seq(from = 1950, to = 2020, by = 10)
+
+suff_results <- data.frame(decade = integer(),
+                           gov_type = character(),
+                           prop_full_suffrage = numeric())
+for(i in decade_range){
+  start_year <- i
+  end_year <- i + 9
+  
+  dd_decade <- democracy_data |>
+    filter(year >= start_year & year <= end_year)
+  
+for(j in c("Presidential democracy", "Royal dictatorship")){
+  dd_subset <- dd_decade |>
+    filter(regime_category == j) |>
+    distinct(country_name, .keep_all = TRUE)
+  
+  if(nrow(dd_subset) > 0){
+    prop <- sum(dd_subset$has_full_suffrage == TRUE, na.rm = TRUE)/nrow(dd_subset)
+  }
+  else{
+    prop <- NA
+  }
+  suff_results <- rbind(suff_results, data.frame(
+  decade = i,
+  gov_type = j,
+  prop_full_suffrage = prop
+))
+}
+}
+suff_results
+```
+**Conclusion**
+The results above indicate clear differences between countries under presidential democracies and countries under royal dictatorships. Beginning in the 1950s, 50% of countries under presidential democracies had full suffrage, while 0% of countries under royal dictatorships had full suffrage. The proportion of presidential democracies with full suffrage quickly increased. The proportion jumped to about 94% in the 1970s, and has been at/near 100% since the 1980s. However, the opposite is true for countries under royal dictatorships. From the 1960's to the 2000s, only about 20-36% of countries had full suffrage. This proportion fluctuated throughout the decades. However, this proportion increased to about 75% in the 2010s. Ultimately, presidential democracies were quick to grant full suffrage, while royal dictatorships fall behind and are slower to grant full suffrage. 
+
+## How do democratic transitions within countries contribute to changes in the global proportion of democratic regimes over time?
+**Modified columns with iteration**
+
+New columns: to_democracy, from_democracy, ten_yrs
+Required Iteration: going through the data and changing the value of the columns to_democracy and from_democracy
+```{R}
+#arranging by country and year
+democracy_data <- democracy_data |> 
+  arrange(country_code, year)
+
+#creating new columns to the data, and assigning them to 0 to start with. this is an indicator variable, with 0 being no transition, and 1 meaning there is a transition. for example, if for a country 2000 is a 0 for the to_democracy variable and 2001 there is a 1, there was a transition to democracy in 2001. 
+democracy_data$to_democracy <- 0
+democracy_data$from_democracy <- 0
+
+#to iterate through rows to find out which ones have transitions. starting at 2 because we are comparing to the previous row (2-1 = 1)
+for (i in 2:nrow(democracy_data)) {
+  #checking if the two countries that are next to each other in the data are the same 
+  if (democracy_data$country_code[i] == democracy_data$country_code[i-1]) { 
+    #assigning them to current and previous labels
+    current <- democracy_data$is_democracy[i]
+    previous <- democracy_data$is_democracy[i - 1]
+    #making sure there are no na values for the is_democracy variable
+    if (!is.na(current) && !is.na(previous)) {
+      #if this year there is democracy and the previous year there wasn't, it is marked as a transition to democracy
+      if (current && !previous) {
+        democracy_data$to_democracy[i] <- 1
+      }
+      #opposite for this one 
+    if (!current && previous) {
+        democracy_data$from_democracy[i] <- 1
+      }
+    }
+  }
+}
+
+#first grouping by year, and then summarizing the proportion of democracy, and transitions in and out of democracy
+summary_data <- democracy_data |>
+  group_by(year) |>
+  summarize(
+    prop_democracy = mean(is_democracy, na.rm = TRUE),
+    transitions_in = sum(to_democracy, na.rm = TRUE),
+    transitions_out = sum(from_democracy, na.rm = TRUE)
+  )
+summary_data
+#after viewing this data, it would be helpful to analyze these trends using something like a plot, but looking at it as a table is overwhelming. To counteract this, we can condense the years to 5 or 10 years at the time to get a better look at overall trends. 
+#we have to create a new column to group the years
+democracy_data <- democracy_data |>
+  mutate(ten_yrs = floor(year / 10) * 10)
+#used the floor function here, that rounds a number down to the greatest integer less than or equal to it, here by 10s.
+summary_ten_yrs <- democracy_data |>
+  group_by(ten_yrs) |>
+  summarize(
+    prop_democracy = mean(is_democracy, na.rm = TRUE),
+    transitions_in = sum(to_democracy, na.rm = TRUE),
+    transitions_out = sum(from_democracy, na.rm = TRUE),
+    .groups = "drop"
+  )
+summary_ten_yrs
+
+#we also want to look at the correlation between the to and from democracy;s and the proportion of countries that are democratic. 
+cor_matrix <- summary_data |>
+  select(prop_democracy, transitions_in, transitions_out) %>%
+  cor(use = "complete.obs")
+
+cor_matrix
+```
+**Conclusion**
+Looking at this table, it is clear that democracy has been overwhelmingly on the rise. However, there have been the most transitions into democracy in the 1990's, and the most transitions out in the 1960's, which doesn't necessarily line up with the transition numbers. So, I created a correlation matrix to look at the relationship between the proportion of democratic countries and the flow of countries changing to be either democratic or not. They all had particularly weak correlations, and this means that there isn't necessarily a relationship between the overall amounts of democratic countries and the state of transitions that there are in the world. This means that the transitions to and from democracy often just offset each other. 
