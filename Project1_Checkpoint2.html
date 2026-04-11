@@ -130,125 +130,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytuesdayR)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pak)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">pillar.width =</span> <span class="cn">Inf</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>democracy_data <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-05/democracy_data.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'janitor'
+<pre><code>Rows: 14768 Columns: 43
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (11): country_name, country_code, regime_category, monarch_name, preside...
+dbl (15): year, regime_category_index, monarch_accession_year, monarch_birth...
+lgl (17): is_monarchy, is_commonwealth, is_female_monarch, is_democracy, is_...
 
-The following objects are masked from 'package:stats':
-
-    chisq.test, fisher.test</code></pre>
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(democracyData)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'democracyData'
-
-The following object is masked from 'package:janitor':
-
-    remove_empty_rows</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">pillar.width =</span> <span class="cn">Inf</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="dv">2024</span>, <span class="at">week =</span> <span class="dv">45</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>---- Compiling #TidyTuesday Information for 2024-11-05 ----
---- There is 1 file available ---
-
-
-── Downloading files ───────────────────────────────────────────────────────────
-
-  1 of 1: "democracy_data.csv"</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: The `file` argument of `vroom()` must use `I()` for literal data as of vroom
-1.5.0.
-  
-  # Bad:
-  vroom("X,Y\n1.5,2.3\n")
-  
-  # Good:
-  vroom(I("X,Y\n1.5,2.3\n"))
-ℹ The deprecated feature was likely used in the readr package.
-  Please report the issue at &lt;https://github.com/tidyverse/readr/issues&gt;.</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>democracy_data <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>democracy_data</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>democracy_data <span class="ot">&lt;-</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  democracyData<span class="sc">::</span>pacl_update <span class="sc">|&gt;</span> </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"country_name"</span> <span class="ot">=</span> <span class="st">"pacl_update_country"</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"country_code"</span> <span class="ot">=</span> <span class="st">"pacl_update_country_isocode"</span>,</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"year"</span>,</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"regime_category_index"</span> <span class="ot">=</span> <span class="st">"dd_regime"</span>,</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"regime_category"</span> <span class="ot">=</span> <span class="st">"dd_category"</span>,</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_monarchy"</span> <span class="ot">=</span> <span class="st">"monarchy"</span>,</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_commonwealth"</span> <span class="ot">=</span> <span class="st">"commonwealth"</span>,</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"monarch_name"</span>,</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"monarch_accession_year"</span> <span class="ot">=</span> <span class="st">"monarch_accession"</span>,</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"monarch_birthyear"</span>,</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_female_monarch"</span> <span class="ot">=</span> <span class="st">"female_monarch"</span>,</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_democracy"</span> <span class="ot">=</span> <span class="st">"democracy"</span>,</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_presidential"</span> <span class="ot">=</span> <span class="st">"presidential"</span>,</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"president_name"</span>,</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"president_accession_year"</span> <span class="ot">=</span> <span class="st">"president_accesion"</span>, <span class="co"># caught a typo and fixed it, used to be president_accesion_year = president_accesion</span></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"president_birthyear"</span>,</span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_interim_phase"</span> <span class="ot">=</span> <span class="st">"interim_phase"</span>,</span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_female_president"</span> <span class="ot">=</span> <span class="st">"female_president"</span>,</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_colony"</span> <span class="ot">=</span> <span class="st">"colony"</span>,</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"colony_of"</span>,</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"colony_administrated_by"</span>,</span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_communist"</span> <span class="ot">=</span> <span class="st">"communist"</span>,</span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"has_regime_change_lag"</span> <span class="ot">=</span> <span class="st">"regime_change_lag"</span>,</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"spatial_democracy"</span>,</span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"parliament_chambers"</span> <span class="ot">=</span> <span class="st">"no_of_chambers_in_parliament"</span>,</span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"has_proportional_voting"</span> <span class="ot">=</span> <span class="st">"proportional_voting"</span>,</span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">"election_system"</span>,</span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lower_house_members"</span> <span class="ot">=</span> <span class="st">"no_of_members_in_lower_house"</span>,</span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"upper_house_members"</span> <span class="ot">=</span> <span class="st">"no_of_members_in_upper_house"</span>,</span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">"third_house_members"</span> <span class="ot">=</span> <span class="st">"no_of_members_in_third_house"</span>,</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"has_new_constitution"</span> <span class="ot">=</span> <span class="st">"new_constitution"</span>,</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"has_full_suffrage"</span> <span class="ot">=</span> <span class="st">"fullsuffrage"</span>,</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"suffrage_restriction"</span>,</span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">"electoral_category_index"</span> <span class="ot">=</span> <span class="st">"electoral"</span>,</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"spatial_electoral"</span>,</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">"has_alternation"</span> <span class="ot">=</span> <span class="st">"alternation"</span>,</span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"is_multiparty"</span> <span class="ot">=</span> <span class="st">"multiparty"</span>,</span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"has_free_and_fair_election"</span> <span class="ot">=</span> <span class="st">"free_and_fair_election"</span>,</span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"parliamentary_election_year"</span>,</span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"election_month"</span> <span class="ot">=</span> <span class="st">"election_month_year"</span>,</span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"has_postponed_election"</span> <span class="ot">=</span> <span class="st">"postponed_election"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">election_month =</span> dplyr<span class="sc">::</span><span class="fu">na_if</span>(.data<span class="sc">$</span>election_month, <span class="st">"?"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">separate_wider_regex</span>(</span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>    <span class="st">"election_month"</span>,</span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">patterns =</span> <span class="fu">c</span>(</span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>      <span class="at">election_month =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">D+"</span>,</span>
-<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>      <span class="at">election_year =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">d{4}$"</span>),</span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">too_few =</span> <span class="st">"align_start"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">electoral_category =</span> dplyr<span class="sc">::</span><span class="fu">recode_values</span>(</span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>      .data<span class="sc">$</span>electoral_category_index,</span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>      <span class="dv">0</span> <span class="sc">~</span> <span class="st">"no elections"</span>,</span>
-<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span> <span class="sc">~</span> <span class="st">"single-party elections"</span>,</span>
-<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span> <span class="sc">~</span> <span class="st">"non-democratic multi-party elections"</span>,</span>
-<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>      <span class="dv">3</span> <span class="sc">~</span> <span class="st">"democratic elections"</span>),</span>
-<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">.after =</span> <span class="st">"electoral_category_index"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">election_month =</span> stringr<span class="sc">::</span><span class="fu">str_squish</span>(.data<span class="sc">$</span>election_month),</span>
-<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">across</span>(</span>
-<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(tidyselect<span class="sc">::</span><span class="fu">ends_with</span>(<span class="st">"_index"</span>),</span>
-<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>        tidyselect<span class="sc">::</span><span class="fu">contains</span>(<span class="st">"year"</span>),</span>
-<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>        tidyselect<span class="sc">::</span><span class="fu">ends_with</span>(<span class="st">"_members"</span>),</span>
-<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>        <span class="st">"parliament_chambers"</span>),</span>
-<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>      as.integer),</span>
-<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">across</span>(</span>
-<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(tidyselect<span class="sc">::</span><span class="fu">starts_with</span>(<span class="st">"is_"</span>),</span>
-<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>        tidyselect<span class="sc">::</span><span class="fu">starts_with</span>(<span class="st">"has_"</span>)),</span>
-<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>      as.logical))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="modified-columns-and-a-custom-function" class="level2">
@@ -262,63 +156,65 @@ The following object is masked from 'package:janitor':
 </ul>
 <p>Afterwards, we wrote a custom function summarise_leadership_gender_gap() that uses an input grouping variable to group the data before calculating proportions of female and male monarchs and presidents, their average accession ages, and the difference in those proportions and ages.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creating our new variables</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>democracy_data <span class="ot">&lt;-</span> democracy_data <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">president_age_at_accession =</span> president_accession_year <span class="sc">-</span> president_birthyear,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">monarch_age_at_accession =</span> monarch_accession_year <span class="sc">-</span> monarch_birthyear,</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">has_female_leader =</span> <span class="fu">ifelse</span>(is_female_president <span class="sc">|</span> is_female_monarch, <span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">decade =</span> <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1960</span>, <span class="st">"1950-1959"</span>,</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1970</span>, <span class="st">"1960-1969"</span>,</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1980</span>, <span class="st">"1970-1979"</span>,</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1990</span>, <span class="st">"1980-1989"</span>,</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">2000</span>, <span class="st">"1990-1999"</span>,</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">2010</span>, <span class="st">"2000-2009"</span>,</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"2010-2020"</span>)))))))</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co"># writing our custom function</span></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>summarise_leadership_gender_gap <span class="ot">&lt;-</span> <span class="cf">function</span>(group_var) {</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  democracy_data <span class="sc">|&gt;</span> </span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(democracy_data[[group_var]])) <span class="sc">|&gt;</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># grouping data by specified grouping variable</span></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(group_var))) <span class="sc">|&gt;</span></span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating proportions of female and male presidents</span></span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">prop_female_president =</span> <span class="fu">mean</span>(</span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(<span class="sc">!</span>is_monarchy, is_female_president, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">prop_male_president =</span> <span class="fu">mean</span>(</span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(<span class="sc">!</span>is_monarchy, <span class="sc">!</span>is_female_president, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating difference in proportions of male presidents and female presidents (male - female)</span></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">gap_president_prop =</span> prop_male_president <span class="sc">-</span> prop_female_president,</span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating the average accession ages for female and male presidents</span></span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_accession_age_female_president =</span> <span class="fu">mean</span>(</span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>        president_age_at_accession[is_presidential <span class="sc">&amp;</span> is_female_president], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_accession_age_male_president =</span> <span class="fu">mean</span>(</span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>        president_age_at_accession[is_presidential <span class="sc">&amp;</span> <span class="sc">!</span>is_female_president], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating proportions of female and male monarchs</span></span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">prop_female_monarch =</span> <span class="fu">mean</span>(</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(is_monarchy, is_female_monarch, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">prop_male_monarch =</span> <span class="fu">mean</span>(</span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(is_monarchy, <span class="sc">!</span>is_female_monarch, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating difference in proportions of male presidents and female monarchs (male - female)</span></span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">gap_monarch_prop =</span> prop_male_monarch <span class="sc">-</span> prop_female_monarch,</span>
-<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating the average accession ages for female and male monarchs</span></span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_accession_age_female_monarch =</span> <span class="fu">mean</span>(</span>
-<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>        monarch_age_at_accession[is_monarchy <span class="sc">&amp;</span> is_female_monarch], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_accession_age_male_monarch =</span> <span class="fu">mean</span>(</span>
-<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>        monarch_age_at_accession[is_monarchy <span class="sc">&amp;</span> <span class="sc">!</span>is_female_monarch], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating difference in average accession ages of male and female monarchs (male - female)</span></span>
-<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>      <span class="at">gap_monarch_accession_age =</span></span>
-<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>        avg_accession_age_male_monarch <span class="sc">-</span> avg_accession_age_female_monarch,</span>
-<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creating our new variables</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>democracy_data <span class="ot">&lt;-</span> democracy_data <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">president_age_at_accession =</span> president_accesion_year <span class="sc">-</span> president_birthyear,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">monarch_age_at_accession =</span> monarch_accession_year <span class="sc">-</span> monarch_birthyear,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">has_female_leader =</span> <span class="fu">ifelse</span>(is_female_president <span class="sc">|</span> is_female_monarch, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">decade =</span> <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1960</span>, <span class="st">"1950-1959"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1970</span>, <span class="st">"1960-1969"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1980</span>, <span class="st">"1970-1979"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1990</span>, <span class="st">"1980-1989"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">2000</span>, <span class="st">"1990-1999"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">2010</span>, <span class="st">"2000-2009"</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"2010-2020"</span>)))))))</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># writing our custom function</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>summarise_leadership_gender_gap <span class="ot">&lt;-</span> <span class="cf">function</span>(group_var) {</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  democracy_data <span class="sc">|&gt;</span> </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(democracy_data[[group_var]])) <span class="sc">|&gt;</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># grouping data by specified grouping variable</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(group_var))) <span class="sc">|&gt;</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating proportions of female and male presidents</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">prop_female_president =</span> <span class="fu">mean</span>(</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(<span class="sc">!</span>is_monarchy, is_female_president, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">prop_male_president =</span> <span class="fu">mean</span>(</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(<span class="sc">!</span>is_monarchy, <span class="sc">!</span>is_female_president, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating difference in proportions of male presidents and female presidents (male - female)</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">gap_president_prop =</span> prop_male_president <span class="sc">-</span> prop_female_president,</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating the average accession ages for female and male presidents</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_accession_age_female_president =</span> <span class="fu">mean</span>(</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        president_age_at_accession[is_presidential <span class="sc">&amp;</span> is_female_president], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_accession_age_male_president =</span> <span class="fu">mean</span>(</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        president_age_at_accession[is_presidential <span class="sc">&amp;</span> <span class="sc">!</span>is_female_president], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating difference in average accession ages of male and female presidents (male - female)</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">gap_president_accession_age =</span> avg_accession_age_male_president <span class="sc">-</span> avg_accession_age_female_president,</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating proportions of female and male monarchs</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">prop_female_monarch =</span> <span class="fu">mean</span>(</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(is_monarchy, is_female_monarch, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>      <span class="at">prop_male_monarch =</span> <span class="fu">mean</span>(</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ifelse</span>(is_monarchy, <span class="sc">!</span>is_female_monarch, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating difference in proportions of male monarchs and female monarchs (male - female)</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>      <span class="at">gap_monarch_prop =</span> prop_male_monarch <span class="sc">-</span> prop_female_monarch,</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating the average accession ages for female and male monarchs</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_accession_age_female_monarch =</span> <span class="fu">mean</span>(</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>        monarch_age_at_accession[is_monarchy <span class="sc">&amp;</span> is_female_monarch], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_accession_age_male_monarch =</span> <span class="fu">mean</span>(</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>        monarch_age_at_accession[is_monarchy <span class="sc">&amp;</span> <span class="sc">!</span>is_female_monarch], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculating difference in average accession ages of male and female monarchs (male - female)</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>      <span class="at">gap_monarch_accession_age =</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>        avg_accession_age_male_monarch <span class="sc">-</span> avg_accession_age_female_monarch,</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can add any variable from the dataset as a grouping variable. For example, we could input is_democracy or has_free_and_fair_election instead of era to see the different values for democratic vs non-democratic countries or countries with and without free and fair elections.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"is_democracy"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"is_democracy"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 13
+<pre><code># A tibble: 2 × 14
   is_democracy     n prop_female_president prop_male_president
   &lt;lgl&gt;        &lt;int&gt;                 &lt;dbl&gt;               &lt;dbl&gt;
 1 FALSE         8000               0.00462               0.995
@@ -327,22 +223,26 @@ The following object is masked from 'package:janitor':
                &lt;dbl&gt;                              &lt;dbl&gt;
 1              0.991                               62.4
 2              0.887                               54.2
-  avg_accession_age_male_president prop_female_monarch prop_male_monarch
-                             &lt;dbl&gt;               &lt;dbl&gt;             &lt;dbl&gt;
-1                             48.6              0.0795             0.920
-2                             57.0              0.522              0.478
-  gap_monarch_prop avg_accession_age_female_monarch
-             &lt;dbl&gt;                            &lt;dbl&gt;
-1           0.841                              27.6
-2          -0.0440                             31.0
-  avg_accession_age_male_monarch gap_monarch_accession_age
-                           &lt;dbl&gt;                     &lt;dbl&gt;
-1                           34.7                      7.10
-2                           38.7                      7.73</code></pre>
+  avg_accession_age_male_president gap_president_accession_age
+                             &lt;dbl&gt;                       &lt;dbl&gt;
+1                             48.6                      -13.7 
+2                             57.0                        2.81
+  prop_female_monarch prop_male_monarch gap_monarch_prop
+                &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;
+1              0.0795             0.920           0.841 
+2              0.522              0.478          -0.0440
+  avg_accession_age_female_monarch avg_accession_age_male_monarch
+                             &lt;dbl&gt;                          &lt;dbl&gt;
+1                             27.6                           34.7
+2                             31.0                           38.7
+  gap_monarch_accession_age
+                      &lt;dbl&gt;
+1                      7.10
+2                      7.73</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"has_free_and_fair_election"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"has_free_and_fair_election"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 13
+<pre><code># A tibble: 2 × 14
   has_free_and_fair_election     n prop_female_president prop_male_president
   &lt;lgl&gt;                      &lt;int&gt;                 &lt;dbl&gt;               &lt;dbl&gt;
 1 FALSE                       7873               0.00475               0.995
@@ -351,25 +251,29 @@ The following object is masked from 'package:janitor':
                &lt;dbl&gt;                              &lt;dbl&gt;
 1              0.991                               62.4
 2              0.891                               54.2
-  avg_accession_age_male_president prop_female_monarch prop_male_monarch
-                             &lt;dbl&gt;               &lt;dbl&gt;             &lt;dbl&gt;
-1                             48.3              0.0757             0.924
-2                             57.2              0.522              0.478
-  gap_monarch_prop avg_accession_age_female_monarch
-             &lt;dbl&gt;                            &lt;dbl&gt;
-1           0.849                              27.7
-2          -0.0437                             31.0
-  avg_accession_age_male_monarch gap_monarch_accession_age
-                           &lt;dbl&gt;                     &lt;dbl&gt;
-1                           34.8                      7.05
-2                           38.6                      7.65</code></pre>
+  avg_accession_age_male_president gap_president_accession_age
+                             &lt;dbl&gt;                       &lt;dbl&gt;
+1                             48.3                      -14.0 
+2                             57.2                        2.95
+  prop_female_monarch prop_male_monarch gap_monarch_prop
+                &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;
+1              0.0757             0.924           0.849 
+2              0.522              0.478          -0.0437
+  avg_accession_age_female_monarch avg_accession_age_male_monarch
+                             &lt;dbl&gt;                          &lt;dbl&gt;
+1                             27.7                           34.8
+2                             31.0                           38.6
+  gap_monarch_accession_age
+                      &lt;dbl&gt;
+1                      7.05
+2                      7.65</code></pre>
 </div>
 </div>
 <p>In particular, however, we want to see those different values by decade.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"decade"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"decade"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 7 × 13
+<pre><code># A tibble: 7 × 14
   decade        n prop_female_president prop_male_president gap_president_prop
   &lt;chr&gt;     &lt;int&gt;                 &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;
 1 1950-1959  2080               0                     1                  1    
@@ -388,37 +292,37 @@ The following object is masked from 'package:janitor':
 5                               51.1                             51.8
 6                               53.5                             53.0
 7                               58.5                             55.7
-  prop_female_monarch prop_male_monarch gap_monarch_prop
-                &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-1               0.291             0.709            0.417
-2               0.300             0.700            0.399
-3               0.326             0.674            0.349
-4               0.351             0.649            0.297
-5               0.356             0.644            0.289
-6               0.326             0.674            0.348
-7               0.253             0.747            0.495
-  avg_accession_age_female_monarch avg_accession_age_male_monarch
-                             &lt;dbl&gt;                          &lt;dbl&gt;
-1                             30.0                           32.0
-2                             29.5                           34.8
-3                             30.4                           33.2
-4                             31.4                           33.3
-5                             32.1                           35.9
-6                             31.8                           41.1
-7                             28.6                           44.1
-  gap_monarch_accession_age
-                      &lt;dbl&gt;
-1                      1.97
-2                      5.36
-3                      2.81
-4                      1.91
-5                      3.80
-6                      9.25
-7                     15.6 </code></pre>
+  gap_president_accession_age prop_female_monarch prop_male_monarch
+                        &lt;dbl&gt;               &lt;dbl&gt;             &lt;dbl&gt;
+1                     NaN                   0.291             0.709
+2                     NaN                   0.300             0.700
+3                       5.62                0.326             0.674
+4                      -2.25                0.351             0.649
+5                       0.704               0.356             0.644
+6                      -0.551               0.326             0.674
+7                      -2.83                0.253             0.747
+  gap_monarch_prop avg_accession_age_female_monarch
+             &lt;dbl&gt;                            &lt;dbl&gt;
+1            0.417                             30.0
+2            0.399                             29.5
+3            0.349                             30.4
+4            0.297                             31.4
+5            0.289                             32.1
+6            0.348                             31.8
+7            0.495                             28.6
+  avg_accession_age_male_monarch gap_monarch_accession_age
+                           &lt;dbl&gt;                     &lt;dbl&gt;
+1                           32.0                      1.97
+2                           34.8                      5.36
+3                           33.2                      2.81
+4                           33.3                      1.91
+5                           35.9                      3.80
+6                           41.1                      9.25
+7                           44.1                     15.6 </code></pre>
 </div>
 </div>
 <p><strong>Conclusion</strong></p>
-<p>Over time, the proportions of female presidents has increased to 6.96% of countries having a female president by 2020. The gender gap for presidents has decreased by 13.7% for female and male presidents. The average accession ages for female and male presidents are similar across all years, typically around 50-55 years old.</p>
+<p>Over time, the proportions of female presidents has increased to 6.96% of countries having a female president by 2020. The gender gap for presidents has decreased by 13.7% for female and male presidents. The average accession ages for female and male presidents are similar across all years, typically around 50-55 years old. The largest difference in accession ages occurred in 1970-1979, when the average accession age of female presidents was 43, and the average accession age of male presidents was 48.6.</p>
 <p>The proportion of female monarchs was increasing until the 2000-2009 decade, where it slightly dropped from 35.6% to 32.6%. After that, it dropped to 25.3% for the 2010-2020 decade. This is the lowest proportion of female monarchs across all decades; thus the gender gap for monarchs increased from 41.7% in 1950-1959 to 49.5% in 2010-2020. Average accession ages for monarchs are much younger than that of presidents. The typical accession age for a monarch is around 30 years. Female monarchs seem to be slightly younger than male monarchs at accession. The most dramatic difference in accession ages is seen during 2010-2020, where the average male monarch accession age was 44.1, and the average female monarch accession age was 28.6.</p>
 </section>
 
