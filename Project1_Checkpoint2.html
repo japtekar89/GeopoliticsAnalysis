@@ -145,9 +145,9 @@ lgl (17): is_monarchy, is_commonwealth, is_female_monarch, is_democracy, is_...
 </div>
 </div>
 </section>
-<section id="modified-columns-and-a-custom-function" class="level2">
-<h2 class="anchored" data-anchor-id="modified-columns-and-a-custom-function">Modified Columns and a Custom Function**</h2>
-<p>We created four new variables.</p>
+<section id="how-have-gender-gaps-in-presidential-and-monarchical-leadership-evolved-across-decades-and-are-these-gaps-larger-in-non-democratic-countries" class="level2">
+<h2 class="anchored" data-anchor-id="how-have-gender-gaps-in-presidential-and-monarchical-leadership-evolved-across-decades-and-are-these-gaps-larger-in-non-democratic-countries">How have gender gaps in presidential and monarchical leadership evolved across decades, and are these gaps larger in non-democratic countries?</h2>
+<p><strong>Modified columns with a custom function</strong> We created four new variables.</p>
 <ul>
 <li>president_age_at_accession: a president’s age at their accession, calculated by subtracting the president’s birth year from their accession year</li>
 <li>monarch_age_at_accession: a monarch’s age at their accession, calculated by subtracting the monarch’s birth year from their accession year</li>
@@ -210,7 +210,7 @@ lgl (17): is_monarchy, is_commonwealth, is_female_monarch, is_democracy, is_...
 <span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
 <span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>We can add any variable from the dataset as a grouping variable. For example, we could input is_democracy or has_free_and_fair_election instead of era to see the different values for democratic vs non-democratic countries or countries with and without free and fair elections.</p>
+<p>We can add any variable from the dataset as a grouping variable. For example, we could input is_democracy to see the different values for democratic vs non-democratic countries or countries with and without free and fair elections.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"is_democracy"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -240,38 +240,12 @@ lgl (17): is_monarchy, is_commonwealth, is_female_monarch, is_democracy, is_...
 1                      7.10
 2                      7.73</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"has_free_and_fair_election"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 14
-  has_free_and_fair_election     n prop_female_president prop_male_president
-  &lt;lgl&gt;                      &lt;int&gt;                 &lt;dbl&gt;               &lt;dbl&gt;
-1 FALSE                       7873               0.00475               0.995
-2 TRUE                        6870               0.0546                0.945
-  gap_president_prop avg_accession_age_female_president
-               &lt;dbl&gt;                              &lt;dbl&gt;
-1              0.991                               62.4
-2              0.891                               54.2
-  avg_accession_age_male_president gap_president_accession_age
-                             &lt;dbl&gt;                       &lt;dbl&gt;
-1                             48.3                      -14.0 
-2                             57.2                        2.95
-  prop_female_monarch prop_male_monarch gap_monarch_prop
-                &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-1              0.0757             0.924           0.849 
-2              0.522              0.478          -0.0437
-  avg_accession_age_female_monarch avg_accession_age_male_monarch
-                             &lt;dbl&gt;                          &lt;dbl&gt;
-1                             27.7                           34.8
-2                             31.0                           38.6
-  gap_monarch_accession_age
-                      &lt;dbl&gt;
-1                      7.05
-2                      7.65</code></pre>
 </div>
-</div>
-<p>In particular, however, we want to see those different values by decade.</p>
+<p>The proportion of female presidents is higher for democratic countries than non-democratic countries. The proportions of male presidents are similar across democratic and non-democratic countries, but the proportion of male presidents for democratic countries is slightly lower. Non-democratic countries’ female presidents are, on average, about 13.7 years older than male presidents. For democratic countries, that difference is much lower, at 2.81 years.</p>
+<p>The proportion of male monarchs in non-democratic countries is 84.1 percentage points higher than that of female monarchs. However, in democratic countries, the proportions of male and female monarchs are very similar (47.8% and 52.2%, respectively). Monarchs of both gender are much younger on average than presidents, around 30-35 years old. Non-democratic countries seem to have younger monarchs than democratic countries.</p>
+<p>We also want to see these different values by decade.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"decade"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"decade"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 × 14
   decade        n prop_female_president prop_male_president gap_president_prop
