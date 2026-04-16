@@ -1,0 +1,44 @@
+---
+title: "Project1_Checkpoint3"
+author: "Julia Aptekar"
+format: html
+---
+
+## Packages
+```{r}
+# install only once
+# install.packages("tidyverse")
+library(tidyverse)
+library(readxl)
+library(tidyr)
+```
+
+## New Data from World Bank
+The World Bank’s SDG database is a subset of its broader World Development Indicators, organized specifically around the UN’s 17 Sustainable Development Goals. It provides country-year panel data (typically yearly) covering economic, social, environmental, and institutional statistics aligned with each goal. The SDGs are separated by topic (e.g., poverty, education, gender equality). 
+
+The proportion of women in national parliaments variable is under the 5th SDG. The 5th SDG is "Achieve gender equality and empower all women and girls." This variable measures the percentage of seats held by women in a country's national parliament, typically focusing on the lower or single legislative chamber. It is reported annually and serves as an indicator of gender equality in politics. 
+
+This proportion is available for most countries from 1997-2020. There are missing values for certain years and countries, but the proportion is more available during the later years of that range.
+
+## Links
+- [SDG 5 description](https://sdgs.un.org/goals/goal5)
+- [Where we found the data](https://databank.worldbank.org/source/sustainable-development-goals-(sdgs)#)
+- [Variable description from World Bank](https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SG.GEN.PARL.ZS)
+
+## Data Cleaning
+Below, we read in the data and do some data cleaning. We removed some columns because certain years had no data for any countries, and there was an empty column that was created from downloading the data. Lastly, we renamed the country column.
+```{r}
+womenPar0 <- read_excel("womenPar.xlsx", skip=2)
+womenPar0 <- womenPar0 %>%
+  select(-2:-8, -11) %>% # removing columns with no data and empty column
+  rename(country = ...1) # renaming the country column
+womenPar0
+```
+This data frame is in a wide format, so we used pivot_longer() to pivot the data into long format to match our democracy_data.
+```{r}
+womenPar <- womenPar0 %>%
+  pivot_longer(cols = -country, # keep country column the same
+    names_to = "year", # creating new column for years
+    values_to = "prop_in_par") # creating new column for the proportion data
+womenPar
+```
