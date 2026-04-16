@@ -4,13 +4,15 @@ author: "Julia Aptekar"
 format: html
 ---
 
-## Packages
+## Packages & Original Data
 ```{r}
 # install only once
 # install.packages("tidyverse")
 library(tidyverse)
 library(readxl)
 library(tidyr)
+
+democracy_data <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-05/democracy_data.csv')
 ```
 
 ## New Data from World Bank
