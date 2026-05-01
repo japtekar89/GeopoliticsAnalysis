@@ -9,30 +9,31 @@ format: html
 #| echo: false
 #install.packages("tidyverse")
 #install.packages("wesanderson")
+#install.packages("gt")
+#install.packages("broom")
 options(pillar.width = Inf)
 library(tidyverse)
 library(wesanderson)
+library(gt)
+library(broom)
 democracy_data <- read.csv("Combined_Democracy_Data.csv")
 ```
 
 ## Explore the data
 
-The dataset we used was put together to conduct research on political transitions for countries around the world. Its purpose is to collect information on regime characteristics, specifically focusing on how a country's political system changes over time. The dataset consists of 14,768 observations and 43 variables. Each row represents political information for one country on a given year, ranging from 1950 to 2020. The variables provide information on whether a country is democratic, its regime type, and information on elections, leaders, suffrage, power changes, and colonial history.
+Our study utilized two datasets. The first was compiled by Christian Bjørnskov and Martin Rode, two economists who study political institutions and how governments change over time. Their goal was to create a resource for researchers studying political transitions, an area they felt had not been adequately covered by existing data. The dataset collects information on 192 sovereign countries and 16 self-governing territories annually from 1950 to 2020 on each country's regime type, democratic status, elections, leadership, suffrage, transfers of power, and colonial history. In total, it includes 14,768 country-year observations across 43 variables.
+
+To build this dataset, the authors expanded on an existing collection of political data by recording key features of each country's government, such as whether elections took place, whether those elections were considered free and fair, and whether leadership changed hands peacefully. Records of coups were verified across newspaper archives, encyclopedias, and other databases to ensure accuracy. For our analysis, this dataset is especially useful because it gives us a reliable way to classify each country as democratic or not for any given year, while also providing the broader political context needed to understand how and why governments change over time.
+
+The second dataset comes from the World Bank, which tracks global progress on the UN's 17 Sustainable Development Goals, a set of goals aimed at making the world more equitable and sustainable across areas like poverty, education, and gender equality. The 5th goal focuses specifically on gender equality, and one of its key indicators is the percentage of parliamentary seats held by women in each country. This figure is compiled by the World Bank using data from the Inter-Parliamentary Union, an organization that collects official seat counts directly from legislative bodies around the world. It is available annually for most countries from 1997 to 2020, with coverage becoming more consistent in the later years of that range.
+
+**Sources**
 
 [Democracy Data](https://www.christianbjoernskov.com/bjoernskovrodedata/)
 
-We also collected data from the World Bank's Sustainable Development Goals database, organized specifically around the UN’s 17 Sustainable Development Goals. The SDGs are separated by topic (e.g., poverty, education, gender equality). It provides country-year panel data (typically yearly) covering economic, social, environmental, and institutional statistics aligned with each goal.
+[World Bank Data](https://databank.worldbank.org/source/sustainable-development-goals-(sdgs)#)
 
-The 5th SDG is "Achieve gender equality and empower all women and girls." 
-The proportion of women in national parliaments variable is under the 5th SDG. This variable measures the percentage of seats held by women in a country's national parliament, typically focusing on the lower or single legislative chamber. It is reported annually and serves as an indicator of gender equality in politics.
-
-This proportion is available for most countries from 1997-2020. There are missing values for certain years and countries, but the proportion is more available during the later years of that range.
-
-- [SDG 5 description](https://sdgs.un.org/goals/goal5)
-- [Where we found the data](https://databank.worldbank.org/source/sustainable-development-goals-(sdgs)#)
-- [Variable description from World Bank](https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SG.GEN.PARL.ZS)
-
-## RQs
+## What We Want To Know
 1. How does the democratic context of a country shape gender gaps in parliamentary representation and executive leadership over time?
 
 ## Exploring Gender Gaps in Leadership and Representation
@@ -91,8 +92,115 @@ summarise_leadership_gender_gap <- function(group_var) {
 }
 
 plotMe <- summarise_leadership_gender_gap("year")
-summarise_leadership_gender_gap("is_democracy")
 ```
+
+```{r}
+#| echo: false
+pal <- wes_palette("Moonrise3")
+# Table 1: Proportions
+summarise_leadership_gender_gap("is_democracy") |>
+  mutate(is_democracy = ifelse(is_democracy, "Democracy", "Non-Democracy")) |>
+  select(is_democracy, n,
+         prop_female_president, prop_male_president, gap_president_prop,
+         prop_female_monarch, prop_male_monarch, gap_monarch_prop) |>
+  gt() |>
+  tab_header(
+    title    = md("**Gender Gaps in Executive Leadership by Democracy Status**"),
+    subtitle = "Proportions of Female and Male Leaders") |>
+  tab_spanner(
+    label   = "Presidents",
+    columns = c(prop_female_president, prop_male_president, gap_president_prop)) |>
+  tab_spanner(
+    label   = "Monarchs",
+    columns = c(prop_female_monarch, prop_male_monarch, gap_monarch_prop)) |>
+  cols_label(is_democracy = "Democracy Status",
+    n = "Sample Size", prop_female_president = "Prop. Female",
+    prop_male_president = "Prop. Male",
+    gap_president_prop  = "Gap (M - F)",
+    prop_female_monarch = "Prop. Female",
+    prop_male_monarch = "Prop. Male",
+    gap_monarch_prop  = "Gap (M - F)") |>
+  fmt_percent(columns  = c(prop_female_president, prop_male_president, gap_president_prop, prop_female_monarch, prop_male_monarch, gap_monarch_prop),
+    decimals = 1) |>
+  fmt_integer(columns = n) |>
+  tab_style(style = cell_fill(color = "#D3D3D3"),
+    locations = cells_column_spanners()) |>
+  tab_style(style = cell_fill(color = "#D3D3D3"),
+    locations = cells_column_labels()) |>
+  tab_style(style = cell_fill(color = "#D3D3D3"),
+    locations = cells_title()) |>
+  tab_style(style = cell_fill(color = paste0(pal[1], "99")),
+    locations = cells_body(
+      columns = gap_president_prop,
+      rows = gap_president_prop > 0)) |>
+  tab_style(style = cell_fill(color = "#FFB6C199"),
+    locations = cells_body(
+      columns = gap_president_prop,
+      rows = gap_president_prop < 0)) |>
+  tab_style(style = cell_fill(color = paste0(pal[1], "99")),
+    locations = cells_body(
+      columns = gap_monarch_prop,
+      rows    = gap_monarch_prop > 0)) |>
+  tab_style(style = cell_fill(color = "#FFB6C199"),
+    locations = cells_body(
+      columns = gap_monarch_prop,
+      rows = gap_monarch_prop < 0)) |>
+  tab_footnote(footnote  = "Positive values (shaded blue) indicate males are higher; negative values (shaded pink) indicate females are higher.",
+    locations = cells_column_labels(columns = c(gap_president_prop, gap_monarch_prop))) |>
+  opt_table_font(font = google_font("Source Serif 4"))
+
+# Table 2: Accession Ages
+summarise_leadership_gender_gap("is_democracy") |>
+  mutate(is_democracy = ifelse(is_democracy, "Democracy", "Non-Democracy")) |>
+  select(is_democracy, n,
+         avg_accession_age_female_president, avg_accession_age_male_president, gap_president_accession_age,
+         avg_accession_age_female_monarch, avg_accession_age_male_monarch, gap_monarch_accession_age) |>
+  gt() |>
+  tab_header(title = md("**Gender Gaps in Accession Age by Democracy Status**"),
+    subtitle = "Average Accession Ages for Female and Male Leaders") |>
+  tab_spanner(label = "Presidents",
+    columns = c(avg_accession_age_female_president, avg_accession_age_male_president, gap_president_accession_age)) |>
+  tab_spanner(label = "Monarchs",
+    columns = c(avg_accession_age_female_monarch, avg_accession_age_male_monarch, gap_monarch_accession_age)) |>
+  cols_label(
+    is_democracy = "Democracy Status",
+    n = "Sample Size",
+    avg_accession_age_female_president = "Avg. Age (Female)",
+    avg_accession_age_male_president = "Avg. Age (Male)",
+    gap_president_accession_age = "Gap (M - F)",
+    avg_accession_age_female_monarch  = "Avg. Age (Female)",
+    avg_accession_age_male_monarch = "Avg. Age (Male)",
+    gap_monarch_accession_age = "Gap (M - F)") |>
+  fmt_number(columns  = c(avg_accession_age_female_president, avg_accession_age_male_president, gap_president_accession_age, avg_accession_age_female_monarch, avg_accession_age_male_monarch, gap_monarch_accession_age),
+    decimals = 1) |>
+  fmt_integer(columns = n) |>
+  tab_style(style = cell_fill(color = "#D3D3D3"),
+    locations = cells_column_spanners()) |>
+  tab_style(style = cell_fill(color = "#D3D3D3"),
+    locations = cells_column_labels()) |>
+  tab_style(style = cell_fill(color = "#D3D3D3"),
+    locations = cells_title()) |>
+  tab_style(style = cell_fill(color = paste0(pal[1], "99")),
+    locations = cells_body(
+      columns = gap_president_accession_age,
+      rows = gap_president_accession_age > 0)) |>
+  tab_style(style = cell_fill(color = "#FFB6C199"),
+    locations = cells_body(
+      columns = gap_president_accession_age,
+      rows  = gap_president_accession_age < 0)) |>
+  tab_style(style = cell_fill(color = paste0(pal[1], "99")),
+    locations = cells_body(
+      columns = gap_monarch_accession_age,
+      rows = gap_monarch_accession_age > 0)) |>
+  tab_style(style = cell_fill(color = "#FFB6C199"),
+    locations = cells_body(
+      columns = gap_monarch_accession_age,
+      rows = gap_monarch_accession_age < 0)) |>
+  tab_footnote(footnote  = "Positive values (shaded blue) indicate males are higher; negative values (shaded pink) indicate females are higher.",
+    locations = cells_column_labels(columns = c(gap_president_accession_age, gap_monarch_accession_age))) |>
+  opt_table_font(font = google_font("Source Serif 4"))
+```
+
 The proportion of female presidents is higher for democratic countries than non-democratic countries. The proportions of male presidents are similar across democratic and non-democratic countries, but the proportion of male presidents for democratic countries is slightly lower. Non-democratic countries' female presidents are, on average, about 13.7 years older than male presidents. For democratic countries, that difference is much lower, at 2.81 years. 
 
 The proportion of male monarchs in non-democratic countries is 84.1 percentage points higher than that of female monarchs. However, in democratic countries, the proportions of male and female monarchs are very similar (47.8% and 52.2%, respectively). Monarchs of both gender are much younger on average than presidents, around 30-35 years old. Non-democratic countries seem to have younger monarchs than democratic countries. 
@@ -101,6 +209,7 @@ Next, we created a ribbon plot to highlight the differences in age between avera
 
 ```{r}
 #| echo: false
+#| warning: false
 #| fig-alt: This is a ribbon plot, depicting the differences in average accession ages of presidents and monarchs by gender. There are four lines on the graph, one for each gender and leader type combination. The x-axis is years 1980-2020, and the y-axis shows ages 20-70. 
 
 moonrise3 <- wes_palette("Moonrise3")
@@ -174,7 +283,7 @@ democracy_data %>%
     color = "black") +
   labs(title = "Women's Representation in National Parliament by Democracy Status",
     x = "Democracy Status",
-    y = "National Parliament Seats Held by Women (%)") + 
+    y = "Percentag of National Parliament Seats Held by Women") + 
   theme(plot.title = element_text(size = 5),
     axis.title = element_text(size = 5)) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
@@ -184,3 +293,47 @@ democracy_data %>%
 Democracies tend to have slightly higher representation of women in national parliaments compared to non-democracies. The median percentage is higher for democracies (15.8%) than for non-democracies (14%), and the mean is also somewhat higher (17.7% vs. 16%).
 
 However, the distributions are fairly similar overall, with substantial overlap between the two groups’ boxplots. Both democracies and non-democracies show wide variability and several outliers. Non-democratic countries seem to have more outliers, including some at higher values, with two outliers exceeding 60%.
+
+## Fitting a model
+
+We ran a t-test to compare the means of the proportion of national parliament seats held by women between different democracy statuses.
+
+```{r}
+#|echo: false
+result <- t.test(prop_in_par ~ is_democracy, data = democracy_data)
+table_result <- tidy(result)
+
+table_result |>
+  select(estimate1, estimate2, statistic, p.value, conf.low, conf.high, parameter) |>
+  gt() |>
+  tab_header(
+    title    = md("**Proportion in Parliament by Democracy Status**"),
+    subtitle = "Welch Two-Sample t-Test") |>
+  cols_label(estimate1  = md("Mean<br>(Non-Democracy)"),
+    estimate2 = md("Mean<br>(Democracy)"),
+    statistic = md("*t*-statistic"),
+    p.value = md("*p*-value"),
+    conf.low = "95% CI Low",
+    conf.high = "95% CI High",
+    parameter = md("*df*")) |>
+  fmt_number(columns  = c(estimate1, estimate2, statistic, conf.low, conf.high),
+    decimals = 3) |>
+  fmt_number(columns  = parameter,
+    decimals = 1) |>
+  fmt_scientific(columns  = p.value,
+    decimals = 3) |>
+  tab_style(style = cell_fill(color = "#fff3cd"),
+    locations = cells_body(columns = p.value)) |>
+  tab_style(style = cell_text(weight = "bold"),
+    locations = cells_body(columns = p.value)) |>
+  tab_spanner(label = "Group Means",
+    columns = c(estimate1, estimate2)) |>
+  tab_spanner(label = "Confidence Interval",
+    columns = c(conf.low, conf.high)) |>
+  tab_footnote(footnote = "Highlighted cell indicates a statistically significant result.",
+    locations = cells_column_labels(columns = p.value)) |>
+  opt_stylize(style = 6, color = "blue") |>
+  opt_table_font(font = google_font("Source Serif 4"))
+```
+
+The t-statistic is -4.591 and the p-value is very small. Also, the confidence interval does not include zero, so we reject the null hypothesis and conclude that there is a statistically significant difference in the mean proportion of seats held by women between democratic and non-democratic countries. This suggests that the true difference in means is not zero.

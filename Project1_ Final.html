@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -87,19 +122,15 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <section id="explore-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="explore-the-data">Explore the data</h2>
-<p>The dataset we used was put together to conduct research on political transitions for countries around the world. Its purpose is to collect information on regime characteristics, specifically focusing on how a country’s political system changes over time. The dataset consists of 14,768 observations and 43 variables. Each row represents political information for one country on a given year, ranging from 1950 to 2020. The variables provide information on whether a country is democratic, its regime type, and information on elections, leaders, suffrage, power changes, and colonial history.</p>
+<p>Our study utilized two datasets. The first was compiled by Christian Bjørnskov and Martin Rode, two economists who study political institutions and how governments change over time. Their goal was to create a resource for researchers studying political transitions, an area they felt had not been adequately covered by existing data. The dataset collects information on 192 sovereign countries and 16 self-governing territories annually from 1950 to 2020 on each country’s regime type, democratic status, elections, leadership, suffrage, transfers of power, and colonial history. In total, it includes 14,768 country-year observations across 43 variables.</p>
+<p>To build this dataset, the authors expanded on an existing collection of political data by recording key features of each country’s government, such as whether elections took place, whether those elections were considered free and fair, and whether leadership changed hands peacefully. Records of coups were verified across newspaper archives, encyclopedias, and other databases to ensure accuracy. For our analysis, this dataset is especially useful because it gives us a reliable way to classify each country as democratic or not for any given year, while also providing the broader political context needed to understand how and why governments change over time.</p>
+<p>The second dataset comes from the World Bank, which tracks global progress on the UN’s 17 Sustainable Development Goals, a set of goals aimed at making the world more equitable and sustainable across areas like poverty, education, and gender equality. The 5th goal focuses specifically on gender equality, and one of its key indicators is the percentage of parliamentary seats held by women in each country. This figure is compiled by the World Bank using data from the Inter-Parliamentary Union, an organization that collects official seat counts directly from legislative bodies around the world. It is available annually for most countries from 1997 to 2020, with coverage becoming more consistent in the later years of that range.</p>
+<p><strong>Sources</strong></p>
 <p><a href="https://www.christianbjoernskov.com/bjoernskovrodedata/">Democracy Data</a></p>
-<p>We also collected data from the World Bank’s Sustainable Development Goals database, organized specifically around the UN’s 17 Sustainable Development Goals. The SDGs are separated by topic (e.g., poverty, education, gender equality). It provides country-year panel data (typically yearly) covering economic, social, environmental, and institutional statistics aligned with each goal.</p>
-<p>The 5th SDG is “Achieve gender equality and empower all women and girls.” The proportion of women in national parliaments variable is under the 5th SDG. This variable measures the percentage of seats held by women in a country’s national parliament, typically focusing on the lower or single legislative chamber. It is reported annually and serves as an indicator of gender equality in politics.</p>
-<p>This proportion is available for most countries from 1997-2020. There are missing values for certain years and countries, but the proportion is more available during the later years of that range.</p>
-<ul>
-<li><a href="https://sdgs.un.org/goals/goal5">SDG 5 description</a></li>
-<li><a href="https://databank.worldbank.org/source/sustainable-development-goals-(sdgs)#">Where we found the data</a></li>
-<li><a href="https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SG.GEN.PARL.ZS">Variable description from World Bank</a></li>
-</ul>
+<p><a href="https://databank.worldbank.org/source/sustainable-development-goals-(sdgs)#">World Bank Data</a></p>
 </section>
-<section id="rqs" class="level2">
-<h2 class="anchored" data-anchor-id="rqs">RQs</h2>
+<section id="what-we-want-to-know" class="level2">
+<h2 class="anchored" data-anchor-id="what-we-want-to-know">What We Want To Know</h2>
 <ol type="1">
 <li>How does the democratic context of a country shape gender gaps in parliamentary representation and executive leadership over time?</li>
 </ol>
@@ -107,48 +138,1055 @@ ul.task-list li input[type="checkbox"] {
 <section id="exploring-gender-gaps-in-leadership-and-representation" class="level2">
 <h2 class="anchored" data-anchor-id="exploring-gender-gaps-in-leadership-and-representation">Exploring Gender Gaps in Leadership and Representation</h2>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 14
-  is_democracy     n prop_female_president prop_male_president
-  &lt;lgl&gt;        &lt;int&gt;                 &lt;dbl&gt;               &lt;dbl&gt;
-1 FALSE         8000               0.00462               0.995
-2 TRUE          6706               0.0563                0.944
-  gap_president_prop avg_accession_age_female_president
-               &lt;dbl&gt;                              &lt;dbl&gt;
-1              0.991                               62.4
-2              0.887                               54.2
-  avg_accession_age_male_president gap_president_accession_age
-                             &lt;dbl&gt;                       &lt;dbl&gt;
-1                             48.6                      -13.7 
-2                             57.0                        2.81
-  prop_female_monarch prop_male_monarch gap_monarch_prop
-                &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;
-1              0.0795             0.920           0.841 
-2              0.522              0.478          -0.0440
-  avg_accession_age_female_monarch avg_accession_age_male_monarch
-                             &lt;dbl&gt;                          &lt;dbl&gt;
-1                             27.6                           34.7
-2                             31.0                           38.7
-  gap_monarch_accession_age
-                      &lt;dbl&gt;
-1                      7.10
-2                      7.73</code></pre>
+<div class="cell-output-display">
+<div id="dqpajnfwjt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#dqpajnfwjt table {
+  font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#dqpajnfwjt thead, #dqpajnfwjt tbody, #dqpajnfwjt tfoot, #dqpajnfwjt tr, #dqpajnfwjt td, #dqpajnfwjt th {
+  border-style: none;
+}
+
+#dqpajnfwjt p {
+  margin: 0;
+  padding: 0;
+}
+
+#dqpajnfwjt .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#dqpajnfwjt .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#dqpajnfwjt .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#dqpajnfwjt .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#dqpajnfwjt .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#dqpajnfwjt .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#dqpajnfwjt .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#dqpajnfwjt .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#dqpajnfwjt .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#dqpajnfwjt .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#dqpajnfwjt .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dqpajnfwjt .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#dqpajnfwjt .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#dqpajnfwjt .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#dqpajnfwjt .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dqpajnfwjt .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#dqpajnfwjt .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#dqpajnfwjt .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#dqpajnfwjt .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dqpajnfwjt .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#dqpajnfwjt .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dqpajnfwjt .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#dqpajnfwjt .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dqpajnfwjt .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dqpajnfwjt .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dqpajnfwjt .gt_left {
+  text-align: left;
+}
+
+#dqpajnfwjt .gt_center {
+  text-align: center;
+}
+
+#dqpajnfwjt .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dqpajnfwjt .gt_font_normal {
+  font-weight: normal;
+}
+
+#dqpajnfwjt .gt_font_bold {
+  font-weight: bold;
+}
+
+#dqpajnfwjt .gt_font_italic {
+  font-style: italic;
+}
+
+#dqpajnfwjt .gt_super {
+  font-size: 65%;
+}
+
+#dqpajnfwjt .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#dqpajnfwjt .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#dqpajnfwjt .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#dqpajnfwjt .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#dqpajnfwjt .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#dqpajnfwjt .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#dqpajnfwjt .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#dqpajnfwjt .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#dqpajnfwjt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="gt_heading header">
+<td colspan="8" class="gt_heading gt_title gt_font_normal" style="background-color: #D3D3D3"><strong>Gender Gaps in Executive Leadership by Democracy Status</strong></td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="8" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="background-color: #D3D3D3">Proportions of Female and Male Leaders</td>
+</tr>
+<tr class="gt_col_headings gt_spanner_row header">
+<th rowspan="2" id="is_democracy" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Democracy Status</th>
+<th rowspan="2" id="n" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Sample Size</th>
+<th colspan="3" id="Presidents" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="colgroup"><div class="gt_column_spanner">
+Presidents
+</div></th>
+<th colspan="3" id="Monarchs" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="colgroup"><div class="gt_column_spanner">
+Monarchs
+</div></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="prop_female_president" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Prop. Female</th>
+<th id="prop_male_president" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Prop. Male</th>
+<th id="gap_president_prop" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Gap (M - F)<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+<th id="prop_female_monarch" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Prop. Female</th>
+<th id="prop_male_monarch" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Prop. Male</th>
+<th id="gap_monarch_prop" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Gap (M - F)<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="is_democracy">Non-Democracy</td>
+<td class="gt_row gt_right" headers="n">8,000</td>
+<td class="gt_row gt_right" headers="prop_female_president">0.5%</td>
+<td class="gt_row gt_right" headers="prop_male_president">99.5%</td>
+<td class="gt_row gt_right" headers="gap_president_prop" style="background-color: rgba(133,212,227,0.6)">99.1%</td>
+<td class="gt_row gt_right" headers="prop_female_monarch">8.0%</td>
+<td class="gt_row gt_right" headers="prop_male_monarch">92.0%</td>
+<td class="gt_row gt_right" headers="gap_monarch_prop" style="background-color: rgba(133,212,227,0.6)">84.1%</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="is_democracy">Democracy</td>
+<td class="gt_row gt_right" headers="n">6,706</td>
+<td class="gt_row gt_right" headers="prop_female_president">5.6%</td>
+<td class="gt_row gt_right" headers="prop_male_president">94.4%</td>
+<td class="gt_row gt_right" headers="gap_president_prop" style="background-color: rgba(133,212,227,0.6)">88.7%</td>
+<td class="gt_row gt_right" headers="prop_female_monarch">52.2%</td>
+<td class="gt_row gt_right" headers="prop_male_monarch">47.8%</td>
+<td class="gt_row gt_right" headers="gap_monarch_prop" style="background-color: rgba(255,182,193,0.6)">−4.4%</td>
+</tr>
+</tbody><tfoot>
+<tr class="gt_footnotes odd">
+<td colspan="8" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Positive values (shaded blue) indicate males are higher; negative values (shaded pink) indicate females are higher.</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+<div class="cell-output-display">
+<div id="hvotkslwpk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#hvotkslwpk table {
+  font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#hvotkslwpk thead, #hvotkslwpk tbody, #hvotkslwpk tfoot, #hvotkslwpk tr, #hvotkslwpk td, #hvotkslwpk th {
+  border-style: none;
+}
+
+#hvotkslwpk p {
+  margin: 0;
+  padding: 0;
+}
+
+#hvotkslwpk .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#hvotkslwpk .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#hvotkslwpk .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#hvotkslwpk .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#hvotkslwpk .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#hvotkslwpk .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#hvotkslwpk .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#hvotkslwpk .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#hvotkslwpk .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#hvotkslwpk .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#hvotkslwpk .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#hvotkslwpk .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#hvotkslwpk .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#hvotkslwpk .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#hvotkslwpk .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hvotkslwpk .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#hvotkslwpk .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#hvotkslwpk .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#hvotkslwpk .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hvotkslwpk .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#hvotkslwpk .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hvotkslwpk .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#hvotkslwpk .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hvotkslwpk .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hvotkslwpk .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hvotkslwpk .gt_left {
+  text-align: left;
+}
+
+#hvotkslwpk .gt_center {
+  text-align: center;
+}
+
+#hvotkslwpk .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#hvotkslwpk .gt_font_normal {
+  font-weight: normal;
+}
+
+#hvotkslwpk .gt_font_bold {
+  font-weight: bold;
+}
+
+#hvotkslwpk .gt_font_italic {
+  font-style: italic;
+}
+
+#hvotkslwpk .gt_super {
+  font-size: 65%;
+}
+
+#hvotkslwpk .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#hvotkslwpk .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#hvotkslwpk .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#hvotkslwpk .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#hvotkslwpk .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#hvotkslwpk .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#hvotkslwpk .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#hvotkslwpk .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#hvotkslwpk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="gt_heading header">
+<td colspan="8" class="gt_heading gt_title gt_font_normal" style="background-color: #D3D3D3"><strong>Gender Gaps in Accession Age by Democracy Status</strong></td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="8" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="background-color: #D3D3D3">Average Accession Ages for Female and Male Leaders</td>
+</tr>
+<tr class="gt_col_headings gt_spanner_row header">
+<th rowspan="2" id="is_democracy" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Democracy Status</th>
+<th rowspan="2" id="n" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Sample Size</th>
+<th colspan="3" id="Presidents" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="colgroup"><div class="gt_column_spanner">
+Presidents
+</div></th>
+<th colspan="3" id="Monarchs" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="colgroup"><div class="gt_column_spanner">
+Monarchs
+</div></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="avg_accession_age_female_president" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Avg. Age (Female)</th>
+<th id="avg_accession_age_male_president" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Avg. Age (Male)</th>
+<th id="gap_president_accession_age" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Gap (M - F)<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+<th id="avg_accession_age_female_monarch" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Avg. Age (Female)</th>
+<th id="avg_accession_age_male_monarch" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Avg. Age (Male)</th>
+<th id="gap_monarch_accession_age" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Gap (M - F)<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="is_democracy">Non-Democracy</td>
+<td class="gt_row gt_right" headers="n">8,000</td>
+<td class="gt_row gt_right" headers="avg_accession_age_female_president">62.4</td>
+<td class="gt_row gt_right" headers="avg_accession_age_male_president">48.6</td>
+<td class="gt_row gt_right" headers="gap_president_accession_age" style="background-color: rgba(255,182,193,0.6)">−13.7</td>
+<td class="gt_row gt_right" headers="avg_accession_age_female_monarch">27.6</td>
+<td class="gt_row gt_right" headers="avg_accession_age_male_monarch">34.7</td>
+<td class="gt_row gt_right" headers="gap_monarch_accession_age" style="background-color: rgba(133,212,227,0.6)">7.1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="is_democracy">Democracy</td>
+<td class="gt_row gt_right" headers="n">6,706</td>
+<td class="gt_row gt_right" headers="avg_accession_age_female_president">54.2</td>
+<td class="gt_row gt_right" headers="avg_accession_age_male_president">57.0</td>
+<td class="gt_row gt_right" headers="gap_president_accession_age" style="background-color: rgba(133,212,227,0.6)">2.8</td>
+<td class="gt_row gt_right" headers="avg_accession_age_female_monarch">31.0</td>
+<td class="gt_row gt_right" headers="avg_accession_age_male_monarch">38.7</td>
+<td class="gt_row gt_right" headers="gap_monarch_accession_age" style="background-color: rgba(133,212,227,0.6)">7.7</td>
+</tr>
+</tbody><tfoot>
+<tr class="gt_footnotes odd">
+<td colspan="8" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Positive values (shaded blue) indicate males are higher; negative values (shaded pink) indicate females are higher.</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
 </div>
 </div>
 <p>The proportion of female presidents is higher for democratic countries than non-democratic countries. The proportions of male presidents are similar across democratic and non-democratic countries, but the proportion of male presidents for democratic countries is slightly lower. Non-democratic countries’ female presidents are, on average, about 13.7 years older than male presidents. For democratic countries, that difference is much lower, at 2.81 years.</p>
 <p>The proportion of male monarchs in non-democratic countries is 84.1 percentage points higher than that of female monarchs. However, in democratic countries, the proportions of male and female monarchs are very similar (47.8% and 52.2%, respectively). Monarchs of both gender are much younger on average than presidents, around 30-35 years old. Non-democratic countries seem to have younger monarchs than democratic countries.</p>
 <p>Next, we created a ribbon plot to highlight the differences in age between average accession ages of presidents and monarchs, by gender. We omitted years before 1980, as there were no female presidents before then, so we did not have any values for the average female presidents’ accession age.</p>
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 30 rows containing missing values or values outside the scale range
-(`geom_ribbon()`).
-Removed 30 rows containing missing values or values outside the scale range
-(`geom_ribbon()`).</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Project1_-Final_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" alt="This is a ribbon plot, depicting the differences in average accession ages of presidents and monarchs by gender. There are four lines on the graph, one for each gender and leader type combination. The x-axis is years 1980-2020, and the y-axis shows ages 20-70." width="672"></p>
+<p><img src="Project1_-Final_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="This is a ribbon plot, depicting the differences in average accession ages of presidents and monarchs by gender. There are four lines on the graph, one for each gender and leader type combination. The x-axis is years 1980-2020, and the y-axis shows ages 20-70." width="672"></p>
 </figure>
 </div>
 </div>
@@ -165,13 +1203,565 @@ Removed 30 rows containing missing values or values outside the scale range
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Project1_-Final_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="This is a boxplot depicting the proportion of women in parliament, while faceting on the democracy status of the country. The mean proportion of women holding seats in non-democratic countries is 0.16 and 0.177 for democratic countries. The median proportion of women holding seats in non-democratic countries is 0.14 and 0.158 for democratic countries." width="672"></p>
+<p><img src="Project1_-Final_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" alt="This is a boxplot depicting the proportion of women in parliament, while faceting on the democracy status of the country. The mean proportion of women holding seats in non-democratic countries is 0.16 and 0.177 for democratic countries. The median proportion of women holding seats in non-democratic countries is 0.14 and 0.158 for democratic countries." width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Democracies tend to have slightly higher representation of women in national parliaments compared to non-democracies. The median percentage is higher for democracies (15.8%) than for non-democracies (14%), and the mean is also somewhat higher (17.7% vs.&nbsp;16%).</p>
 <p>However, the distributions are fairly similar overall, with substantial overlap between the two groups’ boxplots. Both democracies and non-democracies show wide variability and several outliers. Non-democratic countries seem to have more outliers, including some at higher values, with two outliers exceeding 60%.</p>
+</section>
+<section id="fitting-a-model" class="level2">
+<h2 class="anchored" data-anchor-id="fitting-a-model">Fitting a model</h2>
+<p>We ran a t-test to compare the means of the proportion of national parliament seats held by women between different democracy statuses.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|echo: false</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(prop_in_par <span class="sc">~</span> is_democracy, <span class="at">data =</span> democracy_data)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>table_result <span class="ot">&lt;-</span> <span class="fu">tidy</span>(result)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>table_result <span class="sc">|&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(estimate1, estimate2, statistic, p.value, conf.low, conf.high, parameter) <span class="sc">|&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title    =</span> <span class="fu">md</span>(<span class="st">"**Proportion in Parliament by Democracy Status**"</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Welch Two-Sample t-Test"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">estimate1  =</span> <span class="fu">md</span>(<span class="st">"Mean&lt;br&gt;(Non-Democracy)"</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate2 =</span> <span class="fu">md</span>(<span class="st">"Mean&lt;br&gt;(Democracy)"</span>),</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">md</span>(<span class="st">"*t*-statistic"</span>),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">p.value =</span> <span class="fu">md</span>(<span class="st">"*p*-value"</span>),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">conf.low =</span> <span class="st">"95% CI Low"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">conf.high =</span> <span class="st">"95% CI High"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">parameter =</span> <span class="fu">md</span>(<span class="st">"*df*"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns  =</span> <span class="fu">c</span>(estimate1, estimate2, statistic, conf.low, conf.high),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns  =</span> parameter,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_scientific</span>(<span class="at">columns  =</span> p.value,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#fff3cd"</span>),</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> p.value)) <span class="sc">|&gt;</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>),</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> p.value)) <span class="sc">|&gt;</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Group Means"</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(estimate1, estimate2)) <span class="sc">|&gt;</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Confidence Interval"</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(conf.low, conf.high)) <span class="sc">|&gt;</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_footnote</span>(<span class="at">footnote =</span> <span class="st">"Highlighted cell indicates a statistically significant result."</span>,</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> p.value)) <span class="sc">|&gt;</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_stylize</span>(<span class="at">style =</span> <span class="dv">6</span>, <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_table_font</span>(<span class="at">font =</span> <span class="fu">google_font</span>(<span class="st">"Source Serif 4"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="dpwzwbbqye" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#dpwzwbbqye table {
+  font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#dpwzwbbqye thead, #dpwzwbbqye tbody, #dpwzwbbqye tfoot, #dpwzwbbqye tr, #dpwzwbbqye td, #dpwzwbbqye th {
+  border-style: none;
+}
+
+#dpwzwbbqye p {
+  margin: 0;
+  padding: 0;
+}
+
+#dpwzwbbqye .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#dpwzwbbqye .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#dpwzwbbqye .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#dpwzwbbqye .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#dpwzwbbqye .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dpwzwbbqye .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#dpwzwbbqye .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dpwzwbbqye .gt_col_heading {
+  color: #FFFFFF;
+  background-color: #0076BA;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#dpwzwbbqye .gt_column_spanner_outer {
+  color: #FFFFFF;
+  background-color: #0076BA;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#dpwzwbbqye .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#dpwzwbbqye .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#dpwzwbbqye .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#dpwzwbbqye .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#dpwzwbbqye .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#dpwzwbbqye .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+  vertical-align: middle;
+}
+
+#dpwzwbbqye .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#dpwzwbbqye .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#dpwzwbbqye .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #D5D5D5;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D5D5D5;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D5D5D5;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#dpwzwbbqye .gt_stub {
+  color: #333333;
+  background-color: #89D3FE;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D5D5D5;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpwzwbbqye .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#dpwzwbbqye .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#dpwzwbbqye .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#dpwzwbbqye .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpwzwbbqye .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #5F5F5F;
+}
+
+#dpwzwbbqye .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#dpwzwbbqye .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#dpwzwbbqye .gt_grand_summary_row {
+  color: #333333;
+  background-color: #D5D5D5;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpwzwbbqye .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #5F5F5F;
+}
+
+#dpwzwbbqye .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #5F5F5F;
+}
+
+#dpwzwbbqye .gt_striped {
+  background-color: #EDF7FC;
+}
+
+#dpwzwbbqye .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #5F5F5F;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #5F5F5F;
+}
+
+#dpwzwbbqye .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dpwzwbbqye .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpwzwbbqye .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dpwzwbbqye .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpwzwbbqye .gt_left {
+  text-align: left;
+}
+
+#dpwzwbbqye .gt_center {
+  text-align: center;
+}
+
+#dpwzwbbqye .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dpwzwbbqye .gt_font_normal {
+  font-weight: normal;
+}
+
+#dpwzwbbqye .gt_font_bold {
+  font-weight: bold;
+}
+
+#dpwzwbbqye .gt_font_italic {
+  font-style: italic;
+}
+
+#dpwzwbbqye .gt_super {
+  font-size: 65%;
+}
+
+#dpwzwbbqye .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#dpwzwbbqye .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#dpwzwbbqye .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#dpwzwbbqye .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#dpwzwbbqye .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#dpwzwbbqye .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#dpwzwbbqye .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#dpwzwbbqye .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#dpwzwbbqye div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="gt_heading header">
+<td colspan="7" class="gt_heading gt_title gt_font_normal"><strong>Proportion in Parliament by Democracy Status</strong></td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Welch Two-Sample t-Test</td>
+</tr>
+<tr class="gt_col_headings gt_spanner_row header">
+<th colspan="2" id="Group Means" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Group Means
+</div></th>
+<th rowspan="2" id="statistic" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><em>t</em>-statistic</th>
+<th rowspan="2" id="p.value" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><em>p</em>-value<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+<th colspan="2" id="Confidence Interval" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Confidence Interval
+</div></th>
+<th rowspan="2" id="parameter" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col"><em>df</em></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="estimate1" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean<br>(Non-Democracy)</th>
+<th id="estimate2" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Mean<br>(Democracy)</th>
+<th id="conf.low" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">95% CI Low</th>
+<th id="conf.high" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">95% CI High</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="estimate1">16.047</td>
+<td class="gt_row gt_right" headers="estimate2">17.701</td>
+<td class="gt_row gt_right" headers="statistic">−4.591</td>
+<td class="gt_row gt_right" headers="p.value" style="background-color: #FFF3CD; font-weight: bold">4.563&nbsp;×&nbsp;10<sup>−6</sup></td>
+<td class="gt_row gt_right" headers="conf.low">−2.359</td>
+<td class="gt_row gt_right" headers="conf.high">−0.947</td>
+<td class="gt_row gt_right" headers="parameter">3,382.5</td>
+</tr>
+</tbody><tfoot>
+<tr class="gt_footnotes odd">
+<td colspan="7" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Highlighted cell indicates a statistically significant result.</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+<p>The t-statistic is -4.591 and the p-value is very small. Also, the confidence interval does not include zero, so we reject the null hypothesis and conclude that there is a statistically significant difference in the mean proportion of seats held by women between democratic and non-democratic countries. This suggests that the true difference in means is not zero.</p>
 </section>
 
 </main>
