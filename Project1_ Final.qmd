@@ -30,7 +30,7 @@ To build this dataset, the authors expanded on an existing collection of politic
 
 The second dataset comes from the World Bank, which tracks global progress on the UN's 17 Sustainable Development Goals, a set of goals aimed at making the world more equitable and sustainable across areas like poverty, education, and gender equality. The 5th goal focuses specifically on gender equality, and one of its key indicators is the percentage of parliamentary seats held by women in each country. This figure is compiled by the World Bank using data from the Inter-Parliamentary Union, an organization that collects official seat counts directly from legislative bodies around the world. It is available annually for most countries from 1997 to 2020, with coverage becoming more consistent in the later years of that range.
 
-**Links to Data:**
+**Read more about the data here:**
 
 [Democracy Data](https://www.christianbjoernskov.com/bjoernskovrodedata/)
 
