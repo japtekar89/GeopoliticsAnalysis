@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -71,6 +106,22 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("wesanderson")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("gt")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("broom")</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">pillar.width =</span> <span class="cn">Inf</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wesanderson)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>democracy_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Combined_Democracy_Data.csv"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>pal <span class="ot">&lt;-</span> <span class="fu">wes_palette</span>(<span class="st">"Moonrise3"</span>, <span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <section id="explore-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="explore-the-data">Explore the data</h2>
 <p>Our study utilized two datasets. The first was compiled by Christian Bjørnskov and Martin Rode, two economists who study political institutions and how governments change over time. Their goal was to create a resource for researchers studying political transitions, an area they felt had not been adequately covered by existing data. The dataset collects information on 192 sovereign countries and 16 self-governing territories annually from 1950 to 2020 on each country’s regime type, democratic status, elections, leadership, suffrage, transfers of power, and colonial history. In total, it includes 14,768 country-year observations across 43 variables.</p>
@@ -90,6 +141,99 @@ ul.task-list li input[type="checkbox"] {
 <section id="exploring-gender-gaps-in-leadership-and-representation" class="level2">
 <h2 class="anchored" data-anchor-id="exploring-gender-gaps-in-leadership-and-representation">Exploring Gender Gaps in Leadership and Representation</h2>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>democracy_data <span class="ot">&lt;-</span> democracy_data <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">president_age_at_accession =</span> president_accesion_year <span class="sc">-</span> president_birthyear,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">monarch_age_at_accession =</span> monarch_accession_year <span class="sc">-</span> monarch_birthyear,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">has_female_leader =</span> <span class="fu">ifelse</span>(is_female_president <span class="sc">|</span> is_female_monarch, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">decade =</span> <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1960</span>, <span class="st">"1950-1959"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1970</span>, <span class="st">"1960-1969"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1980</span>, <span class="st">"1970-1979"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">1990</span>, <span class="st">"1980-1989"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">2000</span>, <span class="st">"1990-1999"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">2010</span>, <span class="st">"2000-2009"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"2010-2020"</span>)))))))</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>summarise_leadership_gender_gap <span class="ot">&lt;-</span> <span class="cf">function</span>(group_var) {</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  democracy_data <span class="sc">|&gt;</span> </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(democracy_data[[group_var]])) <span class="sc">|&gt;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># grouping data by specified grouping variable</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(group_var))) <span class="sc">|&gt;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>              <span class="co"># calculating proportions of female and male presidents</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>              <span class="at">prop_female_president =</span> <span class="fu">mean</span>(</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>                <span class="fu">ifelse</span>(<span class="sc">!</span>is_monarchy, is_female_president, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>              <span class="at">prop_male_president =</span> <span class="fu">mean</span>(</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                <span class="fu">ifelse</span>(<span class="sc">!</span>is_monarchy, <span class="sc">!</span>is_female_president, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>              <span class="co"># calculating difference in proportions of male presidents and female presidents (male - female)</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>              <span class="at">gap_president_prop =</span> prop_male_president <span class="sc">-</span> prop_female_president,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>              <span class="co"># calculating the average accession ages for female and male presidents</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>              <span class="at">avg_accession_age_female_president =</span> <span class="fu">mean</span>(</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                president_age_at_accession[is_presidential <span class="sc">&amp;</span> is_female_president], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>              <span class="at">avg_accession_age_male_president =</span> <span class="fu">mean</span>(</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                president_age_at_accession[is_presidential <span class="sc">&amp;</span> <span class="sc">!</span>is_female_president], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>              <span class="co"># calculating difference in average accession ages of male and female presidents (male - female)</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>              <span class="at">gap_president_accession_age =</span> avg_accession_age_male_president <span class="sc">-</span> avg_accession_age_female_president,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>              <span class="co"># calculating proportions of female and male monarchs</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>              <span class="at">prop_female_monarch =</span> <span class="fu">mean</span>(</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>                <span class="fu">ifelse</span>(is_monarchy, is_female_monarch, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>              <span class="at">prop_male_monarch =</span> <span class="fu">mean</span>(</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>                <span class="fu">ifelse</span>(is_monarchy, <span class="sc">!</span>is_female_monarch, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>              <span class="co"># calculating difference in proportions of male monarchs and female monarchs (male - female)</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>              <span class="at">gap_monarch_prop =</span> prop_male_monarch <span class="sc">-</span> prop_female_monarch,</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>              <span class="co"># calculating the average accession ages for female and male monarchs</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>              <span class="at">avg_accession_age_female_monarch =</span> <span class="fu">mean</span>(</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>                monarch_age_at_accession[is_monarchy <span class="sc">&amp;</span> is_female_monarch], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>              <span class="at">avg_accession_age_male_monarch =</span> <span class="fu">mean</span>(</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>                monarch_age_at_accession[is_monarchy <span class="sc">&amp;</span> <span class="sc">!</span>is_female_monarch], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>              <span class="co"># calculating difference in average accession ages of male and female monarchs (male - female)</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>              <span class="at">gap_monarch_accession_age =</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>                avg_accession_age_male_monarch <span class="sc">-</span> avg_accession_age_female_monarch,</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>              <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>plotMe <span class="ot">&lt;-</span> <span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"year"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pal0 <span class="ot">&lt;-</span> <span class="fu">wes_palette</span>(<span class="st">"Moonrise3"</span>, <span class="at">n =</span> <span class="dv">2</span>)  </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>democracy_data <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(is_democracy)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(prop_in_par)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">is_democracy =</span> <span class="fu">factor</span>(is_democracy, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Non-Democracy"</span>, <span class="st">"Democracy"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> is_democracy, <span class="at">y =</span> prop_in_par)) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">family =</span> <span class="st">"serif"</span>)) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> pal0,              </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>,          </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">outlier.color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"crossbar"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="fl">0.75</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dotted"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> .<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Mean: "</span>, <span class="fu">round</span>(<span class="fu">after_stat</span>(y), <span class="dv">1</span>),<span class="st">"%"</span>)),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> median,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Median: "</span>, <span class="fu">round</span>(<span class="fu">after_stat</span>(y), <span class="dv">1</span>),<span class="st">"%"</span>)),</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">vjust =</span> <span class="fl">1.5</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Women's Representation in National Parliament by Democracy Status"</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Democracy Status"</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Percentage of National Parliament Seats Held by Women"</span>) <span class="sc">+</span> </span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">5</span>),</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_percent</span>(<span class="at">scale =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 ℹ Please use `linewidth` instead.</code></pre>
@@ -105,25 +249,78 @@ ul.task-list li input[type="checkbox"] {
 <p>We began by looking at the percentages of women’s parliamentary seats in democratic and non-democratic countries. On average, democracies tend to have slightly higher representation, with a median of 15.8% compared to 14.0% in non-democratic countries, and a mean of 17.7% versus 16.0%. That said, the two groups look fairly similar overall, with a lot of overlap between them and wide variation within each group. Non-democratic countries do show a few unusually high values, including two countries where women held more than 60% of parliamentary seats.</p>
 <p>To get a closer look at how democracy status relates to gender gaps beyond parliament, we examined how the proportions of male and female presidents and monarchs and the ages at which they take power differ between democratic and non-democratic countries.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 1: Proportions</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"is_democracy"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">is_democracy =</span> <span class="fu">ifelse</span>(is_democracy, <span class="st">"Democracy"</span>, <span class="st">"Non-Democracy"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(is_democracy, n,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>         prop_female_president, prop_male_president, gap_president_prop, prop_female_monarch, prop_male_monarch, gap_monarch_prop) <span class="sc">|&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title    =</span> <span class="fu">md</span>(<span class="st">"**Gender Gaps in Executive Leadership by Democracy Status**"</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Proportions of Female and Male Leaders"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">label   =</span> <span class="st">"Presidents"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(prop_female_president, prop_male_president, gap_president_prop)) <span class="sc">|&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">label   =</span> <span class="st">"Monarchs"</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(prop_female_monarch, prop_male_monarch, gap_monarch_prop)) <span class="sc">|&gt;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">is_democracy =</span> <span class="st">"Democracy Status"</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="st">"Sample Size"</span>, <span class="at">prop_female_president =</span> <span class="st">"Prop. Female"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop_male_president =</span> <span class="st">"Prop. Male"</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">gap_president_prop =</span> <span class="st">"Gap (M - F)"</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop_female_monarch =</span> <span class="st">"Prop. Female"</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop_male_monarch =</span> <span class="st">"Prop. Male"</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">gap_monarch_prop =</span> <span class="st">"Gap (M - F)"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_percent</span>(<span class="at">columns =</span> <span class="fu">c</span>(prop_female_president, prop_male_president, gap_president_prop, prop_female_monarch, prop_male_monarch, gap_monarch_prop),</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_integer</span>(<span class="at">columns =</span> n) <span class="sc">|&gt;</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_spanners</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="fu">paste0</span>(pal[<span class="dv">1</span>], <span class="st">"99"</span>)),</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">columns =</span> gap_president_prop,</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> gap_president_prop <span class="sc">&gt;</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> pal[<span class="dv">2</span>]),</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">columns =</span> gap_president_prop,</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> gap_president_prop <span class="sc">&lt;</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="fu">paste0</span>(pal[<span class="dv">1</span>], <span class="st">"99"</span>)),</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>      <span class="at">columns =</span> gap_monarch_prop,</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> gap_monarch_prop <span class="sc">&gt;</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> pal[<span class="dv">2</span>]),</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>      <span class="at">columns =</span> gap_monarch_prop,</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> gap_monarch_prop <span class="sc">&lt;</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_footnote</span>(<span class="at">footnote  =</span> <span class="st">"Positive values (shaded blue) indicate males are higher; negative values (shaded pink) indicate females are higher."</span>,</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> <span class="fu">c</span>(gap_president_prop, gap_monarch_prop))) <span class="sc">|&gt;</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_table_font</span>(<span class="at">font =</span> <span class="fu">google_font</span>(<span class="st">"Source Serif 4"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
-<div id="ttzsyvvegb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="udpvmjugsm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#ttzsyvvegb table {
+#udpvmjugsm table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ttzsyvvegb thead, #ttzsyvvegb tbody, #ttzsyvvegb tfoot, #ttzsyvvegb tr, #ttzsyvvegb td, #ttzsyvvegb th {
+#udpvmjugsm thead, #udpvmjugsm tbody, #udpvmjugsm tfoot, #udpvmjugsm tr, #udpvmjugsm td, #udpvmjugsm th {
   border-style: none;
 }
 
-#ttzsyvvegb p {
+#udpvmjugsm p {
   margin: 0;
   padding: 0;
 }
 
-#ttzsyvvegb .gt_table {
+#udpvmjugsm .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -149,12 +346,12 @@ ul.task-list li input[type="checkbox"] {
   border-left-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_caption {
+#udpvmjugsm .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ttzsyvvegb .gt_title {
+#udpvmjugsm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -166,7 +363,7 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-width: 0;
 }
 
-#ttzsyvvegb .gt_subtitle {
+#udpvmjugsm .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -178,7 +375,7 @@ ul.task-list li input[type="checkbox"] {
   border-top-width: 0;
 }
 
-#ttzsyvvegb .gt_heading {
+#udpvmjugsm .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -190,13 +387,13 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_bottom_border {
+#udpvmjugsm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_col_headings {
+#udpvmjugsm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -211,7 +408,7 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_col_heading {
+#udpvmjugsm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -231,7 +428,7 @@ ul.task-list li input[type="checkbox"] {
   overflow-x: hidden;
 }
 
-#ttzsyvvegb .gt_column_spanner_outer {
+#udpvmjugsm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -243,15 +440,15 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 4px;
 }
 
-#ttzsyvvegb .gt_column_spanner_outer:first-child {
+#udpvmjugsm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ttzsyvvegb .gt_column_spanner_outer:last-child {
+#udpvmjugsm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ttzsyvvegb .gt_column_spanner {
+#udpvmjugsm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -263,11 +460,11 @@ ul.task-list li input[type="checkbox"] {
   width: 100%;
 }
 
-#ttzsyvvegb .gt_spanner_row {
+#udpvmjugsm .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ttzsyvvegb .gt_group_heading {
+#udpvmjugsm .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -293,7 +490,7 @@ ul.task-list li input[type="checkbox"] {
   text-align: left;
 }
 
-#ttzsyvvegb .gt_empty_group_heading {
+#udpvmjugsm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -308,15 +505,15 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 
-#ttzsyvvegb .gt_from_md > :first-child {
+#udpvmjugsm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ttzsyvvegb .gt_from_md > :last-child {
+#udpvmjugsm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ttzsyvvegb .gt_row {
+#udpvmjugsm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -335,7 +532,7 @@ ul.task-list li input[type="checkbox"] {
   overflow-x: hidden;
 }
 
-#ttzsyvvegb .gt_stub {
+#udpvmjugsm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -348,7 +545,7 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#ttzsyvvegb .gt_stub_row_group {
+#udpvmjugsm .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -362,15 +559,15 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: top;
 }
 
-#ttzsyvvegb .gt_row_group_first td {
+#udpvmjugsm .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ttzsyvvegb .gt_row_group_first th {
+#udpvmjugsm .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ttzsyvvegb .gt_summary_row {
+#udpvmjugsm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -380,16 +577,16 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#ttzsyvvegb .gt_first_summary_row {
+#udpvmjugsm .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_first_summary_row.thick {
+#udpvmjugsm .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ttzsyvvegb .gt_last_summary_row {
+#udpvmjugsm .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -399,7 +596,7 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_grand_summary_row {
+#udpvmjugsm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -409,7 +606,7 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#ttzsyvvegb .gt_first_grand_summary_row {
+#udpvmjugsm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -419,7 +616,7 @@ ul.task-list li input[type="checkbox"] {
   border-top-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_last_grand_summary_row_top {
+#udpvmjugsm .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -429,11 +626,11 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_striped {
+#udpvmjugsm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ttzsyvvegb .gt_table_body {
+#udpvmjugsm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -442,7 +639,7 @@ ul.task-list li input[type="checkbox"] {
   border-bottom-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_footnotes {
+#udpvmjugsm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -456,7 +653,7 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_footnote {
+#udpvmjugsm .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -465,7 +662,7 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#ttzsyvvegb .gt_sourcenotes {
+#udpvmjugsm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -479,7 +676,7 @@ ul.task-list li input[type="checkbox"] {
   border-right-color: #D3D3D3;
 }
 
-#ttzsyvvegb .gt_sourcenote {
+#udpvmjugsm .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -487,72 +684,72 @@ ul.task-list li input[type="checkbox"] {
   padding-right: 5px;
 }
 
-#ttzsyvvegb .gt_left {
+#udpvmjugsm .gt_left {
   text-align: left;
 }
 
-#ttzsyvvegb .gt_center {
+#udpvmjugsm .gt_center {
   text-align: center;
 }
 
-#ttzsyvvegb .gt_right {
+#udpvmjugsm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ttzsyvvegb .gt_font_normal {
+#udpvmjugsm .gt_font_normal {
   font-weight: normal;
 }
 
-#ttzsyvvegb .gt_font_bold {
+#udpvmjugsm .gt_font_bold {
   font-weight: bold;
 }
 
-#ttzsyvvegb .gt_font_italic {
+#udpvmjugsm .gt_font_italic {
   font-style: italic;
 }
 
-#ttzsyvvegb .gt_super {
+#udpvmjugsm .gt_super {
   font-size: 65%;
 }
 
-#ttzsyvvegb .gt_footnote_marks {
+#udpvmjugsm .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ttzsyvvegb .gt_asterisk {
+#udpvmjugsm .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ttzsyvvegb .gt_indent_1 {
+#udpvmjugsm .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ttzsyvvegb .gt_indent_2 {
+#udpvmjugsm .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ttzsyvvegb .gt_indent_3 {
+#udpvmjugsm .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ttzsyvvegb .gt_indent_4 {
+#udpvmjugsm .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ttzsyvvegb .gt_indent_5 {
+#udpvmjugsm .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ttzsyvvegb .katex-display {
+#udpvmjugsm .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ttzsyvvegb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#udpvmjugsm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -625,25 +822,78 @@ Monarchs
 
 </div>
 </div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 2: Accession Ages</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_leadership_gender_gap</span>(<span class="st">"is_democracy"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">is_democracy =</span> <span class="fu">ifelse</span>(is_democracy, <span class="st">"Democracy"</span>, <span class="st">"Non-Democracy"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(is_democracy, n,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>         avg_accession_age_female_president, avg_accession_age_male_president, gap_president_accession_age,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>         avg_accession_age_female_monarch, avg_accession_age_male_monarch, gap_monarch_accession_age) <span class="sc">|&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="fu">md</span>(<span class="st">"**Gender Gaps in Accession Age by Democracy Status**"</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Average Accession Ages for Female and Male Leaders"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Presidents"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(avg_accession_age_female_president, avg_accession_age_male_president, gap_president_accession_age)) <span class="sc">|&gt;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Monarchs"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(avg_accession_age_female_monarch, avg_accession_age_male_monarch, gap_monarch_accession_age)) <span class="sc">|&gt;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">is_democracy =</span> <span class="st">"Democracy Status"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="st">"Sample Size"</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_accession_age_female_president =</span> <span class="st">"Avg. Age (Female)"</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_accession_age_male_president =</span> <span class="st">"Avg. Age (Male)"</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">gap_president_accession_age =</span> <span class="st">"Gap (M - F)"</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_accession_age_female_monarch  =</span> <span class="st">"Avg. Age (Female)"</span>,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_accession_age_male_monarch =</span> <span class="st">"Avg. Age (Male)"</span>,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">gap_monarch_accession_age =</span> <span class="st">"Gap (M - F)"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns  =</span> <span class="fu">c</span>(avg_accession_age_female_president, avg_accession_age_male_president, gap_president_accession_age, avg_accession_age_female_monarch, avg_accession_age_male_monarch, gap_monarch_accession_age),</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_integer</span>(<span class="at">columns =</span> n) <span class="sc">|&gt;</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_spanners</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="fu">paste0</span>(pal[<span class="dv">1</span>], <span class="st">"99"</span>)),</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">columns =</span> gap_president_accession_age,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> gap_president_accession_age <span class="sc">&gt;</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> pal[<span class="dv">2</span>]),</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">columns =</span> gap_president_accession_age,</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows  =</span> gap_president_accession_age <span class="sc">&lt;</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="fu">paste0</span>(pal[<span class="dv">1</span>], <span class="st">"99"</span>)),</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>      <span class="at">columns =</span> gap_monarch_accession_age,</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> gap_monarch_accession_age <span class="sc">&gt;</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> pal[<span class="dv">2</span>]),</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>      <span class="at">columns =</span> gap_monarch_accession_age,</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> gap_monarch_accession_age <span class="sc">&lt;</span> <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_footnote</span>(<span class="at">footnote  =</span> <span class="st">"Positive values (shaded blue) indicate males are higher; negative values (shaded pink) indicate females are higher."</span>,</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> <span class="fu">c</span>(gap_president_accession_age, gap_monarch_accession_age))) <span class="sc">|&gt;</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_table_font</span>(<span class="at">font =</span> <span class="fu">google_font</span>(<span class="st">"Source Serif 4"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
-<div id="jxvnqjxdyx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="lkhmjymgie" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#jxvnqjxdyx table {
+#lkhmjymgie table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#jxvnqjxdyx thead, #jxvnqjxdyx tbody, #jxvnqjxdyx tfoot, #jxvnqjxdyx tr, #jxvnqjxdyx td, #jxvnqjxdyx th {
+#lkhmjymgie thead, #lkhmjymgie tbody, #lkhmjymgie tfoot, #lkhmjymgie tr, #lkhmjymgie td, #lkhmjymgie th {
   border-style: none;
 }
 
-#jxvnqjxdyx p {
+#lkhmjymgie p {
   margin: 0;
   padding: 0;
 }
 
-#jxvnqjxdyx .gt_table {
+#lkhmjymgie .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -669,12 +919,12 @@ Monarchs
   border-left-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_caption {
+#lkhmjymgie .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#jxvnqjxdyx .gt_title {
+#lkhmjymgie .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -686,7 +936,7 @@ Monarchs
   border-bottom-width: 0;
 }
 
-#jxvnqjxdyx .gt_subtitle {
+#lkhmjymgie .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -698,7 +948,7 @@ Monarchs
   border-top-width: 0;
 }
 
-#jxvnqjxdyx .gt_heading {
+#lkhmjymgie .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -710,13 +960,13 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_bottom_border {
+#lkhmjymgie .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_col_headings {
+#lkhmjymgie .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -731,7 +981,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_col_heading {
+#lkhmjymgie .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -751,7 +1001,7 @@ Monarchs
   overflow-x: hidden;
 }
 
-#jxvnqjxdyx .gt_column_spanner_outer {
+#lkhmjymgie .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -763,15 +1013,15 @@ Monarchs
   padding-right: 4px;
 }
 
-#jxvnqjxdyx .gt_column_spanner_outer:first-child {
+#lkhmjymgie .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jxvnqjxdyx .gt_column_spanner_outer:last-child {
+#lkhmjymgie .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jxvnqjxdyx .gt_column_spanner {
+#lkhmjymgie .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -783,11 +1033,11 @@ Monarchs
   width: 100%;
 }
 
-#jxvnqjxdyx .gt_spanner_row {
+#lkhmjymgie .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#jxvnqjxdyx .gt_group_heading {
+#lkhmjymgie .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -813,7 +1063,7 @@ Monarchs
   text-align: left;
 }
 
-#jxvnqjxdyx .gt_empty_group_heading {
+#lkhmjymgie .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -828,15 +1078,15 @@ Monarchs
   vertical-align: middle;
 }
 
-#jxvnqjxdyx .gt_from_md > :first-child {
+#lkhmjymgie .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jxvnqjxdyx .gt_from_md > :last-child {
+#lkhmjymgie .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jxvnqjxdyx .gt_row {
+#lkhmjymgie .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -855,7 +1105,7 @@ Monarchs
   overflow-x: hidden;
 }
 
-#jxvnqjxdyx .gt_stub {
+#lkhmjymgie .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -868,7 +1118,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#jxvnqjxdyx .gt_stub_row_group {
+#lkhmjymgie .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -882,15 +1132,15 @@ Monarchs
   vertical-align: top;
 }
 
-#jxvnqjxdyx .gt_row_group_first td {
+#lkhmjymgie .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jxvnqjxdyx .gt_row_group_first th {
+#lkhmjymgie .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#jxvnqjxdyx .gt_summary_row {
+#lkhmjymgie .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -900,16 +1150,16 @@ Monarchs
   padding-right: 5px;
 }
 
-#jxvnqjxdyx .gt_first_summary_row {
+#lkhmjymgie .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_first_summary_row.thick {
+#lkhmjymgie .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jxvnqjxdyx .gt_last_summary_row {
+#lkhmjymgie .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -919,7 +1169,7 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_grand_summary_row {
+#lkhmjymgie .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -929,7 +1179,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#jxvnqjxdyx .gt_first_grand_summary_row {
+#lkhmjymgie .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -939,7 +1189,7 @@ Monarchs
   border-top-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_last_grand_summary_row_top {
+#lkhmjymgie .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -949,11 +1199,11 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_striped {
+#lkhmjymgie .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jxvnqjxdyx .gt_table_body {
+#lkhmjymgie .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -962,7 +1212,7 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_footnotes {
+#lkhmjymgie .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -976,7 +1226,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_footnote {
+#lkhmjymgie .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -985,7 +1235,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#jxvnqjxdyx .gt_sourcenotes {
+#lkhmjymgie .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -999,7 +1249,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#jxvnqjxdyx .gt_sourcenote {
+#lkhmjymgie .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1007,72 +1257,72 @@ Monarchs
   padding-right: 5px;
 }
 
-#jxvnqjxdyx .gt_left {
+#lkhmjymgie .gt_left {
   text-align: left;
 }
 
-#jxvnqjxdyx .gt_center {
+#lkhmjymgie .gt_center {
   text-align: center;
 }
 
-#jxvnqjxdyx .gt_right {
+#lkhmjymgie .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jxvnqjxdyx .gt_font_normal {
+#lkhmjymgie .gt_font_normal {
   font-weight: normal;
 }
 
-#jxvnqjxdyx .gt_font_bold {
+#lkhmjymgie .gt_font_bold {
   font-weight: bold;
 }
 
-#jxvnqjxdyx .gt_font_italic {
+#lkhmjymgie .gt_font_italic {
   font-style: italic;
 }
 
-#jxvnqjxdyx .gt_super {
+#lkhmjymgie .gt_super {
   font-size: 65%;
 }
 
-#jxvnqjxdyx .gt_footnote_marks {
+#lkhmjymgie .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#jxvnqjxdyx .gt_asterisk {
+#lkhmjymgie .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jxvnqjxdyx .gt_indent_1 {
+#lkhmjymgie .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jxvnqjxdyx .gt_indent_2 {
+#lkhmjymgie .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jxvnqjxdyx .gt_indent_3 {
+#lkhmjymgie .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jxvnqjxdyx .gt_indent_4 {
+#lkhmjymgie .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jxvnqjxdyx .gt_indent_5 {
+#lkhmjymgie .gt_indent_5 {
   text-indent: 25px;
 }
 
-#jxvnqjxdyx .katex-display {
+#lkhmjymgie .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#jxvnqjxdyx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#lkhmjymgie div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1150,6 +1400,34 @@ Monarchs
 <p>For monarchs, the pattern is quite different. In non-democratic countries, male monarchs outnumber female monarchs by more than 84 percentage points, while in democratic countries the split is much closer to even. Monarchs also tend to come to power younger than presidents, usually somewhere between 30 and 35 years old, and this is especially true in non-democratic countries.</p>
 <p>To get a clearer sense of how these age gaps have shifted over time, we constructed a ribbon plot showing the difference between average accession ages for male and female presidents and monarchs by decade. Because there were no recorded female presidents before 1980, we limited this portion of the analysis to years from 1980 onward.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plotMe <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">1980</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> plotMe, <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">ymin =</span> avg_accession_age_female_president,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">ymax =</span> avg_accession_age_male_president),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="st">"#D3D3D3"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="at">data =</span> plotMe, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">ymin =</span> avg_accession_age_female_monarch,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">ymax =</span> avg_accession_age_male_monarch),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill =</span> <span class="st">"#D3D3D3"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_accession_age_female_president, <span class="at">color =</span> <span class="st">"Female President"</span>), <span class="at">linewidth =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_accession_age_male_president, <span class="at">color =</span> <span class="st">"Male President"</span>), <span class="at">linewidth =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_accession_age_female_monarch, <span class="at">color =</span> <span class="st">"Female Monarch"</span>), <span class="at">linewidth =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_accession_age_male_monarch, <span class="at">color =</span> <span class="st">"Male Monarch"</span>), <span class="at">linewidth =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">name =</span> <span class="st">"Leader Type"</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Female President"</span> <span class="ot">=</span> pal[<span class="dv">3</span>],</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Male President"</span><span class="ot">=</span> pal[<span class="dv">2</span>],</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Male Monarch"</span> <span class="ot">=</span> pal[<span class="dv">4</span>],</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Female Monarch"</span> <span class="ot">=</span> pal[<span class="dv">1</span>]),</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">"Female President"</span>, <span class="st">"Male President"</span>, <span class="st">"Male Monarch"</span>, <span class="st">"Female Monarch"</span>)) <span class="sc">+</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1980</span>, <span class="dv">2020</span>)) <span class="sc">+</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">70</span>)) <span class="sc">+</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average Accession Ages of Presidents &amp; Monarchs by Gender"</span>, <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Average Accession Age"</span>) <span class="sc">+</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1160,24 +1438,54 @@ Monarchs
 </div>
 <p>From 1980 to 2020, gender differences in the age at which leaders take office vary between presidents and monarchs. Among presidents, the gap is small and relatively stable, with men only slightly older than women at the time they take office. Both groups also show a gradual increase in age over time. In contrast, monarchs show a much larger and growing gap. Male monarchs tend to take the throne at older ages, while female monarchs are generally younger, with their ages even decreasing in more recent years. Overall, gender disparities in age at taking office are minimal in presidential systems but much more pronounced in monarchical ones.</p>
 <p>The next table examines how gender gaps appear in leadership across decades. It compares the proportions of female and male presidents over time to show how representation has shifted from 1950 to 2020.</p>
-<div id="gwceoigomw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># table with iteration</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>group_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"decade"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>group_labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Decade"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">walk2</span>(group_vars, group_labels, <span class="cf">function</span>(var, label) {</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  tbl <span class="ot">&lt;-</span> <span class="fu">summarise_leadership_gender_gap</span>(var) <span class="sc">|&gt;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">all_of</span>(var), n, prop_female_president, prop_male_president, gap_president_prop)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(tbl <span class="sc">|&gt;</span> <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="fu">md</span>(<span class="fu">paste0</span>(<span class="st">"**Gender Gaps by "</span>, label, <span class="st">"**"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cols_label</span>(</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!!</span><span class="fu">sym</span>(var)            <span class="sc">:</span><span class="er">=</span> label,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">n                      =</span> <span class="st">"Sample Size"</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">prop_female_president  =</span> <span class="st">"Prop. Female President"</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">prop_male_president    =</span> <span class="st">"Prop. Male President"</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">gap_president_prop     =</span> <span class="st">"Gap (M - F)"</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmt_percent</span>(</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">columns  =</span> <span class="fu">c</span>(prop_female_president, prop_male_president, gap_president_prop),</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmt_integer</span>(<span class="at">columns =</span> n) <span class="sc">|&gt;</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">locations =</span> <span class="fu">cells_column_labels</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">locations =</span> <span class="fu">cells_title</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">opt_table_font</span>(<span class="at">font =</span> <span class="fu">google_font</span>(<span class="st">"Source Serif 4"</span>)))</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div id="pcthoejhcs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#gwceoigomw table {
+#pcthoejhcs table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#gwceoigomw thead, #gwceoigomw tbody, #gwceoigomw tfoot, #gwceoigomw tr, #gwceoigomw td, #gwceoigomw th {
+#pcthoejhcs thead, #pcthoejhcs tbody, #pcthoejhcs tfoot, #pcthoejhcs tr, #pcthoejhcs td, #pcthoejhcs th {
   border-style: none;
 }
 
-#gwceoigomw p {
+#pcthoejhcs p {
   margin: 0;
   padding: 0;
 }
 
-#gwceoigomw .gt_table {
+#pcthoejhcs .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1203,12 +1511,12 @@ Monarchs
   border-left-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_caption {
+#pcthoejhcs .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#gwceoigomw .gt_title {
+#pcthoejhcs .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1220,7 +1528,7 @@ Monarchs
   border-bottom-width: 0;
 }
 
-#gwceoigomw .gt_subtitle {
+#pcthoejhcs .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1232,7 +1540,7 @@ Monarchs
   border-top-width: 0;
 }
 
-#gwceoigomw .gt_heading {
+#pcthoejhcs .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1244,13 +1552,13 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_bottom_border {
+#pcthoejhcs .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_col_headings {
+#pcthoejhcs .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1265,7 +1573,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_col_heading {
+#pcthoejhcs .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1285,7 +1593,7 @@ Monarchs
   overflow-x: hidden;
 }
 
-#gwceoigomw .gt_column_spanner_outer {
+#pcthoejhcs .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1297,15 +1605,15 @@ Monarchs
   padding-right: 4px;
 }
 
-#gwceoigomw .gt_column_spanner_outer:first-child {
+#pcthoejhcs .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#gwceoigomw .gt_column_spanner_outer:last-child {
+#pcthoejhcs .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#gwceoigomw .gt_column_spanner {
+#pcthoejhcs .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1317,11 +1625,11 @@ Monarchs
   width: 100%;
 }
 
-#gwceoigomw .gt_spanner_row {
+#pcthoejhcs .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#gwceoigomw .gt_group_heading {
+#pcthoejhcs .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1347,7 +1655,7 @@ Monarchs
   text-align: left;
 }
 
-#gwceoigomw .gt_empty_group_heading {
+#pcthoejhcs .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1362,15 +1670,15 @@ Monarchs
   vertical-align: middle;
 }
 
-#gwceoigomw .gt_from_md > :first-child {
+#pcthoejhcs .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#gwceoigomw .gt_from_md > :last-child {
+#pcthoejhcs .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#gwceoigomw .gt_row {
+#pcthoejhcs .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1389,7 +1697,7 @@ Monarchs
   overflow-x: hidden;
 }
 
-#gwceoigomw .gt_stub {
+#pcthoejhcs .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1402,7 +1710,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#gwceoigomw .gt_stub_row_group {
+#pcthoejhcs .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1416,15 +1724,15 @@ Monarchs
   vertical-align: top;
 }
 
-#gwceoigomw .gt_row_group_first td {
+#pcthoejhcs .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#gwceoigomw .gt_row_group_first th {
+#pcthoejhcs .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#gwceoigomw .gt_summary_row {
+#pcthoejhcs .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1434,16 +1742,16 @@ Monarchs
   padding-right: 5px;
 }
 
-#gwceoigomw .gt_first_summary_row {
+#pcthoejhcs .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_first_summary_row.thick {
+#pcthoejhcs .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#gwceoigomw .gt_last_summary_row {
+#pcthoejhcs .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1453,7 +1761,7 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_grand_summary_row {
+#pcthoejhcs .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1463,7 +1771,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#gwceoigomw .gt_first_grand_summary_row {
+#pcthoejhcs .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1473,7 +1781,7 @@ Monarchs
   border-top-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_last_grand_summary_row_top {
+#pcthoejhcs .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1483,11 +1791,11 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_striped {
+#pcthoejhcs .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#gwceoigomw .gt_table_body {
+#pcthoejhcs .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1496,7 +1804,7 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_footnotes {
+#pcthoejhcs .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1510,7 +1818,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_footnote {
+#pcthoejhcs .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1519,7 +1827,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#gwceoigomw .gt_sourcenotes {
+#pcthoejhcs .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1533,7 +1841,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#gwceoigomw .gt_sourcenote {
+#pcthoejhcs .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1541,72 +1849,72 @@ Monarchs
   padding-right: 5px;
 }
 
-#gwceoigomw .gt_left {
+#pcthoejhcs .gt_left {
   text-align: left;
 }
 
-#gwceoigomw .gt_center {
+#pcthoejhcs .gt_center {
   text-align: center;
 }
 
-#gwceoigomw .gt_right {
+#pcthoejhcs .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#gwceoigomw .gt_font_normal {
+#pcthoejhcs .gt_font_normal {
   font-weight: normal;
 }
 
-#gwceoigomw .gt_font_bold {
+#pcthoejhcs .gt_font_bold {
   font-weight: bold;
 }
 
-#gwceoigomw .gt_font_italic {
+#pcthoejhcs .gt_font_italic {
   font-style: italic;
 }
 
-#gwceoigomw .gt_super {
+#pcthoejhcs .gt_super {
   font-size: 65%;
 }
 
-#gwceoigomw .gt_footnote_marks {
+#pcthoejhcs .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#gwceoigomw .gt_asterisk {
+#pcthoejhcs .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#gwceoigomw .gt_indent_1 {
+#pcthoejhcs .gt_indent_1 {
   text-indent: 5px;
 }
 
-#gwceoigomw .gt_indent_2 {
+#pcthoejhcs .gt_indent_2 {
   text-indent: 10px;
 }
 
-#gwceoigomw .gt_indent_3 {
+#pcthoejhcs .gt_indent_3 {
   text-indent: 15px;
 }
 
-#gwceoigomw .gt_indent_4 {
+#pcthoejhcs .gt_indent_4 {
   text-indent: 20px;
 }
 
-#gwceoigomw .gt_indent_5 {
+#pcthoejhcs .gt_indent_5 {
   text-indent: 25px;
 }
 
-#gwceoigomw .katex-display {
+#pcthoejhcs .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#gwceoigomw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#pcthoejhcs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1761,25 +2069,63 @@ Gap (M - F)
 <p>This table highlights the changes in gender gaps by decade, including the sample size, decade, proportion of female presidents, and proportion of male presidents. Highlighted in pink are the gender gaps, which as we can predict, decrease in proportion over time. For the first two decades that we have data for (1950-1970), there were solely male presidents, but during our final decade, 2010-2020, there was a gap of around 86%.</p>
 <p>We ran a t-test to compare the means of the proportion of national parliament seats held by women between different democracy statuses.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(prop_in_par <span class="sc">~</span> is_democracy, <span class="at">data =</span> democracy_data)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>table_result <span class="ot">&lt;-</span> <span class="fu">tidy</span>(result)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>table_result <span class="sc">|&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(estimate1, estimate2, statistic, p.value, conf.low, conf.high, parameter) <span class="sc">|&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="fu">md</span>(<span class="st">"**Proportion in Parliament by Democracy Status**"</span>), <span class="at">subtitle =</span> <span class="st">"Welch Two-Sample t-Test"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">estimate1 =</span> <span class="fu">md</span>(<span class="st">"Mean&lt;br&gt;(Non-Democracy)"</span>),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate2 =</span> <span class="fu">md</span>(<span class="st">"Mean&lt;br&gt;(Democracy)"</span>),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">statistic =</span> <span class="fu">md</span>(<span class="st">"*t*-statistic"</span>),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">p.value =</span> <span class="fu">md</span>(<span class="st">"*p*-value"</span>),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">conf.low =</span> <span class="st">"95% CI Low"</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">conf.high =</span> <span class="st">"95% CI High"</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">parameter =</span> <span class="fu">md</span>(<span class="st">"*df*"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns  =</span> <span class="fu">c</span>(estimate1, estimate2, statistic, conf.low, conf.high),<span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns  =</span> parameter,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_scientific</span>(<span class="at">columns =</span> p.value,</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#FAD77B"</span>),</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> p.value)) <span class="sc">|&gt;</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>),</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(<span class="at">columns =</span> p.value)) <span class="sc">|&gt;</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Group Means"</span>,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(estimate1, estimate2)) <span class="sc">|&gt;</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Confidence Interval"</span>,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(conf.low, conf.high)) <span class="sc">|&gt;</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_footnote</span>(<span class="at">footnote =</span> <span class="st">"Highlighted cell indicates a statistically significant result."</span>, <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> p.value)) <span class="sc">|&gt;</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_spanners</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_table_font</span>(<span class="at">font =</span> <span class="fu">google_font</span>(<span class="st">"Source Serif 4"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
-<div id="reacdfvprv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="tufpixkubp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#reacdfvprv table {
+#tufpixkubp table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#reacdfvprv thead, #reacdfvprv tbody, #reacdfvprv tfoot, #reacdfvprv tr, #reacdfvprv td, #reacdfvprv th {
+#tufpixkubp thead, #tufpixkubp tbody, #tufpixkubp tfoot, #tufpixkubp tr, #tufpixkubp td, #tufpixkubp th {
   border-style: none;
 }
 
-#reacdfvprv p {
+#tufpixkubp p {
   margin: 0;
   padding: 0;
 }
 
-#reacdfvprv .gt_table {
+#tufpixkubp .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1805,12 +2151,12 @@ Gap (M - F)
   border-left-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_caption {
+#tufpixkubp .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#reacdfvprv .gt_title {
+#tufpixkubp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1822,7 +2168,7 @@ Gap (M - F)
   border-bottom-width: 0;
 }
 
-#reacdfvprv .gt_subtitle {
+#tufpixkubp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1834,7 +2180,7 @@ Gap (M - F)
   border-top-width: 0;
 }
 
-#reacdfvprv .gt_heading {
+#tufpixkubp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1846,13 +2192,13 @@ Gap (M - F)
   border-right-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_bottom_border {
+#tufpixkubp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_col_headings {
+#tufpixkubp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1867,7 +2213,7 @@ Gap (M - F)
   border-right-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_col_heading {
+#tufpixkubp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1887,7 +2233,7 @@ Gap (M - F)
   overflow-x: hidden;
 }
 
-#reacdfvprv .gt_column_spanner_outer {
+#tufpixkubp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1899,15 +2245,15 @@ Gap (M - F)
   padding-right: 4px;
 }
 
-#reacdfvprv .gt_column_spanner_outer:first-child {
+#tufpixkubp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#reacdfvprv .gt_column_spanner_outer:last-child {
+#tufpixkubp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#reacdfvprv .gt_column_spanner {
+#tufpixkubp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1919,11 +2265,11 @@ Gap (M - F)
   width: 100%;
 }
 
-#reacdfvprv .gt_spanner_row {
+#tufpixkubp .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#reacdfvprv .gt_group_heading {
+#tufpixkubp .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1949,7 +2295,7 @@ Gap (M - F)
   text-align: left;
 }
 
-#reacdfvprv .gt_empty_group_heading {
+#tufpixkubp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1964,15 +2310,15 @@ Gap (M - F)
   vertical-align: middle;
 }
 
-#reacdfvprv .gt_from_md > :first-child {
+#tufpixkubp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#reacdfvprv .gt_from_md > :last-child {
+#tufpixkubp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#reacdfvprv .gt_row {
+#tufpixkubp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1991,7 +2337,7 @@ Gap (M - F)
   overflow-x: hidden;
 }
 
-#reacdfvprv .gt_stub {
+#tufpixkubp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2004,7 +2350,7 @@ Gap (M - F)
   padding-right: 5px;
 }
 
-#reacdfvprv .gt_stub_row_group {
+#tufpixkubp .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2018,15 +2364,15 @@ Gap (M - F)
   vertical-align: top;
 }
 
-#reacdfvprv .gt_row_group_first td {
+#tufpixkubp .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#reacdfvprv .gt_row_group_first th {
+#tufpixkubp .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#reacdfvprv .gt_summary_row {
+#tufpixkubp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2036,16 +2382,16 @@ Gap (M - F)
   padding-right: 5px;
 }
 
-#reacdfvprv .gt_first_summary_row {
+#tufpixkubp .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_first_summary_row.thick {
+#tufpixkubp .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#reacdfvprv .gt_last_summary_row {
+#tufpixkubp .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2055,7 +2401,7 @@ Gap (M - F)
   border-bottom-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_grand_summary_row {
+#tufpixkubp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2065,7 +2411,7 @@ Gap (M - F)
   padding-right: 5px;
 }
 
-#reacdfvprv .gt_first_grand_summary_row {
+#tufpixkubp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2075,7 +2421,7 @@ Gap (M - F)
   border-top-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_last_grand_summary_row_top {
+#tufpixkubp .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2085,11 +2431,11 @@ Gap (M - F)
   border-bottom-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_striped {
+#tufpixkubp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#reacdfvprv .gt_table_body {
+#tufpixkubp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2098,7 +2444,7 @@ Gap (M - F)
   border-bottom-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_footnotes {
+#tufpixkubp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2112,7 +2458,7 @@ Gap (M - F)
   border-right-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_footnote {
+#tufpixkubp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2121,7 +2467,7 @@ Gap (M - F)
   padding-right: 5px;
 }
 
-#reacdfvprv .gt_sourcenotes {
+#tufpixkubp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2135,7 +2481,7 @@ Gap (M - F)
   border-right-color: #D3D3D3;
 }
 
-#reacdfvprv .gt_sourcenote {
+#tufpixkubp .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2143,72 +2489,72 @@ Gap (M - F)
   padding-right: 5px;
 }
 
-#reacdfvprv .gt_left {
+#tufpixkubp .gt_left {
   text-align: left;
 }
 
-#reacdfvprv .gt_center {
+#tufpixkubp .gt_center {
   text-align: center;
 }
 
-#reacdfvprv .gt_right {
+#tufpixkubp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#reacdfvprv .gt_font_normal {
+#tufpixkubp .gt_font_normal {
   font-weight: normal;
 }
 
-#reacdfvprv .gt_font_bold {
+#tufpixkubp .gt_font_bold {
   font-weight: bold;
 }
 
-#reacdfvprv .gt_font_italic {
+#tufpixkubp .gt_font_italic {
   font-style: italic;
 }
 
-#reacdfvprv .gt_super {
+#tufpixkubp .gt_super {
   font-size: 65%;
 }
 
-#reacdfvprv .gt_footnote_marks {
+#tufpixkubp .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#reacdfvprv .gt_asterisk {
+#tufpixkubp .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#reacdfvprv .gt_indent_1 {
+#tufpixkubp .gt_indent_1 {
   text-indent: 5px;
 }
 
-#reacdfvprv .gt_indent_2 {
+#tufpixkubp .gt_indent_2 {
   text-indent: 10px;
 }
 
-#reacdfvprv .gt_indent_3 {
+#tufpixkubp .gt_indent_3 {
   text-indent: 15px;
 }
 
-#reacdfvprv .gt_indent_4 {
+#tufpixkubp .gt_indent_4 {
   text-indent: 20px;
 }
 
-#reacdfvprv .gt_indent_5 {
+#tufpixkubp .gt_indent_5 {
   text-indent: 25px;
 }
 
-#reacdfvprv .katex-display {
+#tufpixkubp .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#reacdfvprv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#tufpixkubp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2274,6 +2620,73 @@ Confidence Interval
 <section id="exploring-the-global-effect-of-democratic-transitions" class="level2">
 <h2 class="anchored" data-anchor-id="exploring-the-global-effect-of-democratic-transitions">Exploring The Global Effect of Democratic Transitions</h2>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#arranging by country and year</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>democracy_data <span class="ot">&lt;-</span> democracy_data <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(country, year)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#creating new columns to the data, and assigning them to 0 to start with. this is an indicator variable, with 0 being no transition, and 1 meaning there is a transition. for example, if for a country 2000 is a 0 for the to_democracy variable and 2001 there is a 1, there was a transition to democracy in 2001. </span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>democracy_data<span class="sc">$</span>to_democracy <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>democracy_data<span class="sc">$</span>from_democracy <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#to iterate through rows to find out which ones have transitions. starting at 2 because we are comparing to the previous row (2-1 = 1)</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">nrow</span>(democracy_data)) {</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#checking if the two countries that are next to each other in the data are the same </span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (democracy_data<span class="sc">$</span>country[i] <span class="sc">==</span> democracy_data<span class="sc">$</span>country[i<span class="dv">-1</span>]) { </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#assigning them to current and previous labels</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    current <span class="ot">&lt;-</span> democracy_data<span class="sc">$</span>is_democracy[i]</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    previous <span class="ot">&lt;-</span> democracy_data<span class="sc">$</span>is_democracy[i <span class="sc">-</span> <span class="dv">1</span>]</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">#making sure there are no na values for the is_democracy variable</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(current) <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(previous)) {</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>      <span class="co">#if this year there is democracy and the previous year there wasn't, it is marked as a transition to democracy</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (current <span class="sc">&amp;&amp;</span> <span class="sc">!</span>previous) {</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        democracy_data<span class="sc">$</span>to_democracy[i] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>      <span class="co">#opposite for this one </span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>current <span class="sc">&amp;&amp;</span> previous) {</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        democracy_data<span class="sc">$</span>from_democracy[i] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co">#first grouping by year, and then summarizing the proportion of democracy, and transitions in and out of democracy</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>summary_data <span class="ot">&lt;-</span> democracy_data <span class="sc">|&gt;</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">|&gt;</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop_democracy =</span> <span class="fu">mean</span>(is_democracy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_in =</span> <span class="fu">sum</span>(to_democracy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_out =</span> <span class="fu">sum</span>(from_democracy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a><span class="co">#after viewing this data, it would be helpful to analyze these trends using something like a plot, but looking at it as a table is overwhelming. To counteract this, we can condense the years to 5 or 10 years at the time to get a better look at overall trends. </span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="co">#we have to create a new column to group the years</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>democracy_data <span class="ot">&lt;-</span> democracy_data <span class="sc">|&gt;</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ten_yrs =</span> <span class="fu">floor</span>(year <span class="sc">/</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">10</span>)</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="co">#used the floor function here, that rounds a number down to the greatest integer less than or equal to it, here by 10s.</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>summary_ten_yrs <span class="ot">&lt;-</span> democracy_data <span class="sc">|&gt;</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ten_yrs) <span class="sc">|&gt;</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop_democracy =</span> <span class="fu">mean</span>(is_democracy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_in =</span> <span class="fu">sum</span>(to_democracy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_out =</span> <span class="fu">sum</span>(from_democracy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(summary_data, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> prop_democracy)) <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> pal[<span class="dv">2</span>], <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color=</span>pal[<span class="dv">2</span>], <span class="at">linewidth=</span><span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.2</span>), <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>()) <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Percentage of Democratic Countries Over Time"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Percentage of Democratic Countries"</span>) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">1950</span>,<span class="dv">2020</span>,<span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2284,24 +2697,41 @@ Confidence Interval
 </div>
 <p>We first examined the overall trend of the percentage of democratic countries. In 1950, the percentage of democratic countries was at about 25%, before rising gradually through the 1960s. The percentage then stayed fairly stable around the mid-30% range through the 1970s and early 1980s. The largest increase happened around the late 1980s and early 1990s, when the percentage increased sharply to nearly 60%. After that, democracy continued to grow more slowly, reaching the mid-60% range in the 2010s before leveling off slightly by 2020.</p>
 <p>Next, we analyzed the number of global transitions to and from democracies.</p>
-<div id="zujliqfmfl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>summary_ten_yrs <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(ten_yrs, transitions_in, transitions_out) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="fu">md</span>(<span class="st">"**Democracy Transitions by Year**"</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Transitions In and Out of Democracy"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">ten_yrs =</span> <span class="st">"Decade"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_in =</span> <span class="st">"Transitions In"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_out =</span> <span class="st">"Transitions Out"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_integer</span>(<span class="at">columns =</span> <span class="fu">c</span>(transitions_in, transitions_out)) <span class="sc">|&gt;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_table_font</span>(<span class="at">font =</span> <span class="fu">google_font</span>(<span class="st">"Source Serif 4"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div id="nlbxnsjuil" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#zujliqfmfl table {
+#nlbxnsjuil table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zujliqfmfl thead, #zujliqfmfl tbody, #zujliqfmfl tfoot, #zujliqfmfl tr, #zujliqfmfl td, #zujliqfmfl th {
+#nlbxnsjuil thead, #nlbxnsjuil tbody, #nlbxnsjuil tfoot, #nlbxnsjuil tr, #nlbxnsjuil td, #nlbxnsjuil th {
   border-style: none;
 }
 
-#zujliqfmfl p {
+#nlbxnsjuil p {
   margin: 0;
   padding: 0;
 }
 
-#zujliqfmfl .gt_table {
+#nlbxnsjuil .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2327,12 +2757,12 @@ Confidence Interval
   border-left-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_caption {
+#nlbxnsjuil .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zujliqfmfl .gt_title {
+#nlbxnsjuil .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2344,7 +2774,7 @@ Confidence Interval
   border-bottom-width: 0;
 }
 
-#zujliqfmfl .gt_subtitle {
+#nlbxnsjuil .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2356,7 +2786,7 @@ Confidence Interval
   border-top-width: 0;
 }
 
-#zujliqfmfl .gt_heading {
+#nlbxnsjuil .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2368,13 +2798,13 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_bottom_border {
+#nlbxnsjuil .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_col_headings {
+#nlbxnsjuil .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2389,7 +2819,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_col_heading {
+#nlbxnsjuil .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2409,7 +2839,7 @@ Confidence Interval
   overflow-x: hidden;
 }
 
-#zujliqfmfl .gt_column_spanner_outer {
+#nlbxnsjuil .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2421,15 +2851,15 @@ Confidence Interval
   padding-right: 4px;
 }
 
-#zujliqfmfl .gt_column_spanner_outer:first-child {
+#nlbxnsjuil .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zujliqfmfl .gt_column_spanner_outer:last-child {
+#nlbxnsjuil .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zujliqfmfl .gt_column_spanner {
+#nlbxnsjuil .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2441,11 +2871,11 @@ Confidence Interval
   width: 100%;
 }
 
-#zujliqfmfl .gt_spanner_row {
+#nlbxnsjuil .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zujliqfmfl .gt_group_heading {
+#nlbxnsjuil .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2471,7 +2901,7 @@ Confidence Interval
   text-align: left;
 }
 
-#zujliqfmfl .gt_empty_group_heading {
+#nlbxnsjuil .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2486,15 +2916,15 @@ Confidence Interval
   vertical-align: middle;
 }
 
-#zujliqfmfl .gt_from_md > :first-child {
+#nlbxnsjuil .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zujliqfmfl .gt_from_md > :last-child {
+#nlbxnsjuil .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zujliqfmfl .gt_row {
+#nlbxnsjuil .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2513,7 +2943,7 @@ Confidence Interval
   overflow-x: hidden;
 }
 
-#zujliqfmfl .gt_stub {
+#nlbxnsjuil .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2526,7 +2956,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#zujliqfmfl .gt_stub_row_group {
+#nlbxnsjuil .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2540,15 +2970,15 @@ Confidence Interval
   vertical-align: top;
 }
 
-#zujliqfmfl .gt_row_group_first td {
+#nlbxnsjuil .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zujliqfmfl .gt_row_group_first th {
+#nlbxnsjuil .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zujliqfmfl .gt_summary_row {
+#nlbxnsjuil .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2558,16 +2988,16 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#zujliqfmfl .gt_first_summary_row {
+#nlbxnsjuil .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_first_summary_row.thick {
+#nlbxnsjuil .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zujliqfmfl .gt_last_summary_row {
+#nlbxnsjuil .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2577,7 +3007,7 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_grand_summary_row {
+#nlbxnsjuil .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2587,7 +3017,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#zujliqfmfl .gt_first_grand_summary_row {
+#nlbxnsjuil .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2597,7 +3027,7 @@ Confidence Interval
   border-top-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_last_grand_summary_row_top {
+#nlbxnsjuil .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2607,11 +3037,11 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_striped {
+#nlbxnsjuil .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zujliqfmfl .gt_table_body {
+#nlbxnsjuil .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2620,7 +3050,7 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_footnotes {
+#nlbxnsjuil .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2634,7 +3064,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_footnote {
+#nlbxnsjuil .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2643,7 +3073,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#zujliqfmfl .gt_sourcenotes {
+#nlbxnsjuil .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2657,7 +3087,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#zujliqfmfl .gt_sourcenote {
+#nlbxnsjuil .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2665,72 +3095,72 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#zujliqfmfl .gt_left {
+#nlbxnsjuil .gt_left {
   text-align: left;
 }
 
-#zujliqfmfl .gt_center {
+#nlbxnsjuil .gt_center {
   text-align: center;
 }
 
-#zujliqfmfl .gt_right {
+#nlbxnsjuil .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zujliqfmfl .gt_font_normal {
+#nlbxnsjuil .gt_font_normal {
   font-weight: normal;
 }
 
-#zujliqfmfl .gt_font_bold {
+#nlbxnsjuil .gt_font_bold {
   font-weight: bold;
 }
 
-#zujliqfmfl .gt_font_italic {
+#nlbxnsjuil .gt_font_italic {
   font-style: italic;
 }
 
-#zujliqfmfl .gt_super {
+#nlbxnsjuil .gt_super {
   font-size: 65%;
 }
 
-#zujliqfmfl .gt_footnote_marks {
+#nlbxnsjuil .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zujliqfmfl .gt_asterisk {
+#nlbxnsjuil .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zujliqfmfl .gt_indent_1 {
+#nlbxnsjuil .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zujliqfmfl .gt_indent_2 {
+#nlbxnsjuil .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zujliqfmfl .gt_indent_3 {
+#nlbxnsjuil .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zujliqfmfl .gt_indent_4 {
+#nlbxnsjuil .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zujliqfmfl .gt_indent_5 {
+#nlbxnsjuil .gt_indent_5 {
   text-indent: 25px;
 }
 
-#zujliqfmfl .katex-display {
+#nlbxnsjuil .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#zujliqfmfl div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#nlbxnsjuil div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2796,6 +3226,28 @@ Confidence Interval
 </div>
 <p>This table shows democratic transitions by decade, offering a cleaner view of long-term trends in global democratization from 1950 to 2020. The 1990s stand out as the most transformative decade, with 39 transitions into democracy and only 11 out, reflecting the wave of democratization that followed the end of the Cold War. In contrast, the 1970s were the most stagnant period, with transitions in and out nearly balanced at 16 and 15 respectively and virtually no net change in the global proportion.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>summary_data_long <span class="ot">&lt;-</span> summary_data <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(transitions_in, transitions_out),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"type"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"count"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(summary_data_long, <span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> count, <span class="at">fill =</span> type)) <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">alpha =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">transitions_in =</span> pal[<span class="dv">2</span>],</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">transitions_out =</span> pal[<span class="dv">1</span>]),</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Transition Direction"</span>,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="at">transitions_in =</span> <span class="st">"Transitions In"</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">transitions_out =</span> <span class="st">"Transitions Out"</span>)) <span class="sc">+</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Global Democratic Transitions Over Time"</span>,</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Count of Transitions"</span>) <span class="sc">+</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">12</span>), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">12</span>,<span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">1950</span>,<span class="dv">2020</span>), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">1950</span>,<span class="dv">2020</span>,<span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -2807,25 +3259,72 @@ Confidence Interval
 <p>The area plot reveals that countries do not transition into democracies at a steady rate, but instead noticeably fluctuate over time. While there are often more transitions into democracy than out of it, this pattern appears variable. The process of democratization is unstable, as transitions out of democracy are present throughout the years and do not seem to be declining. One particularly noticeable feature is seen in the 1990s, where there is a sharp increase in the amount of countries that transitioned into a democracy. We can see that democratization is not a smooth, continuous process.</p>
 <p>We also wanted to identify which countries had the most transitions into and out of democracy from 1950-2020.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>topn_countries <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">start_year =</span> <span class="dv">1950</span>, <span class="at">end_year =</span> <span class="dv">2020</span>, <span class="at">num_countries =</span> <span class="dv">10</span>) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (start_year <span class="sc">&lt;</span> <span class="dv">1950</span> <span class="sc">|</span> end_year <span class="sc">&gt;</span> <span class="dv">2020</span> <span class="sc">|</span> start_year <span class="sc">&gt;</span> end_year) {</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Year range must be between 1950 and 2020"</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> democracy_data <span class="sc">|&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(year <span class="sc">&gt;=</span> start_year <span class="sc">&amp;</span> year <span class="sc">&lt;=</span> end_year) <span class="sc">|&gt;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(country_name, year) <span class="sc">|&gt;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(country_name) <span class="sc">|&gt;</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">prev_year =</span> <span class="fu">lag</span>(is_democracy),</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">to_democracy =</span> <span class="fu">ifelse</span>(is_democracy <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> prev_year <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">from_democracy =</span> <span class="fu">ifelse</span>(is_democracy <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> prev_year <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  country_table <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(country_name) <span class="sc">|&gt;</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">transitions_in =</span> <span class="fu">sum</span>(to_democracy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">transitions_out =</span> <span class="fu">sum</span>(from_democracy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">total_transitions =</span> transitions_in <span class="sc">+</span> transitions_out,</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(total_transitions)) <span class="sc">|&gt;</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_head</span>(<span class="at">n =</span> num_countries)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(country_table)</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>country_transitions <span class="ot">&lt;-</span> <span class="fu">topn_countries</span>(<span class="dv">1950</span>, <span class="dv">2020</span>, <span class="dv">10</span>)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>country_transitions <span class="sc">|&gt;</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="fu">md</span>(<span class="st">"**Top 10 Countries by Democratic Transitions**"</span>),</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Total Transitions Into and Out of Democracy"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">country_name =</span> <span class="st">"Country"</span>,</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_in =</span> <span class="st">"Transitions In"</span>,</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_out =</span> <span class="st">"Transitions Out"</span>,</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_transitions =</span> <span class="st">"Total Transitions"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_integer</span>(<span class="at">columns =</span> <span class="fu">c</span>(transitions_in, transitions_out, total_transitions)) <span class="sc">|&gt;</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_table_font</span>(<span class="at">font =</span> <span class="fu">google_font</span>(<span class="st">"Source Serif 4"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
-<div id="rydkibksxz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="kbpbxnxyfd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#rydkibksxz table {
+#kbpbxnxyfd table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#rydkibksxz thead, #rydkibksxz tbody, #rydkibksxz tfoot, #rydkibksxz tr, #rydkibksxz td, #rydkibksxz th {
+#kbpbxnxyfd thead, #kbpbxnxyfd tbody, #kbpbxnxyfd tfoot, #kbpbxnxyfd tr, #kbpbxnxyfd td, #kbpbxnxyfd th {
   border-style: none;
 }
 
-#rydkibksxz p {
+#kbpbxnxyfd p {
   margin: 0;
   padding: 0;
 }
 
-#rydkibksxz .gt_table {
+#kbpbxnxyfd .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2851,12 +3350,12 @@ Confidence Interval
   border-left-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_caption {
+#kbpbxnxyfd .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#rydkibksxz .gt_title {
+#kbpbxnxyfd .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2868,7 +3367,7 @@ Confidence Interval
   border-bottom-width: 0;
 }
 
-#rydkibksxz .gt_subtitle {
+#kbpbxnxyfd .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2880,7 +3379,7 @@ Confidence Interval
   border-top-width: 0;
 }
 
-#rydkibksxz .gt_heading {
+#kbpbxnxyfd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2892,13 +3391,13 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_bottom_border {
+#kbpbxnxyfd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_col_headings {
+#kbpbxnxyfd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2913,7 +3412,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_col_heading {
+#kbpbxnxyfd .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2933,7 +3432,7 @@ Confidence Interval
   overflow-x: hidden;
 }
 
-#rydkibksxz .gt_column_spanner_outer {
+#kbpbxnxyfd .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2945,15 +3444,15 @@ Confidence Interval
   padding-right: 4px;
 }
 
-#rydkibksxz .gt_column_spanner_outer:first-child {
+#kbpbxnxyfd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rydkibksxz .gt_column_spanner_outer:last-child {
+#kbpbxnxyfd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rydkibksxz .gt_column_spanner {
+#kbpbxnxyfd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2965,11 +3464,11 @@ Confidence Interval
   width: 100%;
 }
 
-#rydkibksxz .gt_spanner_row {
+#kbpbxnxyfd .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#rydkibksxz .gt_group_heading {
+#kbpbxnxyfd .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2995,7 +3494,7 @@ Confidence Interval
   text-align: left;
 }
 
-#rydkibksxz .gt_empty_group_heading {
+#kbpbxnxyfd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3010,15 +3509,15 @@ Confidence Interval
   vertical-align: middle;
 }
 
-#rydkibksxz .gt_from_md > :first-child {
+#kbpbxnxyfd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rydkibksxz .gt_from_md > :last-child {
+#kbpbxnxyfd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rydkibksxz .gt_row {
+#kbpbxnxyfd .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3037,7 +3536,7 @@ Confidence Interval
   overflow-x: hidden;
 }
 
-#rydkibksxz .gt_stub {
+#kbpbxnxyfd .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3050,7 +3549,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#rydkibksxz .gt_stub_row_group {
+#kbpbxnxyfd .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3064,15 +3563,15 @@ Confidence Interval
   vertical-align: top;
 }
 
-#rydkibksxz .gt_row_group_first td {
+#kbpbxnxyfd .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#rydkibksxz .gt_row_group_first th {
+#kbpbxnxyfd .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#rydkibksxz .gt_summary_row {
+#kbpbxnxyfd .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3082,16 +3581,16 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#rydkibksxz .gt_first_summary_row {
+#kbpbxnxyfd .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_first_summary_row.thick {
+#kbpbxnxyfd .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#rydkibksxz .gt_last_summary_row {
+#kbpbxnxyfd .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3101,7 +3600,7 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_grand_summary_row {
+#kbpbxnxyfd .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3111,7 +3610,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#rydkibksxz .gt_first_grand_summary_row {
+#kbpbxnxyfd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3121,7 +3620,7 @@ Confidence Interval
   border-top-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_last_grand_summary_row_top {
+#kbpbxnxyfd .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3131,11 +3630,11 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_striped {
+#kbpbxnxyfd .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#rydkibksxz .gt_table_body {
+#kbpbxnxyfd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3144,7 +3643,7 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_footnotes {
+#kbpbxnxyfd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3158,7 +3657,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_footnote {
+#kbpbxnxyfd .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3167,7 +3666,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#rydkibksxz .gt_sourcenotes {
+#kbpbxnxyfd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3181,7 +3680,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#rydkibksxz .gt_sourcenote {
+#kbpbxnxyfd .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3189,72 +3688,72 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#rydkibksxz .gt_left {
+#kbpbxnxyfd .gt_left {
   text-align: left;
 }
 
-#rydkibksxz .gt_center {
+#kbpbxnxyfd .gt_center {
   text-align: center;
 }
 
-#rydkibksxz .gt_right {
+#kbpbxnxyfd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rydkibksxz .gt_font_normal {
+#kbpbxnxyfd .gt_font_normal {
   font-weight: normal;
 }
 
-#rydkibksxz .gt_font_bold {
+#kbpbxnxyfd .gt_font_bold {
   font-weight: bold;
 }
 
-#rydkibksxz .gt_font_italic {
+#kbpbxnxyfd .gt_font_italic {
   font-style: italic;
 }
 
-#rydkibksxz .gt_super {
+#kbpbxnxyfd .gt_super {
   font-size: 65%;
 }
 
-#rydkibksxz .gt_footnote_marks {
+#kbpbxnxyfd .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#rydkibksxz .gt_asterisk {
+#kbpbxnxyfd .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#rydkibksxz .gt_indent_1 {
+#kbpbxnxyfd .gt_indent_1 {
   text-indent: 5px;
 }
 
-#rydkibksxz .gt_indent_2 {
+#kbpbxnxyfd .gt_indent_2 {
   text-indent: 10px;
 }
 
-#rydkibksxz .gt_indent_3 {
+#kbpbxnxyfd .gt_indent_3 {
   text-indent: 15px;
 }
 
-#rydkibksxz .gt_indent_4 {
+#kbpbxnxyfd .gt_indent_4 {
   text-indent: 20px;
 }
 
-#rydkibksxz .gt_indent_5 {
+#kbpbxnxyfd .gt_indent_5 {
   text-indent: 25px;
 }
 
-#rydkibksxz .katex-display {
+#kbpbxnxyfd .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#rydkibksxz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#kbpbxnxyfd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3344,25 +3843,43 @@ Confidence Interval
 <p>Argentina and Thailand experienced the highest number of democratic transitions between 1950 and 2020, followed by Ghana, Pakistan, and Peru. The countries listed in the table suggest repeated shifts between democratic and non-democratic rule, reflecting political instability over time. Together with the area plot above, this table reinforces that democratization is not a steady or linear process, but one marked by periods of fluctuation.</p>
 <p>Lastly, our table earlier showed that the most transitions into democracy happened between 1980-2010. We created another table focusing in on the top 10 countries in this time frame.</p>
 <div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>country_transitions2 <span class="ot">&lt;-</span> <span class="fu">topn_countries</span>(<span class="dv">1980</span>, <span class="dv">2010</span>, <span class="dv">10</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>country_transitions2 <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="fu">md</span>(<span class="st">"**Top 10 Countries by Democratic Transitions**"</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Total Transitions Into and Out of Democracy from 1980-2010"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">country_name =</span> <span class="st">"Country"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_in =</span> <span class="st">"Transitions In"</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_out =</span> <span class="st">"Transitions Out"</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_transitions =</span> <span class="st">"Total Transitions"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_integer</span>(<span class="at">columns =</span> <span class="fu">c</span>(transitions_in, transitions_out, total_transitions)) <span class="sc">|&gt;</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(<span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_table_font</span>(<span class="at">font =</span> <span class="fu">google_font</span>(<span class="st">"Source Serif 4"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output-display">
-<div id="oxrqomczsw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="hozahpcuzt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#oxrqomczsw table {
+#hozahpcuzt table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#oxrqomczsw thead, #oxrqomczsw tbody, #oxrqomczsw tfoot, #oxrqomczsw tr, #oxrqomczsw td, #oxrqomczsw th {
+#hozahpcuzt thead, #hozahpcuzt tbody, #hozahpcuzt tfoot, #hozahpcuzt tr, #hozahpcuzt td, #hozahpcuzt th {
   border-style: none;
 }
 
-#oxrqomczsw p {
+#hozahpcuzt p {
   margin: 0;
   padding: 0;
 }
 
-#oxrqomczsw .gt_table {
+#hozahpcuzt .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3388,12 +3905,12 @@ Confidence Interval
   border-left-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_caption {
+#hozahpcuzt .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#oxrqomczsw .gt_title {
+#hozahpcuzt .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3405,7 +3922,7 @@ Confidence Interval
   border-bottom-width: 0;
 }
 
-#oxrqomczsw .gt_subtitle {
+#hozahpcuzt .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3417,7 +3934,7 @@ Confidence Interval
   border-top-width: 0;
 }
 
-#oxrqomczsw .gt_heading {
+#hozahpcuzt .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3429,13 +3946,13 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_bottom_border {
+#hozahpcuzt .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_col_headings {
+#hozahpcuzt .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3450,7 +3967,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_col_heading {
+#hozahpcuzt .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3470,7 +3987,7 @@ Confidence Interval
   overflow-x: hidden;
 }
 
-#oxrqomczsw .gt_column_spanner_outer {
+#hozahpcuzt .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3482,15 +3999,15 @@ Confidence Interval
   padding-right: 4px;
 }
 
-#oxrqomczsw .gt_column_spanner_outer:first-child {
+#hozahpcuzt .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#oxrqomczsw .gt_column_spanner_outer:last-child {
+#hozahpcuzt .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#oxrqomczsw .gt_column_spanner {
+#hozahpcuzt .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3502,11 +4019,11 @@ Confidence Interval
   width: 100%;
 }
 
-#oxrqomczsw .gt_spanner_row {
+#hozahpcuzt .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#oxrqomczsw .gt_group_heading {
+#hozahpcuzt .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3532,7 +4049,7 @@ Confidence Interval
   text-align: left;
 }
 
-#oxrqomczsw .gt_empty_group_heading {
+#hozahpcuzt .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3547,15 +4064,15 @@ Confidence Interval
   vertical-align: middle;
 }
 
-#oxrqomczsw .gt_from_md > :first-child {
+#hozahpcuzt .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#oxrqomczsw .gt_from_md > :last-child {
+#hozahpcuzt .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#oxrqomczsw .gt_row {
+#hozahpcuzt .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3574,7 +4091,7 @@ Confidence Interval
   overflow-x: hidden;
 }
 
-#oxrqomczsw .gt_stub {
+#hozahpcuzt .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3587,7 +4104,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#oxrqomczsw .gt_stub_row_group {
+#hozahpcuzt .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3601,15 +4118,15 @@ Confidence Interval
   vertical-align: top;
 }
 
-#oxrqomczsw .gt_row_group_first td {
+#hozahpcuzt .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#oxrqomczsw .gt_row_group_first th {
+#hozahpcuzt .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#oxrqomczsw .gt_summary_row {
+#hozahpcuzt .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3619,16 +4136,16 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#oxrqomczsw .gt_first_summary_row {
+#hozahpcuzt .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_first_summary_row.thick {
+#hozahpcuzt .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#oxrqomczsw .gt_last_summary_row {
+#hozahpcuzt .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3638,7 +4155,7 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_grand_summary_row {
+#hozahpcuzt .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3648,7 +4165,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#oxrqomczsw .gt_first_grand_summary_row {
+#hozahpcuzt .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3658,7 +4175,7 @@ Confidence Interval
   border-top-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_last_grand_summary_row_top {
+#hozahpcuzt .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3668,11 +4185,11 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_striped {
+#hozahpcuzt .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#oxrqomczsw .gt_table_body {
+#hozahpcuzt .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3681,7 +4198,7 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_footnotes {
+#hozahpcuzt .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3695,7 +4212,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_footnote {
+#hozahpcuzt .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3704,7 +4221,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#oxrqomczsw .gt_sourcenotes {
+#hozahpcuzt .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3718,7 +4235,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#oxrqomczsw .gt_sourcenote {
+#hozahpcuzt .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3726,72 +4243,72 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#oxrqomczsw .gt_left {
+#hozahpcuzt .gt_left {
   text-align: left;
 }
 
-#oxrqomczsw .gt_center {
+#hozahpcuzt .gt_center {
   text-align: center;
 }
 
-#oxrqomczsw .gt_right {
+#hozahpcuzt .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#oxrqomczsw .gt_font_normal {
+#hozahpcuzt .gt_font_normal {
   font-weight: normal;
 }
 
-#oxrqomczsw .gt_font_bold {
+#hozahpcuzt .gt_font_bold {
   font-weight: bold;
 }
 
-#oxrqomczsw .gt_font_italic {
+#hozahpcuzt .gt_font_italic {
   font-style: italic;
 }
 
-#oxrqomczsw .gt_super {
+#hozahpcuzt .gt_super {
   font-size: 65%;
 }
 
-#oxrqomczsw .gt_footnote_marks {
+#hozahpcuzt .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#oxrqomczsw .gt_asterisk {
+#hozahpcuzt .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#oxrqomczsw .gt_indent_1 {
+#hozahpcuzt .gt_indent_1 {
   text-indent: 5px;
 }
 
-#oxrqomczsw .gt_indent_2 {
+#hozahpcuzt .gt_indent_2 {
   text-indent: 10px;
 }
 
-#oxrqomczsw .gt_indent_3 {
+#hozahpcuzt .gt_indent_3 {
   text-indent: 15px;
 }
 
-#oxrqomczsw .gt_indent_4 {
+#hozahpcuzt .gt_indent_4 {
   text-indent: 20px;
 }
 
-#oxrqomczsw .gt_indent_5 {
+#hozahpcuzt .gt_indent_5 {
   text-indent: 25px;
 }
 
-#oxrqomczsw .katex-display {
+#hozahpcuzt .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#oxrqomczsw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#hozahpcuzt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

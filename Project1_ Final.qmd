@@ -5,7 +5,6 @@ embedded-resources: true
 code-fold: true
 format: html
 theme: lux
-echo: false
 ---
 ```{r}
 #| warning: false
