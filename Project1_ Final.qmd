@@ -400,7 +400,6 @@ summary_data <- democracy_data |>
     prop_democracy = mean(is_democracy, na.rm = TRUE),
     transitions_in = sum(to_democracy, na.rm = TRUE),
     transitions_out = sum(from_democracy, na.rm = TRUE))
-summary_data
 
 #after viewing this data, it would be helpful to analyze these trends using something like a plot, but looking at it as a table is overwhelming. To counteract this, we can condense the years to 5 or 10 years at the time to get a better look at overall trends. 
 #we have to create a new column to group the years
@@ -414,7 +413,6 @@ summary_ten_yrs <- democracy_data |>
     transitions_in = sum(to_democracy, na.rm = TRUE),
     transitions_out = sum(from_democracy, na.rm = TRUE),
     .groups = "drop")
-summary_ten_yrs
 ```
 
 ```{r}
