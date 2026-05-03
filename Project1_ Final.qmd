@@ -366,7 +366,6 @@ table_result |>
 The t-statistic is -4.591 and the p-value is very small. Also, the confidence interval does not include zero, so we reject the null hypothesis and conclude that there is a statistically significant difference in the mean proportion of seats held by women between democratic and non-democratic countries. This suggests that the true difference in means is not zero.
 
 ## Exploring The Global Effect of Democratic Transitions
-
 ```{r}
 #| echo: false
 #| results: false
@@ -406,8 +405,7 @@ summary_data <- democracy_data |>
   summarize(
     prop_democracy = mean(is_democracy, na.rm = TRUE),
     transitions_in = sum(to_democracy, na.rm = TRUE),
-    transitions_out = sum(from_democracy, na.rm = TRUE)
-  )
+    transitions_out = sum(from_democracy, na.rm = TRUE))
 summary_data
 
 #after viewing this data, it would be helpful to analyze these trends using something like a plot, but looking at it as a table is overwhelming. To counteract this, we can condense the years to 5 or 10 years at the time to get a better look at overall trends. 
@@ -423,109 +421,48 @@ summary_ten_yrs <- democracy_data |>
     transitions_out = sum(from_democracy, na.rm = TRUE),
     .groups = "drop")
 summary_ten_yrs
-
-#we also want to look at the correlation between the to and from democracy;s and the proportion of countries that are democratic. 
-cor_matrix <- summary_data |>
-  select(prop_democracy, transitions_in, transitions_out) %>%
-  cor(use = "complete.obs")
 ```
 
 ```{r}
 #| echo: false
+ggplot(summary_data, aes(x = year, y = prop_democracy)) +
+  geom_point(color = pal[2], size = 2) +
+  geom_line(color=pal[2], linewidth=0.75) +
+  scale_y_continuous(breaks=seq(0,1,0.2), limits=c(0,1),
+                     labels = scales::percent_format()) +
+  labs(title = "Percentage of Democratic Countries Over Time",
+    x = "Year",
+    y = "Percentage of Democratic Countries") +
+  scale_x_continuous(breaks=seq(1950,2020,10)) +
+  theme_minimal()
+```
+
+We first examined the overall trend of the percentage of democratic countries. In 1950, the percentage of democratic countries was at about 25%, before rising gradually through the 1960s. The percentage then stayed fairly stable around the mid-30% range through the 1970s and early 1980s. The largest increase happened around the late 1980s and early 1990s, when the percentage increased sharply to nearly 60%. After that, democracy continued to grow more slowly, reaching the mid-60% range in the 2010s before leveling off slightly by 2020.
+
+Next, we analyzed the number of global transitions to and from democracies.
+```{r}
+#| echo: false
 #| results: asis
 summary_ten_yrs |>
+  select(ten_yrs, transitions_in, transitions_out) |>
   gt() |>
-  tab_header(
-    title = md("**Democracy Transitions by Year**"),
-    subtitle = "Proportion of Democracies and Transitions In and Out") |>
+  tab_header(title = md("**Democracy Transitions by Year**"),
+    subtitle = "Transitions In and Out of Democracy") |>
   cols_label(ten_yrs = "Decade",
-    prop_democracy = "Proportion Democracy",
     transitions_in = "Transitions In",
     transitions_out = "Transitions Out") |>
-  fmt_percent(columns = prop_democracy,
-    decimals = 1) |>
   fmt_integer(columns = c(transitions_in, transitions_out)) |>
   tab_style(style = cell_fill(color = "#D3D3D3"),
     locations = cells_column_labels()) |>
   tab_style(style = cell_fill(color = "#D3D3D3"),
     locations = cells_title()) |>
-  tab_style(style = cell_fill(color = paste0(pal[2], "99")),
-    locations = cells_body(
-      columns = transitions_in,
-      rows = transitions_in > 0)) |>
-  tab_style(style = cell_fill(color = paste0(pal[1], "99")), locations = cells_body(
-      columns = transitions_out,
-      rows = transitions_out > 0)) |>
   opt_table_font(font = google_font("Source Serif 4"))
 ```
 
-This table aggregates democratic transitions by decade, offering a cleaner view of long-term trends in global democratization from 1950 to 2020. The proportion of democracies worldwide grew from 29.0% in the 1950s to a peak of 63.6% in the 2010s, representing more than a doubling over seven decades. The 1990s stand out as the most transformative decade, with 39 transitions into democracy and only 11 out, reflecting the wave of democratization that followed the end of the Cold War. In contrast, the 1970s were the most stagnant period, with transitions in and out nearly balanced at 16 and 15 respectively and virtually no net change in the global proportion. The 2020 row, which represents only a single year, shows 0 transitions in and 2 out, hinting at the modest democratic backsliding visible at the tail end of the dataset. 
+This table shows democratic transitions by decade, offering a cleaner view of long-term trends in global democratization from 1950 to 2020. The 1990s stand out as the most transformative decade, with 39 transitions into democracy and only 11 out, reflecting the wave of democratization that followed the end of the Cold War. In contrast, the 1970s were the most stagnant period, with transitions in and out nearly balanced at 16 and 15 respectively and virtually no net change in the global proportion.
 
 ```{r}
 #| echo: false
-#| fig-alt: The correlation heatmap indicates the strength of the relationship between democratic transitions and the proportion of countries who are democratic. The stronger the relationship, the closer the color is to pink or blue. 
-
-cor_matrix <- summary_data |>
-  select(prop_democracy, transitions_in, transitions_out) |>
-  cor(use = "complete.obs")
-
-cor_df <- as.data.frame(cor_matrix) |>
-  rownames_to_column("var1") |>
-  pivot_longer(-var1, names_to = "var2", values_to = "correlation") |>
-  filter(var1 != var2) |>
-  mutate(
-    var1 = recode(
-      var1,
-      prop_democracy = "Democracy Proportion",
-      transitions_in = "Transitions In",
-      transitions_out = "Transitions Out"),
-    var2 = recode(
-      var2,
-      prop_democracy = "Democracy Proportion",
-      transitions_in = "Transitions In",
-      transitions_out = "Transitions Out"))
-
-ggplot(cor_df, aes(x = var1, y = var2, fill = correlation)) +
-  geom_tile() +
-  geom_text(aes(label = round(correlation, 2)), size = 4) +
-  scale_fill_gradientn(
-    colors = c(pal[1], pal[2]),
-    limits = c(-1, 1)) +
-  labs(title = "Correlation Heatmap",
-    x = NULL,
-    y = NULL,
-    fill = "Correlation") +
-  theme_minimal()
-
-summary_data_long <- summary_data |>
-  pivot_longer(
-    cols = c(transitions_in, transitions_out),
-    names_to = "transition_type",
-    values_to = "transition_count") |>
-  mutate(
-    transition_type = recode(
-      transition_type,
-      transitions_in = "Transitions In",
-      transitions_out = "Transitions Out"))
-
-ggplot(summary_data, aes(x = year, y = prop_democracy)) +
-  geom_point(
-    color = pal[2],
-    size = 2) +
-  geom_line(linewidth=0.75, color=pal[2]) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  labs(
-    title = "Democracy Proportion and Transitions Into Democracy",
-    x = "Year",
-    y = "Democracy Proportion") +
-  theme_minimal()
-```
-
-The correlation heatmap does not suggest that transitions into or out of democracies influence the proportion of democratic countries across the world. The values of -0.05 and -0.06 indicate that fluctuations in democratic transitions are not associated with changes in the proportion of democratic countries. 
-
-Next, we examined the number of transitions in and out of democracy over time, from 1950-2020.
-
-```{r}
 #| fig-alt: The area plot below shows the count of democractic transitions in and out, where the pink represents a country gaining a democratic status, and the blue represents a country losing a democratic status throughout the years.
 
 summary_data_long <- summary_data |>
@@ -536,24 +473,22 @@ summary_data_long <- summary_data |>
 
 ggplot(summary_data_long, aes(x = year, y = count, fill = type)) +
   geom_area(alpha = 0.75) +
-  scale_fill_manual(
-    values = c(
-      transitions_in = pal[2],
+  scale_fill_manual(values = c(transitions_in = pal[2],
       transitions_out = pal[1]),
     name = "Transition Direction",
-    labels = c(
-      transitions_in = "Transitions In",
+    labels = c(transitions_in = "Transitions In",
       transitions_out = "Transitions Out")) +
   labs(title = "Global Democratic Transitions Over Time",
     x = "Year",
     y = "Count of Transitions") +
   scale_y_continuous(limits=c(0,12), breaks=seq(0,12,2)) +
+  scale_x_continuous(limits=c(1950,2020), breaks=seq(1950,2020,10)) +
   theme_minimal()
 ```
 
-The area plot reveals that countries do not transition into democracies at a steady rate, but instead noticeably fluctuate over time. While there are often more transitions into democracy than out of it, this pattern appears variable. The process of democratization is unstable, as transitions out of democracy are present throughout the years and do not seem to be declining. One particularly noticeable feature is seen in the 1990s, where there is a sharp increase in the amount of countries that transitioned into a democracy. From the data, we can see that democratization is not a smooth, continuous process. 
+The area plot reveals that countries do not transition into democracies at a steady rate, but instead noticeably fluctuate over time. While there are often more transitions into democracy than out of it, this pattern appears variable. The process of democratization is unstable, as transitions out of democracy are present throughout the years and do not seem to be declining. One particularly noticeable feature is seen in the 1990s, where there is a sharp increase in the amount of countries that transitioned into a democracy. We can see that democratization is not a smooth, continuous process. 
 
-We also wanted to identify which countries had the most transitions into and out of democracy.
+Lastly, we also wanted to identify which countries had the most transitions into and out of democracy.
 
 ```{r}
 top10_countries <- function(data) {
