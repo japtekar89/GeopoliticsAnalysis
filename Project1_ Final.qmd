@@ -44,7 +44,6 @@ The second dataset comes from the World Bank, which tracks global progress on th
 ## Exploring Gender Gaps in Leadership and Representation
 
 ```{r}
-#| echo: false
 #| warning: false
 democracy_data <- democracy_data |>
   mutate(president_age_at_accession = president_accesion_year - president_birthyear,
@@ -101,7 +100,6 @@ plotMe <- summarise_leadership_gender_gap("year")
 ```
 
 ```{r}
-#| echo: false
 #| fig-alt: This is a boxplot depicting the proportion of women in parliament, while faceting on the democracy status of the country. The mean proportion of women holding seats in non-democratic countries is 0.16 and 0.177 for democratic countries. The median proportion of women holding seats in non-democratic countries is 0.14 and 0.158 for democratic countries.
 
 pal0 <- wes_palette("Moonrise3", n = 2)  
@@ -144,7 +142,6 @@ We began by looking at the percentages of women's parliamentary seats in democra
 To get a closer look at how democracy status relates to gender gaps beyond parliament, we examined how the proportions of male and female presidents and monarchs and the ages at which they take power differ between democratic and non-democratic countries.
 
 ```{r}
-#| echo: false
 # Table 1: Proportions
 summarise_leadership_gender_gap("is_democracy") |>
   mutate(is_democracy = ifelse(is_democracy, "Democracy", "Non-Democracy")) |>
@@ -255,7 +252,6 @@ For monarchs, the pattern is quite different. In non-democratic countries, male 
 To get a clearer sense of how these age gaps have shifted over time, we constructed a ribbon plot showing the difference between average accession ages for male and female presidents and monarchs by decade. Because there were no recorded female presidents before 1980, we limited this portion of the analysis to years from 1980 onward.
 
 ```{r}
-#| echo: false
 #| warning: false
 #| fig-alt: This is a ribbon plot, depicting the differences in average accession ages of presidents and monarchs by gender. There are four lines on the graph, one for each gender and leader type combination. The x-axis is years 1980-2020, and the y-axis shows ages 20-70. 
 
@@ -291,7 +287,6 @@ From 1980 to 2020, gender differences in the age at which leaders take office va
 The next table examines how gender gaps appear in leadership across decades. It compares the proportions of female and male presidents over time to show how representation has shifted from 1950 to 2020.
 
 ```{r}
-#| echo: false
 #| results: asis
 # table with iteration
 group_vars <- c("decade")
@@ -327,7 +322,6 @@ This table highlights the changes in gender gaps by decade, including the sample
 We ran a t-test to compare the means of the proportion of national parliament seats held by women between different democracy statuses.
 
 ```{r}
-#| echo: false
 result <- t.test(prop_in_par ~ is_democracy, data = democracy_data)
 table_result <- tidy(result)
 
@@ -370,9 +364,6 @@ The t-statistic is -4.591 and the p-value is very small. Also, the confidence in
 ## Exploring The Global Effect of Democratic Transitions
 
 ```{r}
-#| echo: false
-#| results: false
-#| code-fold: true
 #arranging by country and year
 democracy_data <- democracy_data |> 
   arrange(country, year)
@@ -427,7 +418,6 @@ summary_ten_yrs
 ```
 
 ```{r}
-#| echo: false
 ggplot(summary_data, aes(x = year, y = prop_democracy)) +
   geom_point(color = pal[2], size = 2) +
   geom_line(color=pal[2], linewidth=0.75) +
@@ -444,7 +434,6 @@ We first examined the overall trend of the percentage of democratic countries. I
 
 Next, we analyzed the number of global transitions to and from democracies.
 ```{r}
-#| echo: false
 #| results: asis
 summary_ten_yrs |>
   select(ten_yrs, transitions_in, transitions_out) |>
@@ -465,7 +454,6 @@ summary_ten_yrs |>
 This table shows democratic transitions by decade, offering a cleaner view of long-term trends in global democratization from 1950 to 2020. The 1990s stand out as the most transformative decade, with 39 transitions into democracy and only 11 out, reflecting the wave of democratization that followed the end of the Cold War. In contrast, the 1970s were the most stagnant period, with transitions in and out nearly balanced at 16 and 15 respectively and virtually no net change in the global proportion.
 
 ```{r}
-#| echo: false
 #| fig-alt: The area plot below shows the count of democractic transitions in and out, where the pink represents a country gaining a democratic status, and the blue represents a country losing a democratic status throughout the years.
 
 summary_data_long <- summary_data |>
@@ -494,7 +482,6 @@ The area plot reveals that countries do not transition into democracies at a ste
 We also wanted to identify which countries had the most transitions into and out of democracy from 1950-2020.
 
 ```{r}
-#| echo: false
 topn_countries <- function(start_year = 1950, end_year = 2020, num_countries = 10) {
   if (start_year < 1950 | end_year > 2020 | start_year > end_year) {
     stop("Year range must be between 1950 and 2020")
@@ -546,7 +533,6 @@ Argentina and Thailand experienced the highest number of democratic transitions 
 Lastly, our table earlier showed that the most transitions into democracy happened between 1980-2010. We created another table focusing in on the top 10 countries in this time frame.
 
 ```{r}
-#| echo: false
 country_transitions2 <- topn_countries(1980, 2010, 10)
 country_transitions2 |>
   gt() |>
