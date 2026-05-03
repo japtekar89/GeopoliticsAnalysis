@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Julia Aptekar, Meghana Kolar, Sofia Jachno, &amp; Bryce Corbett">
 
-<title>STAT 431 Project 1 Final Deliverable</title>
+<title>The Democracy Gap</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,41 +20,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -82,13 +48,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">STAT 431 Project 1 Final Deliverable</h1>
+<h1 class="title">The Democracy Gap</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Julia Aptekar, Meghana Kolar, Sofia Jachno, &amp; Bryce Corbett </p>
+          </div>
+  </div>
     
   
     
@@ -99,20 +71,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.2.1     ✔ readr     2.1.6
-✔ forcats   1.0.1     ✔ stringr   1.6.0
-✔ ggplot2   4.0.2     ✔ tibble    3.3.1
-✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-✔ purrr     1.2.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-</div>
 <section id="explore-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="explore-the-data">Explore the data</h2>
 <p>Our study utilized two datasets. The first was compiled by Christian Bjørnskov and Martin Rode, two economists who study political institutions and how governments change over time. Their goal was to create a resource for researchers studying political transitions, an area they felt had not been adequately covered by existing data. The dataset collects information on 192 sovereign countries and 16 self-governing territories annually from 1950 to 2020 on each country’s regime type, democratic status, elections, leadership, suffrage, transfers of power, and colonial history. In total, it includes 14,768 country-year observations across 43 variables.</p>
@@ -148,24 +106,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To get a closer look at how democracy status relates to gender gaps beyond parliament, we examined how the proportions of male and female presidents and monarchs and the ages at which they take power differ between democratic and non-democratic countries.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="xhnayalqeu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ktkddrbjur" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#xhnayalqeu table {
+#ktkddrbjur table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#xhnayalqeu thead, #xhnayalqeu tbody, #xhnayalqeu tfoot, #xhnayalqeu tr, #xhnayalqeu td, #xhnayalqeu th {
+#ktkddrbjur thead, #ktkddrbjur tbody, #ktkddrbjur tfoot, #ktkddrbjur tr, #ktkddrbjur td, #ktkddrbjur th {
   border-style: none;
 }
 
-#xhnayalqeu p {
+#ktkddrbjur p {
   margin: 0;
   padding: 0;
 }
 
-#xhnayalqeu .gt_table {
+#ktkddrbjur .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -191,12 +149,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_caption {
+#ktkddrbjur .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#xhnayalqeu .gt_title {
+#ktkddrbjur .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -208,7 +166,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#xhnayalqeu .gt_subtitle {
+#ktkddrbjur .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -220,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#xhnayalqeu .gt_heading {
+#ktkddrbjur .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -232,13 +190,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_bottom_border {
+#ktkddrbjur .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_col_headings {
+#ktkddrbjur .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -253,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_col_heading {
+#ktkddrbjur .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -273,7 +231,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#xhnayalqeu .gt_column_spanner_outer {
+#ktkddrbjur .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -285,15 +243,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#xhnayalqeu .gt_column_spanner_outer:first-child {
+#ktkddrbjur .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xhnayalqeu .gt_column_spanner_outer:last-child {
+#ktkddrbjur .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xhnayalqeu .gt_column_spanner {
+#ktkddrbjur .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -305,11 +263,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#xhnayalqeu .gt_spanner_row {
+#ktkddrbjur .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#xhnayalqeu .gt_group_heading {
+#ktkddrbjur .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -335,7 +293,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#xhnayalqeu .gt_empty_group_heading {
+#ktkddrbjur .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -350,15 +308,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#xhnayalqeu .gt_from_md > :first-child {
+#ktkddrbjur .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xhnayalqeu .gt_from_md > :last-child {
+#ktkddrbjur .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xhnayalqeu .gt_row {
+#ktkddrbjur .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -377,7 +335,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#xhnayalqeu .gt_stub {
+#ktkddrbjur .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -390,7 +348,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#xhnayalqeu .gt_stub_row_group {
+#ktkddrbjur .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -404,15 +362,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#xhnayalqeu .gt_row_group_first td {
+#ktkddrbjur .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#xhnayalqeu .gt_row_group_first th {
+#ktkddrbjur .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#xhnayalqeu .gt_summary_row {
+#ktkddrbjur .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -422,16 +380,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#xhnayalqeu .gt_first_summary_row {
+#ktkddrbjur .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_first_summary_row.thick {
+#ktkddrbjur .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#xhnayalqeu .gt_last_summary_row {
+#ktkddrbjur .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -441,7 +399,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_grand_summary_row {
+#ktkddrbjur .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -451,7 +409,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#xhnayalqeu .gt_first_grand_summary_row {
+#ktkddrbjur .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -461,7 +419,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_last_grand_summary_row_top {
+#ktkddrbjur .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -471,11 +429,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_striped {
+#ktkddrbjur .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#xhnayalqeu .gt_table_body {
+#ktkddrbjur .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -484,7 +442,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_footnotes {
+#ktkddrbjur .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -498,7 +456,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_footnote {
+#ktkddrbjur .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -507,7 +465,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#xhnayalqeu .gt_sourcenotes {
+#ktkddrbjur .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -521,7 +479,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#xhnayalqeu .gt_sourcenote {
+#ktkddrbjur .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -529,72 +487,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#xhnayalqeu .gt_left {
+#ktkddrbjur .gt_left {
   text-align: left;
 }
 
-#xhnayalqeu .gt_center {
+#ktkddrbjur .gt_center {
   text-align: center;
 }
 
-#xhnayalqeu .gt_right {
+#ktkddrbjur .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xhnayalqeu .gt_font_normal {
+#ktkddrbjur .gt_font_normal {
   font-weight: normal;
 }
 
-#xhnayalqeu .gt_font_bold {
+#ktkddrbjur .gt_font_bold {
   font-weight: bold;
 }
 
-#xhnayalqeu .gt_font_italic {
+#ktkddrbjur .gt_font_italic {
   font-style: italic;
 }
 
-#xhnayalqeu .gt_super {
+#ktkddrbjur .gt_super {
   font-size: 65%;
 }
 
-#xhnayalqeu .gt_footnote_marks {
+#ktkddrbjur .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#xhnayalqeu .gt_asterisk {
+#ktkddrbjur .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#xhnayalqeu .gt_indent_1 {
+#ktkddrbjur .gt_indent_1 {
   text-indent: 5px;
 }
 
-#xhnayalqeu .gt_indent_2 {
+#ktkddrbjur .gt_indent_2 {
   text-indent: 10px;
 }
 
-#xhnayalqeu .gt_indent_3 {
+#ktkddrbjur .gt_indent_3 {
   text-indent: 15px;
 }
 
-#xhnayalqeu .gt_indent_4 {
+#ktkddrbjur .gt_indent_4 {
   text-indent: 20px;
 }
 
-#xhnayalqeu .gt_indent_5 {
+#ktkddrbjur .gt_indent_5 {
   text-indent: 25px;
 }
 
-#xhnayalqeu .katex-display {
+#ktkddrbjur .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#xhnayalqeu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ktkddrbjur div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -668,24 +626,24 @@ Monarchs
 </div>
 </div>
 <div class="cell-output-display">
-<div id="yoptgabpto" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ztugyxeqpi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#yoptgabpto table {
+#ztugyxeqpi table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#yoptgabpto thead, #yoptgabpto tbody, #yoptgabpto tfoot, #yoptgabpto tr, #yoptgabpto td, #yoptgabpto th {
+#ztugyxeqpi thead, #ztugyxeqpi tbody, #ztugyxeqpi tfoot, #ztugyxeqpi tr, #ztugyxeqpi td, #ztugyxeqpi th {
   border-style: none;
 }
 
-#yoptgabpto p {
+#ztugyxeqpi p {
   margin: 0;
   padding: 0;
 }
 
-#yoptgabpto .gt_table {
+#ztugyxeqpi .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -711,12 +669,12 @@ Monarchs
   border-left-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_caption {
+#ztugyxeqpi .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#yoptgabpto .gt_title {
+#ztugyxeqpi .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -728,7 +686,7 @@ Monarchs
   border-bottom-width: 0;
 }
 
-#yoptgabpto .gt_subtitle {
+#ztugyxeqpi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -740,7 +698,7 @@ Monarchs
   border-top-width: 0;
 }
 
-#yoptgabpto .gt_heading {
+#ztugyxeqpi .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -752,13 +710,13 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_bottom_border {
+#ztugyxeqpi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_col_headings {
+#ztugyxeqpi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -773,7 +731,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_col_heading {
+#ztugyxeqpi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -793,7 +751,7 @@ Monarchs
   overflow-x: hidden;
 }
 
-#yoptgabpto .gt_column_spanner_outer {
+#ztugyxeqpi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -805,15 +763,15 @@ Monarchs
   padding-right: 4px;
 }
 
-#yoptgabpto .gt_column_spanner_outer:first-child {
+#ztugyxeqpi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#yoptgabpto .gt_column_spanner_outer:last-child {
+#ztugyxeqpi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#yoptgabpto .gt_column_spanner {
+#ztugyxeqpi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -825,11 +783,11 @@ Monarchs
   width: 100%;
 }
 
-#yoptgabpto .gt_spanner_row {
+#ztugyxeqpi .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#yoptgabpto .gt_group_heading {
+#ztugyxeqpi .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -855,7 +813,7 @@ Monarchs
   text-align: left;
 }
 
-#yoptgabpto .gt_empty_group_heading {
+#ztugyxeqpi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -870,15 +828,15 @@ Monarchs
   vertical-align: middle;
 }
 
-#yoptgabpto .gt_from_md > :first-child {
+#ztugyxeqpi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#yoptgabpto .gt_from_md > :last-child {
+#ztugyxeqpi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#yoptgabpto .gt_row {
+#ztugyxeqpi .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -897,7 +855,7 @@ Monarchs
   overflow-x: hidden;
 }
 
-#yoptgabpto .gt_stub {
+#ztugyxeqpi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -910,7 +868,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#yoptgabpto .gt_stub_row_group {
+#ztugyxeqpi .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -924,15 +882,15 @@ Monarchs
   vertical-align: top;
 }
 
-#yoptgabpto .gt_row_group_first td {
+#ztugyxeqpi .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#yoptgabpto .gt_row_group_first th {
+#ztugyxeqpi .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#yoptgabpto .gt_summary_row {
+#ztugyxeqpi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -942,16 +900,16 @@ Monarchs
   padding-right: 5px;
 }
 
-#yoptgabpto .gt_first_summary_row {
+#ztugyxeqpi .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_first_summary_row.thick {
+#ztugyxeqpi .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#yoptgabpto .gt_last_summary_row {
+#ztugyxeqpi .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -961,7 +919,7 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_grand_summary_row {
+#ztugyxeqpi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -971,7 +929,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#yoptgabpto .gt_first_grand_summary_row {
+#ztugyxeqpi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -981,7 +939,7 @@ Monarchs
   border-top-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_last_grand_summary_row_top {
+#ztugyxeqpi .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -991,11 +949,11 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_striped {
+#ztugyxeqpi .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#yoptgabpto .gt_table_body {
+#ztugyxeqpi .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1004,7 +962,7 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_footnotes {
+#ztugyxeqpi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1018,7 +976,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_footnote {
+#ztugyxeqpi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1027,7 +985,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#yoptgabpto .gt_sourcenotes {
+#ztugyxeqpi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1041,7 +999,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#yoptgabpto .gt_sourcenote {
+#ztugyxeqpi .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1049,72 +1007,72 @@ Monarchs
   padding-right: 5px;
 }
 
-#yoptgabpto .gt_left {
+#ztugyxeqpi .gt_left {
   text-align: left;
 }
 
-#yoptgabpto .gt_center {
+#ztugyxeqpi .gt_center {
   text-align: center;
 }
 
-#yoptgabpto .gt_right {
+#ztugyxeqpi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#yoptgabpto .gt_font_normal {
+#ztugyxeqpi .gt_font_normal {
   font-weight: normal;
 }
 
-#yoptgabpto .gt_font_bold {
+#ztugyxeqpi .gt_font_bold {
   font-weight: bold;
 }
 
-#yoptgabpto .gt_font_italic {
+#ztugyxeqpi .gt_font_italic {
   font-style: italic;
 }
 
-#yoptgabpto .gt_super {
+#ztugyxeqpi .gt_super {
   font-size: 65%;
 }
 
-#yoptgabpto .gt_footnote_marks {
+#ztugyxeqpi .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#yoptgabpto .gt_asterisk {
+#ztugyxeqpi .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#yoptgabpto .gt_indent_1 {
+#ztugyxeqpi .gt_indent_1 {
   text-indent: 5px;
 }
 
-#yoptgabpto .gt_indent_2 {
+#ztugyxeqpi .gt_indent_2 {
   text-indent: 10px;
 }
 
-#yoptgabpto .gt_indent_3 {
+#ztugyxeqpi .gt_indent_3 {
   text-indent: 15px;
 }
 
-#yoptgabpto .gt_indent_4 {
+#ztugyxeqpi .gt_indent_4 {
   text-indent: 20px;
 }
 
-#yoptgabpto .gt_indent_5 {
+#ztugyxeqpi .gt_indent_5 {
   text-indent: 25px;
 }
 
-#yoptgabpto .katex-display {
+#ztugyxeqpi .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#yoptgabpto div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ztugyxeqpi div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1202,24 +1160,24 @@ Monarchs
 </div>
 <p>From 1980 to 2020, gender differences in the age at which leaders take office vary between presidents and monarchs. Among presidents, the gap is small and relatively stable, with men only slightly older than women at the time they take office. Both groups also show a gradual increase in age over time. In contrast, monarchs show a much larger and growing gap. Male monarchs tend to take the throne at older ages, while female monarchs are generally younger, with their ages even decreasing in more recent years. Overall, gender disparities in age at taking office are minimal in presidential systems but much more pronounced in monarchical ones.</p>
 <p>The next table examines how gender gaps appear in leadership across decades. It compares the proportions of female and male presidents over time to show how representation has shifted from 1950 to 2020.</p>
-<div id="usmmghclac" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="xubwkzrtqj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#usmmghclac table {
+#xubwkzrtqj table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#usmmghclac thead, #usmmghclac tbody, #usmmghclac tfoot, #usmmghclac tr, #usmmghclac td, #usmmghclac th {
+#xubwkzrtqj thead, #xubwkzrtqj tbody, #xubwkzrtqj tfoot, #xubwkzrtqj tr, #xubwkzrtqj td, #xubwkzrtqj th {
   border-style: none;
 }
 
-#usmmghclac p {
+#xubwkzrtqj p {
   margin: 0;
   padding: 0;
 }
 
-#usmmghclac .gt_table {
+#xubwkzrtqj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1245,12 +1203,12 @@ Monarchs
   border-left-color: #D3D3D3;
 }
 
-#usmmghclac .gt_caption {
+#xubwkzrtqj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#usmmghclac .gt_title {
+#xubwkzrtqj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1262,7 +1220,7 @@ Monarchs
   border-bottom-width: 0;
 }
 
-#usmmghclac .gt_subtitle {
+#xubwkzrtqj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1274,7 +1232,7 @@ Monarchs
   border-top-width: 0;
 }
 
-#usmmghclac .gt_heading {
+#xubwkzrtqj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1286,13 +1244,13 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#usmmghclac .gt_bottom_border {
+#xubwkzrtqj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#usmmghclac .gt_col_headings {
+#xubwkzrtqj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1307,7 +1265,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#usmmghclac .gt_col_heading {
+#xubwkzrtqj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1327,7 +1285,7 @@ Monarchs
   overflow-x: hidden;
 }
 
-#usmmghclac .gt_column_spanner_outer {
+#xubwkzrtqj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1339,15 +1297,15 @@ Monarchs
   padding-right: 4px;
 }
 
-#usmmghclac .gt_column_spanner_outer:first-child {
+#xubwkzrtqj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#usmmghclac .gt_column_spanner_outer:last-child {
+#xubwkzrtqj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#usmmghclac .gt_column_spanner {
+#xubwkzrtqj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1359,11 +1317,11 @@ Monarchs
   width: 100%;
 }
 
-#usmmghclac .gt_spanner_row {
+#xubwkzrtqj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#usmmghclac .gt_group_heading {
+#xubwkzrtqj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1389,7 +1347,7 @@ Monarchs
   text-align: left;
 }
 
-#usmmghclac .gt_empty_group_heading {
+#xubwkzrtqj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1404,15 +1362,15 @@ Monarchs
   vertical-align: middle;
 }
 
-#usmmghclac .gt_from_md > :first-child {
+#xubwkzrtqj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#usmmghclac .gt_from_md > :last-child {
+#xubwkzrtqj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#usmmghclac .gt_row {
+#xubwkzrtqj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1431,7 +1389,7 @@ Monarchs
   overflow-x: hidden;
 }
 
-#usmmghclac .gt_stub {
+#xubwkzrtqj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1444,7 +1402,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#usmmghclac .gt_stub_row_group {
+#xubwkzrtqj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1458,15 +1416,15 @@ Monarchs
   vertical-align: top;
 }
 
-#usmmghclac .gt_row_group_first td {
+#xubwkzrtqj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#usmmghclac .gt_row_group_first th {
+#xubwkzrtqj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#usmmghclac .gt_summary_row {
+#xubwkzrtqj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1476,16 +1434,16 @@ Monarchs
   padding-right: 5px;
 }
 
-#usmmghclac .gt_first_summary_row {
+#xubwkzrtqj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#usmmghclac .gt_first_summary_row.thick {
+#xubwkzrtqj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#usmmghclac .gt_last_summary_row {
+#xubwkzrtqj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1495,7 +1453,7 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#usmmghclac .gt_grand_summary_row {
+#xubwkzrtqj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1505,7 +1463,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#usmmghclac .gt_first_grand_summary_row {
+#xubwkzrtqj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1515,7 +1473,7 @@ Monarchs
   border-top-color: #D3D3D3;
 }
 
-#usmmghclac .gt_last_grand_summary_row_top {
+#xubwkzrtqj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1525,11 +1483,11 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#usmmghclac .gt_striped {
+#xubwkzrtqj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#usmmghclac .gt_table_body {
+#xubwkzrtqj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1538,7 +1496,7 @@ Monarchs
   border-bottom-color: #D3D3D3;
 }
 
-#usmmghclac .gt_footnotes {
+#xubwkzrtqj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1552,7 +1510,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#usmmghclac .gt_footnote {
+#xubwkzrtqj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1561,7 +1519,7 @@ Monarchs
   padding-right: 5px;
 }
 
-#usmmghclac .gt_sourcenotes {
+#xubwkzrtqj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1575,7 +1533,7 @@ Monarchs
   border-right-color: #D3D3D3;
 }
 
-#usmmghclac .gt_sourcenote {
+#xubwkzrtqj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1583,72 +1541,72 @@ Monarchs
   padding-right: 5px;
 }
 
-#usmmghclac .gt_left {
+#xubwkzrtqj .gt_left {
   text-align: left;
 }
 
-#usmmghclac .gt_center {
+#xubwkzrtqj .gt_center {
   text-align: center;
 }
 
-#usmmghclac .gt_right {
+#xubwkzrtqj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#usmmghclac .gt_font_normal {
+#xubwkzrtqj .gt_font_normal {
   font-weight: normal;
 }
 
-#usmmghclac .gt_font_bold {
+#xubwkzrtqj .gt_font_bold {
   font-weight: bold;
 }
 
-#usmmghclac .gt_font_italic {
+#xubwkzrtqj .gt_font_italic {
   font-style: italic;
 }
 
-#usmmghclac .gt_super {
+#xubwkzrtqj .gt_super {
   font-size: 65%;
 }
 
-#usmmghclac .gt_footnote_marks {
+#xubwkzrtqj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#usmmghclac .gt_asterisk {
+#xubwkzrtqj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#usmmghclac .gt_indent_1 {
+#xubwkzrtqj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#usmmghclac .gt_indent_2 {
+#xubwkzrtqj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#usmmghclac .gt_indent_3 {
+#xubwkzrtqj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#usmmghclac .gt_indent_4 {
+#xubwkzrtqj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#usmmghclac .gt_indent_5 {
+#xubwkzrtqj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#usmmghclac .katex-display {
+#xubwkzrtqj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#usmmghclac div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#xubwkzrtqj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1801,30 +1759,27 @@ Gap (M - F)
 </table>
 </div>
 <p>This table highlights the changes in gender gaps by decade, including the sample size, decade, proportion of female presidents, and proportion of male presidents. Highlighted in pink are the gender gaps, which as we can predict, decrease in proportion over time. For the first two decades that we have data for (1950-1970), there were solely male presidents, but during our final decade, 2010-2020, there was a gap of around 86%.</p>
-</section>
-<section id="fitting-a-model" class="level2">
-<h2 class="anchored" data-anchor-id="fitting-a-model">Fitting a model</h2>
 <p>We ran a t-test to compare the means of the proportion of national parliament seats held by women between different democracy statuses.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="cefcuvelvf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="itopnxaccl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#cefcuvelvf table {
+#itopnxaccl table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cefcuvelvf thead, #cefcuvelvf tbody, #cefcuvelvf tfoot, #cefcuvelvf tr, #cefcuvelvf td, #cefcuvelvf th {
+#itopnxaccl thead, #itopnxaccl tbody, #itopnxaccl tfoot, #itopnxaccl tr, #itopnxaccl td, #itopnxaccl th {
   border-style: none;
 }
 
-#cefcuvelvf p {
+#itopnxaccl p {
   margin: 0;
   padding: 0;
 }
 
-#cefcuvelvf .gt_table {
+#itopnxaccl .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1850,12 +1805,12 @@ Gap (M - F)
   border-left-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_caption {
+#itopnxaccl .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cefcuvelvf .gt_title {
+#itopnxaccl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1867,7 +1822,7 @@ Gap (M - F)
   border-bottom-width: 0;
 }
 
-#cefcuvelvf .gt_subtitle {
+#itopnxaccl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1879,7 +1834,7 @@ Gap (M - F)
   border-top-width: 0;
 }
 
-#cefcuvelvf .gt_heading {
+#itopnxaccl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1891,13 +1846,13 @@ Gap (M - F)
   border-right-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_bottom_border {
+#itopnxaccl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_col_headings {
+#itopnxaccl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1912,7 +1867,7 @@ Gap (M - F)
   border-right-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_col_heading {
+#itopnxaccl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1932,7 +1887,7 @@ Gap (M - F)
   overflow-x: hidden;
 }
 
-#cefcuvelvf .gt_column_spanner_outer {
+#itopnxaccl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1944,15 +1899,15 @@ Gap (M - F)
   padding-right: 4px;
 }
 
-#cefcuvelvf .gt_column_spanner_outer:first-child {
+#itopnxaccl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cefcuvelvf .gt_column_spanner_outer:last-child {
+#itopnxaccl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cefcuvelvf .gt_column_spanner {
+#itopnxaccl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1964,11 +1919,11 @@ Gap (M - F)
   width: 100%;
 }
 
-#cefcuvelvf .gt_spanner_row {
+#itopnxaccl .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cefcuvelvf .gt_group_heading {
+#itopnxaccl .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1994,7 +1949,7 @@ Gap (M - F)
   text-align: left;
 }
 
-#cefcuvelvf .gt_empty_group_heading {
+#itopnxaccl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2009,15 +1964,15 @@ Gap (M - F)
   vertical-align: middle;
 }
 
-#cefcuvelvf .gt_from_md > :first-child {
+#itopnxaccl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cefcuvelvf .gt_from_md > :last-child {
+#itopnxaccl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cefcuvelvf .gt_row {
+#itopnxaccl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2036,7 +1991,7 @@ Gap (M - F)
   overflow-x: hidden;
 }
 
-#cefcuvelvf .gt_stub {
+#itopnxaccl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2049,7 +2004,7 @@ Gap (M - F)
   padding-right: 5px;
 }
 
-#cefcuvelvf .gt_stub_row_group {
+#itopnxaccl .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2063,15 +2018,15 @@ Gap (M - F)
   vertical-align: top;
 }
 
-#cefcuvelvf .gt_row_group_first td {
+#itopnxaccl .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cefcuvelvf .gt_row_group_first th {
+#itopnxaccl .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cefcuvelvf .gt_summary_row {
+#itopnxaccl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2081,16 +2036,16 @@ Gap (M - F)
   padding-right: 5px;
 }
 
-#cefcuvelvf .gt_first_summary_row {
+#itopnxaccl .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_first_summary_row.thick {
+#itopnxaccl .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cefcuvelvf .gt_last_summary_row {
+#itopnxaccl .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2100,7 +2055,7 @@ Gap (M - F)
   border-bottom-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_grand_summary_row {
+#itopnxaccl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2110,7 +2065,7 @@ Gap (M - F)
   padding-right: 5px;
 }
 
-#cefcuvelvf .gt_first_grand_summary_row {
+#itopnxaccl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2120,7 +2075,7 @@ Gap (M - F)
   border-top-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_last_grand_summary_row_top {
+#itopnxaccl .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2130,11 +2085,11 @@ Gap (M - F)
   border-bottom-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_striped {
+#itopnxaccl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cefcuvelvf .gt_table_body {
+#itopnxaccl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2143,7 +2098,7 @@ Gap (M - F)
   border-bottom-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_footnotes {
+#itopnxaccl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2157,7 +2112,7 @@ Gap (M - F)
   border-right-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_footnote {
+#itopnxaccl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2166,7 +2121,7 @@ Gap (M - F)
   padding-right: 5px;
 }
 
-#cefcuvelvf .gt_sourcenotes {
+#itopnxaccl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2180,7 +2135,7 @@ Gap (M - F)
   border-right-color: #D3D3D3;
 }
 
-#cefcuvelvf .gt_sourcenote {
+#itopnxaccl .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2188,72 +2143,72 @@ Gap (M - F)
   padding-right: 5px;
 }
 
-#cefcuvelvf .gt_left {
+#itopnxaccl .gt_left {
   text-align: left;
 }
 
-#cefcuvelvf .gt_center {
+#itopnxaccl .gt_center {
   text-align: center;
 }
 
-#cefcuvelvf .gt_right {
+#itopnxaccl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cefcuvelvf .gt_font_normal {
+#itopnxaccl .gt_font_normal {
   font-weight: normal;
 }
 
-#cefcuvelvf .gt_font_bold {
+#itopnxaccl .gt_font_bold {
   font-weight: bold;
 }
 
-#cefcuvelvf .gt_font_italic {
+#itopnxaccl .gt_font_italic {
   font-style: italic;
 }
 
-#cefcuvelvf .gt_super {
+#itopnxaccl .gt_super {
   font-size: 65%;
 }
 
-#cefcuvelvf .gt_footnote_marks {
+#itopnxaccl .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cefcuvelvf .gt_asterisk {
+#itopnxaccl .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cefcuvelvf .gt_indent_1 {
+#itopnxaccl .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cefcuvelvf .gt_indent_2 {
+#itopnxaccl .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cefcuvelvf .gt_indent_3 {
+#itopnxaccl .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cefcuvelvf .gt_indent_4 {
+#itopnxaccl .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cefcuvelvf .gt_indent_5 {
+#itopnxaccl .gt_indent_5 {
   text-indent: 25px;
 }
 
-#cefcuvelvf .katex-display {
+#itopnxaccl .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#cefcuvelvf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#itopnxaccl div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2329,24 +2284,24 @@ Confidence Interval
 </div>
 <p>We first examined the overall trend of the percentage of democratic countries. In 1950, the percentage of democratic countries was at about 25%, before rising gradually through the 1960s. The percentage then stayed fairly stable around the mid-30% range through the 1970s and early 1980s. The largest increase happened around the late 1980s and early 1990s, when the percentage increased sharply to nearly 60%. After that, democracy continued to grow more slowly, reaching the mid-60% range in the 2010s before leveling off slightly by 2020.</p>
 <p>Next, we analyzed the number of global transitions to and from democracies.</p>
-<div id="qsspsmsnom" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="bskguzixlq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#qsspsmsnom table {
+#bskguzixlq table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#qsspsmsnom thead, #qsspsmsnom tbody, #qsspsmsnom tfoot, #qsspsmsnom tr, #qsspsmsnom td, #qsspsmsnom th {
+#bskguzixlq thead, #bskguzixlq tbody, #bskguzixlq tfoot, #bskguzixlq tr, #bskguzixlq td, #bskguzixlq th {
   border-style: none;
 }
 
-#qsspsmsnom p {
+#bskguzixlq p {
   margin: 0;
   padding: 0;
 }
 
-#qsspsmsnom .gt_table {
+#bskguzixlq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2372,12 +2327,12 @@ Confidence Interval
   border-left-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_caption {
+#bskguzixlq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#qsspsmsnom .gt_title {
+#bskguzixlq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2389,7 +2344,7 @@ Confidence Interval
   border-bottom-width: 0;
 }
 
-#qsspsmsnom .gt_subtitle {
+#bskguzixlq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2401,7 +2356,7 @@ Confidence Interval
   border-top-width: 0;
 }
 
-#qsspsmsnom .gt_heading {
+#bskguzixlq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2413,13 +2368,13 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_bottom_border {
+#bskguzixlq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_col_headings {
+#bskguzixlq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2434,7 +2389,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_col_heading {
+#bskguzixlq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2454,7 +2409,7 @@ Confidence Interval
   overflow-x: hidden;
 }
 
-#qsspsmsnom .gt_column_spanner_outer {
+#bskguzixlq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2466,15 +2421,15 @@ Confidence Interval
   padding-right: 4px;
 }
 
-#qsspsmsnom .gt_column_spanner_outer:first-child {
+#bskguzixlq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qsspsmsnom .gt_column_spanner_outer:last-child {
+#bskguzixlq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qsspsmsnom .gt_column_spanner {
+#bskguzixlq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2486,11 +2441,11 @@ Confidence Interval
   width: 100%;
 }
 
-#qsspsmsnom .gt_spanner_row {
+#bskguzixlq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#qsspsmsnom .gt_group_heading {
+#bskguzixlq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2516,7 +2471,7 @@ Confidence Interval
   text-align: left;
 }
 
-#qsspsmsnom .gt_empty_group_heading {
+#bskguzixlq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2531,15 +2486,15 @@ Confidence Interval
   vertical-align: middle;
 }
 
-#qsspsmsnom .gt_from_md > :first-child {
+#bskguzixlq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qsspsmsnom .gt_from_md > :last-child {
+#bskguzixlq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qsspsmsnom .gt_row {
+#bskguzixlq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2558,7 +2513,7 @@ Confidence Interval
   overflow-x: hidden;
 }
 
-#qsspsmsnom .gt_stub {
+#bskguzixlq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2571,7 +2526,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#qsspsmsnom .gt_stub_row_group {
+#bskguzixlq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2585,15 +2540,15 @@ Confidence Interval
   vertical-align: top;
 }
 
-#qsspsmsnom .gt_row_group_first td {
+#bskguzixlq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qsspsmsnom .gt_row_group_first th {
+#bskguzixlq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#qsspsmsnom .gt_summary_row {
+#bskguzixlq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2603,16 +2558,16 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#qsspsmsnom .gt_first_summary_row {
+#bskguzixlq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_first_summary_row.thick {
+#bskguzixlq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qsspsmsnom .gt_last_summary_row {
+#bskguzixlq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2622,7 +2577,7 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_grand_summary_row {
+#bskguzixlq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2632,7 +2587,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#qsspsmsnom .gt_first_grand_summary_row {
+#bskguzixlq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2642,7 +2597,7 @@ Confidence Interval
   border-top-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_last_grand_summary_row_top {
+#bskguzixlq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2652,11 +2607,11 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_striped {
+#bskguzixlq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qsspsmsnom .gt_table_body {
+#bskguzixlq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2665,7 +2620,7 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_footnotes {
+#bskguzixlq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2679,7 +2634,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_footnote {
+#bskguzixlq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2688,7 +2643,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#qsspsmsnom .gt_sourcenotes {
+#bskguzixlq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2702,7 +2657,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#qsspsmsnom .gt_sourcenote {
+#bskguzixlq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2710,72 +2665,72 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#qsspsmsnom .gt_left {
+#bskguzixlq .gt_left {
   text-align: left;
 }
 
-#qsspsmsnom .gt_center {
+#bskguzixlq .gt_center {
   text-align: center;
 }
 
-#qsspsmsnom .gt_right {
+#bskguzixlq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qsspsmsnom .gt_font_normal {
+#bskguzixlq .gt_font_normal {
   font-weight: normal;
 }
 
-#qsspsmsnom .gt_font_bold {
+#bskguzixlq .gt_font_bold {
   font-weight: bold;
 }
 
-#qsspsmsnom .gt_font_italic {
+#bskguzixlq .gt_font_italic {
   font-style: italic;
 }
 
-#qsspsmsnom .gt_super {
+#bskguzixlq .gt_super {
   font-size: 65%;
 }
 
-#qsspsmsnom .gt_footnote_marks {
+#bskguzixlq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#qsspsmsnom .gt_asterisk {
+#bskguzixlq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qsspsmsnom .gt_indent_1 {
+#bskguzixlq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#qsspsmsnom .gt_indent_2 {
+#bskguzixlq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#qsspsmsnom .gt_indent_3 {
+#bskguzixlq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#qsspsmsnom .gt_indent_4 {
+#bskguzixlq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#qsspsmsnom .gt_indent_5 {
+#bskguzixlq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#qsspsmsnom .katex-display {
+#bskguzixlq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#qsspsmsnom div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#bskguzixlq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2850,76 +2805,27 @@ Confidence Interval
 </div>
 </div>
 <p>The area plot reveals that countries do not transition into democracies at a steady rate, but instead noticeably fluctuate over time. While there are often more transitions into democracy than out of it, this pattern appears variable. The process of democratization is unstable, as transitions out of democracy are present throughout the years and do not seem to be declining. One particularly noticeable feature is seen in the 1990s, where there is a sharp increase in the amount of countries that transitioned into a democracy. We can see that democratization is not a smooth, continuous process.</p>
-<p>Lastly, we also wanted to identify which countries had the most transitions into and out of democracy.</p>
+<p>We also wanted to identify which countries had the most transitions into and out of democracy from 1950-2020.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>top10_countries <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(country_name, year) <span class="sc">|&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(country_name) <span class="sc">|&gt;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">prev_year =</span> <span class="fu">lag</span>(is_democracy),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">to_democracy =</span> <span class="fu">ifelse</span>(is_democracy <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> prev_year <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">from_democracy =</span> <span class="fu">ifelse</span>(is_democracy <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> prev_year <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  country_table <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(country_name) <span class="sc">|&gt;</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">transitions_in =</span> <span class="fu">sum</span>(to_democracy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">transitions_out =</span> <span class="fu">sum</span>(from_democracy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">total_transitions =</span> transitions_in <span class="sc">+</span> transitions_out,</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(total_transitions)) <span class="sc">|&gt;</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>     <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) </span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(country_table)</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>country_transitions <span class="ot">&lt;-</span> <span class="fu">top10_countries</span>(democracy_data)</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>country_transitions <span class="sc">|&gt;</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">md</span>(<span class="st">"**Top 10 Countries by Democratic Transitions**"</span>),</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Total Transitions Into and Out of Democracy"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">country_name =</span> <span class="st">"Country"</span>,</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_in =</span> <span class="st">"Transitions In"</span>,</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">transitions_out =</span> <span class="st">"Transitions Out"</span>,</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_transitions =</span> <span class="st">"Total Transitions"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_integer</span>(</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(transitions_in, transitions_out, total_transitions)) <span class="sc">|&gt;</span></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_column_labels</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#D3D3D3"</span>),</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_table_font</span>(<span class="at">font =</span> <span class="fu">google_font</span>(<span class="st">"Source Serif 4"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output-display">
-<div id="adqcilzyjy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="zlvrsnbzzv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#adqcilzyjy table {
+#zlvrsnbzzv table {
   font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#adqcilzyjy thead, #adqcilzyjy tbody, #adqcilzyjy tfoot, #adqcilzyjy tr, #adqcilzyjy td, #adqcilzyjy th {
+#zlvrsnbzzv thead, #zlvrsnbzzv tbody, #zlvrsnbzzv tfoot, #zlvrsnbzzv tr, #zlvrsnbzzv td, #zlvrsnbzzv th {
   border-style: none;
 }
 
-#adqcilzyjy p {
+#zlvrsnbzzv p {
   margin: 0;
   padding: 0;
 }
 
-#adqcilzyjy .gt_table {
+#zlvrsnbzzv .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2945,12 +2851,12 @@ Confidence Interval
   border-left-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_caption {
+#zlvrsnbzzv .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#adqcilzyjy .gt_title {
+#zlvrsnbzzv .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2962,7 +2868,7 @@ Confidence Interval
   border-bottom-width: 0;
 }
 
-#adqcilzyjy .gt_subtitle {
+#zlvrsnbzzv .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2974,7 +2880,7 @@ Confidence Interval
   border-top-width: 0;
 }
 
-#adqcilzyjy .gt_heading {
+#zlvrsnbzzv .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2986,13 +2892,13 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_bottom_border {
+#zlvrsnbzzv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_col_headings {
+#zlvrsnbzzv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3007,7 +2913,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_col_heading {
+#zlvrsnbzzv .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3027,7 +2933,7 @@ Confidence Interval
   overflow-x: hidden;
 }
 
-#adqcilzyjy .gt_column_spanner_outer {
+#zlvrsnbzzv .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3039,15 +2945,15 @@ Confidence Interval
   padding-right: 4px;
 }
 
-#adqcilzyjy .gt_column_spanner_outer:first-child {
+#zlvrsnbzzv .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#adqcilzyjy .gt_column_spanner_outer:last-child {
+#zlvrsnbzzv .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#adqcilzyjy .gt_column_spanner {
+#zlvrsnbzzv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3059,11 +2965,11 @@ Confidence Interval
   width: 100%;
 }
 
-#adqcilzyjy .gt_spanner_row {
+#zlvrsnbzzv .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#adqcilzyjy .gt_group_heading {
+#zlvrsnbzzv .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3089,7 +2995,7 @@ Confidence Interval
   text-align: left;
 }
 
-#adqcilzyjy .gt_empty_group_heading {
+#zlvrsnbzzv .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3104,15 +3010,15 @@ Confidence Interval
   vertical-align: middle;
 }
 
-#adqcilzyjy .gt_from_md > :first-child {
+#zlvrsnbzzv .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#adqcilzyjy .gt_from_md > :last-child {
+#zlvrsnbzzv .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#adqcilzyjy .gt_row {
+#zlvrsnbzzv .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3131,7 +3037,7 @@ Confidence Interval
   overflow-x: hidden;
 }
 
-#adqcilzyjy .gt_stub {
+#zlvrsnbzzv .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3144,7 +3050,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#adqcilzyjy .gt_stub_row_group {
+#zlvrsnbzzv .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3158,15 +3064,15 @@ Confidence Interval
   vertical-align: top;
 }
 
-#adqcilzyjy .gt_row_group_first td {
+#zlvrsnbzzv .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#adqcilzyjy .gt_row_group_first th {
+#zlvrsnbzzv .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#adqcilzyjy .gt_summary_row {
+#zlvrsnbzzv .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3176,16 +3082,16 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#adqcilzyjy .gt_first_summary_row {
+#zlvrsnbzzv .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_first_summary_row.thick {
+#zlvrsnbzzv .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#adqcilzyjy .gt_last_summary_row {
+#zlvrsnbzzv .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3195,7 +3101,7 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_grand_summary_row {
+#zlvrsnbzzv .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3205,7 +3111,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#adqcilzyjy .gt_first_grand_summary_row {
+#zlvrsnbzzv .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3215,7 +3121,7 @@ Confidence Interval
   border-top-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_last_grand_summary_row_top {
+#zlvrsnbzzv .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3225,11 +3131,11 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_striped {
+#zlvrsnbzzv .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#adqcilzyjy .gt_table_body {
+#zlvrsnbzzv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3238,7 +3144,7 @@ Confidence Interval
   border-bottom-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_footnotes {
+#zlvrsnbzzv .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3252,7 +3158,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_footnote {
+#zlvrsnbzzv .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3261,7 +3167,7 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#adqcilzyjy .gt_sourcenotes {
+#zlvrsnbzzv .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3275,7 +3181,7 @@ Confidence Interval
   border-right-color: #D3D3D3;
 }
 
-#adqcilzyjy .gt_sourcenote {
+#zlvrsnbzzv .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3283,72 +3189,72 @@ Confidence Interval
   padding-right: 5px;
 }
 
-#adqcilzyjy .gt_left {
+#zlvrsnbzzv .gt_left {
   text-align: left;
 }
 
-#adqcilzyjy .gt_center {
+#zlvrsnbzzv .gt_center {
   text-align: center;
 }
 
-#adqcilzyjy .gt_right {
+#zlvrsnbzzv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#adqcilzyjy .gt_font_normal {
+#zlvrsnbzzv .gt_font_normal {
   font-weight: normal;
 }
 
-#adqcilzyjy .gt_font_bold {
+#zlvrsnbzzv .gt_font_bold {
   font-weight: bold;
 }
 
-#adqcilzyjy .gt_font_italic {
+#zlvrsnbzzv .gt_font_italic {
   font-style: italic;
 }
 
-#adqcilzyjy .gt_super {
+#zlvrsnbzzv .gt_super {
   font-size: 65%;
 }
 
-#adqcilzyjy .gt_footnote_marks {
+#zlvrsnbzzv .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#adqcilzyjy .gt_asterisk {
+#zlvrsnbzzv .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#adqcilzyjy .gt_indent_1 {
+#zlvrsnbzzv .gt_indent_1 {
   text-indent: 5px;
 }
 
-#adqcilzyjy .gt_indent_2 {
+#zlvrsnbzzv .gt_indent_2 {
   text-indent: 10px;
 }
 
-#adqcilzyjy .gt_indent_3 {
+#zlvrsnbzzv .gt_indent_3 {
   text-indent: 15px;
 }
 
-#adqcilzyjy .gt_indent_4 {
+#zlvrsnbzzv .gt_indent_4 {
   text-indent: 20px;
 }
 
-#adqcilzyjy .gt_indent_5 {
+#zlvrsnbzzv .gt_indent_5 {
   text-indent: 25px;
 }
 
-#adqcilzyjy .katex-display {
+#zlvrsnbzzv .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#adqcilzyjy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#zlvrsnbzzv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3435,6 +3341,550 @@ Confidence Interval
 </div>
 </div>
 </div>
+<p>Argentina and Thailand experienced the highest number of democratic transitions between 1950 and 2020, followed by Ghana, Pakistan, and Peru. The countries listed in the table suggest repeated shifts between democratic and non-democratic rule, reflecting political instability over time. Together with the area plot above, this table reinforces that democratization is not a steady or linear process, but one marked by periods of fluctuation.</p>
+<p>Lastly, our table earlier showed that the most transitions into democracy happened between 1980-2010. We created another table focusing in on the top 10 countries in this time frame.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="btmiwlpejc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#btmiwlpejc table {
+  font-family: 'Source Serif 4', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#btmiwlpejc thead, #btmiwlpejc tbody, #btmiwlpejc tfoot, #btmiwlpejc tr, #btmiwlpejc td, #btmiwlpejc th {
+  border-style: none;
+}
+
+#btmiwlpejc p {
+  margin: 0;
+  padding: 0;
+}
+
+#btmiwlpejc .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#btmiwlpejc .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#btmiwlpejc .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#btmiwlpejc .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#btmiwlpejc .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#btmiwlpejc .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#btmiwlpejc .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#btmiwlpejc .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#btmiwlpejc .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#btmiwlpejc .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#btmiwlpejc .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#btmiwlpejc .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#btmiwlpejc .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#btmiwlpejc .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#btmiwlpejc .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#btmiwlpejc .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#btmiwlpejc .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#btmiwlpejc .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#btmiwlpejc .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#btmiwlpejc .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#btmiwlpejc .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#btmiwlpejc .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#btmiwlpejc .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#btmiwlpejc .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#btmiwlpejc .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#btmiwlpejc .gt_left {
+  text-align: left;
+}
+
+#btmiwlpejc .gt_center {
+  text-align: center;
+}
+
+#btmiwlpejc .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#btmiwlpejc .gt_font_normal {
+  font-weight: normal;
+}
+
+#btmiwlpejc .gt_font_bold {
+  font-weight: bold;
+}
+
+#btmiwlpejc .gt_font_italic {
+  font-style: italic;
+}
+
+#btmiwlpejc .gt_super {
+  font-size: 65%;
+}
+
+#btmiwlpejc .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#btmiwlpejc .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#btmiwlpejc .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#btmiwlpejc .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#btmiwlpejc .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#btmiwlpejc .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#btmiwlpejc .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#btmiwlpejc .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#btmiwlpejc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="4" class="gt_heading gt_title gt_font_normal" style="background-color: #D3D3D3"><strong>Top 10 Countries by Democratic Transitions</strong></td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="background-color: #D3D3D3">Total Transitions Into and Out of Democracy from 1980-2010</td>
+</tr>
+<tr class="gt_col_headings header">
+<th id="country_name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Country</th>
+<th id="transitions_in" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Transitions In</th>
+<th id="transitions_out" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Transitions Out</th>
+<th id="total_transitions" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="background-color: #D3D3D3" scope="col">Total Transitions</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="country_name">Guinea-Bissau</td>
+<td class="gt_row gt_right" headers="transitions_in">2</td>
+<td class="gt_row gt_right" headers="transitions_out">2</td>
+<td class="gt_row gt_right" headers="total_transitions">4</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country_name">Niger</td>
+<td class="gt_row gt_right" headers="transitions_in">2</td>
+<td class="gt_row gt_right" headers="transitions_out">2</td>
+<td class="gt_row gt_right" headers="total_transitions">4</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country_name">Thailand</td>
+<td class="gt_row gt_right" headers="transitions_in">2</td>
+<td class="gt_row gt_right" headers="transitions_out">2</td>
+<td class="gt_row gt_right" headers="total_transitions">4</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country_name">Albania</td>
+<td class="gt_row gt_right" headers="transitions_in">2</td>
+<td class="gt_row gt_right" headers="transitions_out">1</td>
+<td class="gt_row gt_right" headers="total_transitions">3</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country_name">Burundi</td>
+<td class="gt_row gt_right" headers="transitions_in">2</td>
+<td class="gt_row gt_right" headers="transitions_out">1</td>
+<td class="gt_row gt_right" headers="total_transitions">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country_name">Comoros</td>
+<td class="gt_row gt_right" headers="transitions_in">2</td>
+<td class="gt_row gt_right" headers="transitions_out">1</td>
+<td class="gt_row gt_right" headers="total_transitions">3</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country_name">Nepal</td>
+<td class="gt_row gt_right" headers="transitions_in">2</td>
+<td class="gt_row gt_right" headers="transitions_out">1</td>
+<td class="gt_row gt_right" headers="total_transitions">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country_name">Pakistan</td>
+<td class="gt_row gt_right" headers="transitions_in">2</td>
+<td class="gt_row gt_right" headers="transitions_out">1</td>
+<td class="gt_row gt_right" headers="total_transitions">3</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="country_name">Suriname</td>
+<td class="gt_row gt_right" headers="transitions_in">2</td>
+<td class="gt_row gt_right" headers="transitions_out">1</td>
+<td class="gt_row gt_right" headers="total_transitions">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="country_name">Turks and Caicos</td>
+<td class="gt_row gt_right" headers="transitions_in">1</td>
+<td class="gt_row gt_right" headers="transitions_out">2</td>
+<td class="gt_row gt_right" headers="total_transitions">3</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>In this table and the previous one, we see that the countries listed all have four or fewer transitions in or out of democracy in the respective time frames. Although this is not a very large number, even a small number of regime changes can indicate meaningful political instability, since transitions between democratic and non-democratic systems often reflect major shifts in leadership and ideology. This suggests that a key part of democratization is not only becoming democratic, but also maintaining democratic rule over time.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Overall, our analysis shows that democracy is related to gender representation and political stability, but not always in simple ways. Democratic countries had slightly higher average proportions of women in parliament than non-democratic countries, and the t-test showed that this difference was statistically significant. However, the actual difference in means was fairly small, suggesting that democracy alone does not guarantee equal representation. Female presidents became more common over time, but male presidents still made up the large majority of presidential leaders across every decade. Accession-age gaps were smaller and more stable among presidents, while monarchs showed larger differences by gender.</p>
+<p>Our analysis of democratic transitions also showed that global democratization has been unpredictable. The percentage of democratic countries increased substantially from 1950 to 2020, especially around the late 1980s and early 1990s, but this growth was not steady. Countries continued to move both into and out of democracy over time, showing that democratization includes both progress and reversal. The country-level transition tables suggest that even a small number of regime changes can reflect meaningful political instability.</p>
+<p>Taken together, these findings show that becoming a democratic country can be associated with greater gender representation and broader political change, but maintaining democratic rule and achieving gender equality remain ongoing challenges. Democracy may create more opportunities for representation, but the persistence of gender gaps and repeated regime transitions show that political progress is not automatic or permanent.</p>
 </section>
 
 </main>

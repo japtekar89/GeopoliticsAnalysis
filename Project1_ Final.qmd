@@ -1,12 +1,14 @@
 ---
-title: "STAT 431 Project 1 Final Deliverable"
+title: "The Democracy Gap"
+author: "Julia Aptekar, Meghana Kolar, Sofia Jachno, & Bryce Corbett"
 embedded-resources: true
 code-fold: true
 format: html
 theme: lux
+echo: false
 ---
 ```{r}
-#| echo: false
+#| warning: false
 #install.packages("tidyverse")
 #install.packages("wesanderson")
 #install.packages("gt")
@@ -35,10 +37,12 @@ The second dataset comes from the World Bank, which tracks global progress on th
 [World Bank Data](https://databank.worldbank.org/source/sustainable-development-goals-(sdgs)#)
 
 ## What We Want To Know
+
 1. How does the democratic context of a country shape gender gaps in parliamentary representation and executive leadership over time?
 2. How do democratic transitions within countries contribute to changes in the global proportion of democratic regimes over time?
 
 ## Exploring Gender Gaps in Leadership and Representation
+
 ```{r}
 #| echo: false
 #| warning: false
@@ -320,8 +324,6 @@ walk2(group_vars, group_labels, function(var, label) {
 
 This table highlights the changes in gender gaps by decade, including the sample size, decade, proportion of female presidents, and proportion of male presidents. Highlighted in pink are the gender gaps, which as we can predict, decrease in proportion over time. For the first two decades that we have data for (1950-1970), there were solely male presidents, but during our final decade, 2010-2020, there was a gap of around 86%.
 
-## Fitting a model
-
 We ran a t-test to compare the means of the proportion of national parliament seats held by women between different democracy statuses.
 
 ```{r}
@@ -366,6 +368,7 @@ table_result |>
 The t-statistic is -4.591 and the p-value is very small. Also, the confidence interval does not include zero, so we reject the null hypothesis and conclude that there is a statistically significant difference in the mean proportion of seats held by women between democratic and non-democratic countries. This suggests that the true difference in means is not zero.
 
 ## Exploring The Global Effect of Democratic Transitions
+
 ```{r}
 #| echo: false
 #| results: false
@@ -488,19 +491,23 @@ ggplot(summary_data_long, aes(x = year, y = count, fill = type)) +
 
 The area plot reveals that countries do not transition into democracies at a steady rate, but instead noticeably fluctuate over time. While there are often more transitions into democracy than out of it, this pattern appears variable. The process of democratization is unstable, as transitions out of democracy are present throughout the years and do not seem to be declining. One particularly noticeable feature is seen in the 1990s, where there is a sharp increase in the amount of countries that transitioned into a democracy. We can see that democratization is not a smooth, continuous process. 
 
-Lastly, we also wanted to identify which countries had the most transitions into and out of democracy.
+We also wanted to identify which countries had the most transitions into and out of democracy from 1950-2020.
 
 ```{r}
-top10_countries <- function(data) {
+#| echo: false
+topn_countries <- function(start_year = 1950, end_year = 2020, num_countries = 10) {
+  if (start_year < 1950 | end_year > 2020 | start_year > end_year) {
+    stop("Year range must be between 1950 and 2020")
+  }
   
-  data <- data |>
+  data <- democracy_data |>
+    filter(year >= start_year & year <= end_year) |>
     arrange(country_name, year) |>
     group_by(country_name) |>
     mutate(
       prev_year = lag(is_democracy),
       to_democracy = ifelse(is_democracy == 1 & prev_year == 0, 1, 0),
-      from_democracy = ifelse(is_democracy == 0 & prev_year == 1, 1, 0)
-    ) |>
+      from_democracy = ifelse(is_democracy == 0 & prev_year == 1, 1, 0)) |>
     ungroup()
   
   country_table <- data |>
@@ -511,30 +518,58 @@ top10_countries <- function(data) {
       total_transitions = transitions_in + transitions_out,
       .groups = "drop") |>
     arrange(desc(total_transitions)) |>
-     slice_head(n = 10) 
+    slice_head(n = num_countries)
   
   return(country_table)
 }
 
-country_transitions <- top10_countries(democracy_data)
+country_transitions <- topn_countries(1950, 2020, 10)
 
 country_transitions |>
   gt() |>
-  tab_header(
-    title = md("**Top 10 Countries by Democratic Transitions**"),
+  tab_header(title = md("**Top 10 Countries by Democratic Transitions**"),
     subtitle = "Total Transitions Into and Out of Democracy") |>
-  cols_label(
-    country_name = "Country",
+  cols_label(country_name = "Country",
     transitions_in = "Transitions In",
     transitions_out = "Transitions Out",
     total_transitions = "Total Transitions") |>
-  fmt_integer(
-    columns = c(transitions_in, transitions_out, total_transitions)) |>
-  tab_style(
-    style = cell_fill(color = "#D3D3D3"),
+  fmt_integer(columns = c(transitions_in, transitions_out, total_transitions)) |>
+  tab_style(style = cell_fill(color = "#D3D3D3"),
     locations = cells_column_labels()) |>
-  tab_style(
-    style = cell_fill(color = "#D3D3D3"),
+  tab_style(style = cell_fill(color = "#D3D3D3"),
     locations = cells_title()) |>
   opt_table_font(font = google_font("Source Serif 4"))
 ```
+
+Argentina and Thailand experienced the highest number of democratic transitions between 1950 and 2020, followed by Ghana, Pakistan, and Peru. The countries listed in the table suggest repeated shifts between democratic and non-democratic rule, reflecting political instability over time. Together with the area plot above, this table reinforces that democratization is not a steady or linear process, but one marked by periods of fluctuation.
+
+Lastly, our table earlier showed that the most transitions into democracy happened between 1980-2010. We created another table focusing in on the top 10 countries in this time frame.
+
+```{r}
+#| echo: false
+country_transitions2 <- topn_countries(1980, 2010, 10)
+country_transitions2 |>
+  gt() |>
+  tab_header(title = md("**Top 10 Countries by Democratic Transitions**"),
+    subtitle = "Total Transitions Into and Out of Democracy from 1980-2010") |>
+  cols_label(country_name = "Country",
+    transitions_in = "Transitions In",
+    transitions_out = "Transitions Out",
+    total_transitions = "Total Transitions") |>
+  fmt_integer(columns = c(transitions_in, transitions_out, total_transitions)) |>
+  tab_style(style = cell_fill(color = "#D3D3D3"),
+    locations = cells_column_labels()) |>
+  tab_style(style = cell_fill(color = "#D3D3D3"),
+    locations = cells_title()) |>
+  opt_table_font(font = google_font("Source Serif 4"))
+```
+
+In this table and the previous one, we see that the countries listed all have four or fewer transitions in or out of democracy in the respective time frames. Although this is not a very large number, even a small number of regime changes can indicate meaningful political instability, since transitions between democratic and non-democratic systems often reflect major shifts in leadership and ideology. This suggests that a key part of democratization is not only becoming democratic, but also maintaining democratic rule over time. 
+
+## Conclusion
+
+Overall, our analysis shows that democracy is related to gender representation and political stability, but not always in simple ways. Democratic countries had slightly higher average proportions of women in parliament than non-democratic countries, and the t-test showed that this difference was statistically significant. However, the actual difference in means was fairly small, suggesting that democracy alone does not guarantee equal representation. Female presidents became more common over time, but male presidents still made up the large majority of presidential leaders across every decade. Accession-age gaps were smaller and more stable among presidents, while monarchs showed larger differences by gender.
+
+Our analysis of democratic transitions also showed that global democratization has been unpredictable. The percentage of democratic countries increased substantially from 1950 to 2020, especially around the late 1980s and early 1990s, but this growth was not steady. Countries continued to move both into and out of democracy over time, showing that democratization includes both progress and reversal. The country-level transition tables suggest that even a small number of regime changes can reflect meaningful political instability.
+
+Taken together, these findings show that becoming a democratic country can be associated with greater gender representation and broader political change, but maintaining democratic rule and achieving gender equality remain ongoing challenges. Democracy may create more opportunities for representation, but the persistence of gender gaps and repeated regime transitions show that political progress is not automatic or permanent.
