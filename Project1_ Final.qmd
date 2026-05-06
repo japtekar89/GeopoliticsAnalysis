@@ -1,7 +1,7 @@
 ---
 title: "The Democracy Gap"
 author: "Julia Aptekar, Meghana Kolar, Sofia Jachno, & Bryce Corbett"
-embedded-resources: true
+embed-resources: true
 code-fold: true
 format: html
 theme: lux
@@ -20,6 +20,9 @@ library(broom)
 democracy_data <- read.csv("Combined_Democracy_Data.csv")
 pal <- wes_palette("Moonrise3", n = 5)
 ```
+
+## Introduction
+
 
 ## Explore the data
 
